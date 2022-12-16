@@ -1,0 +1,211 @@
+#+TITLE: Artificial Intelligence
+#+AUTHOR: Christos Dimitrakakis
+#+EMAIL:christos.dimitrakakis@unine.ch
+#+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
+#+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
+#+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
+#+LaTeX_HEADER: \newcommand \Param {\Theta}
+#+LaTeX_HEADER: \newcommand \param {\theta}
+#+TAGS: activity advanced definition exercise homework project example theory code
+#+OPTIONS:   H:3
+
+* Introduction
+  
+This course will focus on algorithms and models for Artificial
+Intelligence.  We will concentrate mainly on the decision making,
+rather than the learning, side of artificial intelligence. Learning is
+already addressed in statistics courses, as well as the machine
+learning course in the final year.
+
+The philosophy of this course is as follows: 
+- We give example problems.
+- We use theory to explain and generalise from those examples to general problems.
+- We describe algorithms to /solve/ general problems.
+- We implement algorithms to solve the specific examples.
+
+In genral, the course will start from the simplest problems and
+slowly progress to the more complex ones.
+
+** What is Artificial Intelligence?
+
+*** Decision making and interaction
+- Recommend a route.
+- Buy and sell stocks.
+- Make a move in chess.
+
+*** Learning.
+- Decisions change as information changes.
+
+  
+** Methods for Artificial Intelligence
+*** Optimisation and Decision Theory
+- How to find the "best" decision
+*** Statistics and Machine Lerning
+- How to learn from data and interactions.
+
+* Single agent problems with no uncertainty
+** Elementary Decision Theory
+*** Preferences
+We assume we prefer one thing $x$ to another thing $y$.
+*** Utility and Cost
+To make it easy, assign a utility $U(x)$
+** Few choices
+*** Enumeration
+** Infinite choices
+*** First-order gradient methods
+*** Stochastic search
+
+** Structured choices
+*** The structure of choices
+
+*** Depth-first search
+*** Breath-first search
+*** Dynamic programming
+
+* Single agent problems with uncertainty
+** Logic 
+*** Knowledge base
+**** Syntax and Semtantics
+- Syntax: How to construct sentences
+- Semantix: What sentences mean
+**** Truth
+- A statement $A$ is either true or false in any model $m$.
+**** Model
+- $M(A)$ the set of all models where $A$ is true.
+**** Entailment
+- $A \models B$ means that $B$ is true whenever $A$ is true.
+- $A \models B$ if and only if $M(A) \subseteq M(B)$.
+**** Knowledge-Base
+- A set of sentences that are true.
+**** Inference
+- $KB \vdash_i A$: Algorithm $i$ can derive $A$ from KB.
+*** Propositional logic syntax
+-Sentence $\to$ Atomic | Complex
+-Atomic \to True | False | A | B | C | \ldots
+-Complex \to (Sentence) | [Sentence]
+- | $\neg$  Sentence (not)
+- | Sentence $\wedge$ Sentence (and)
+- | Sentence $\vee$ Sentence (or)
+- | Sentence $\Rightarrow$ Sentence (implies)
+- | Sentence $\Leftrightarrow$ Sentence (if and only if)
+
+Precedence: $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
+
+*** Difference between Meta-Logic and Propositional Logic
+**** Meta-Logic
+- $\alpha \models \beta$: $(\alpha \Rightarrow \beta)$ in every model.
+- $\alpha \equiv \beta$: $(\alpha \Leftrightarrow \beta)$ in every model.
+**** Propositional Logic
+- $A \Rightarrow B$: $A$ implies $B$
+- $A \Leftrightarrow B$, $A$ is true iff $B$ is true.
+*** Proposition logic semantics
+- $A \Rightarrow B \equiv (\neg B \Rightarrow \neg A)$
+- $\neg (\neg A) \equiv A$
+- $(A \Rightarrow B) \equiv (\neg B \Rightarrow \neg A)$
+- $(A \Rightarrow B) \equiv (\neg A \vee B)$
+
+
+**** Models
+A model fixes the truth value for every symbol
+For any model $m$:
+- $\neg P$ is true iff $P$ is false in $m$.
+- $P \wedge Q$ is true iff $P, Q$ are true in $m$.
+- $P \vee Q$ is true iff either $P$ or $Q$ is true in $m$.
+- $P \Rightarrow Q$ is true unless $P$ is true and $Q$ is false in $m$.
+- $P \Leftrightarrow Q$ if $P,Q$ are both true or both false in $m$.
+
+**** Inference Rules
+- If $a \Rightarrow b$ and $a$ is true then $b$ is true.
+- If $a$ and $b$ is true then $a$ is true.
+**** From set theory
+- If $A \subset B$ $\omega \in A$  $\omega in B$.
+- If $\omega \in A \cap B then $\omega \in A$.
+*** Conjunctive Normal Forms
+**** Equivalence
+Every sentence is equivalent to a conjunction
+*** Inference
+Let's check if $KB \models A$, i.e. if what we know implies $A$.
+From entailment, this means that if our $KB$ is correct, then $A$ must be true.
+
+** Probability
+
+** Satatistical Decision Theory
+*** Expected utility
+** Few Choices
+*** Enumeration
+** Structured choices
+*** Policies
+*** Dynamic programming
+** Constrained problems
+*** Constrained optimisation
+
+* Multiple agent problems with no uncertainty
+** Two-Player Zero-sum Alternating Games
+*** Backwards Induction
+** Two-Player Zero-sum Normal-Form Games
+*** Linear Programming
+** Two-Player General Games
+
+* Mathematical background
+** Probability
+*** Probability measure
+A probability measure $P$ defined on a space $\Omega$ satisfies
+1. $P(\Omega) = 1$.
+2. $P(\Omega) = 1$.
+** Gradient
+
+* Optimisation methods
+** Gradient Descent
+** Stochastic Gradient Descent
+** Newton's Method
+** Simulated Annealing
+** Monte-Carlo Methods
+** Dynamic Programming and Backwards Induction
+** Linear Programming
+* Mapping to the Russel book
+
+|----+----------------------------------+---------------------------------------|
+|  1 | Preferences                      | 1. Introduction                       |
+|    | Utility                          | 2. Intelligent Agents and Rationality |
+|----+----------------------------------+---------------------------------------|
+|  2 | Depth-First Search               | 3. Search And Heuristics              |
+|    | Breadth-First Search             |                                       |
+|----+----------------------------------+---------------------------------------|
+|  3 | Dijkstra's Algorithm             |                                       |
+|    | Dynamic Programming              |                                       |
+|----+----------------------------------+---------------------------------------|
+|  4 | Discrete Increments              | 4. Local Search                       |
+|    | Gradient Methods                 | (4.1, 4.2)                            |
+|    |                                  |                                       |
+|----+----------------------------------+---------------------------------------|
+|  5 | Stochastic Gradient              | (4.1)                                 |
+|    |                                  |                                       |
+|----+----------------------------------+---------------------------------------|
+|  6 | Propositional Logic              | 7. Logical Agents                     |
+|    | Propositional Inference          |                                       |
+|----+----------------------------------+---------------------------------------|
+|  7 | Probability Theory               | 12. Uncertainty                       |
+|    | Bayes Theorem                    | 13. Probabilistic Reasoning           |
+|----+----------------------------------+---------------------------------------|
+|  8 | Reading week                     |                                       |
+|----+----------------------------------+---------------------------------------|
+|  9 | Expected Utility Theory          | 15. Making Simple Decisions           |
+|----+----------------------------------+---------------------------------------|
+| 10 | Markov Decision Processes        | 16. Making Complex Decisions          |
+|    | Dynamic Programming              |                                       |
+|----+----------------------------------+---------------------------------------|
+| 11 | Alternating Zero-Sum Games       | 6. Games                              |
+|    | Stochastic Zero-Sum Games        |                                       |
+|----+----------------------------------+---------------------------------------|
+| 12 | Simultaneous Move Zero-Sum Games |                                       |
+|    | Linear Programming               |                                       |
+|    | General games                    |                                       |
+|----+----------------------------------+---------------------------------------|
+| 13 | Project Presentations            |                                       |
+|----+----------------------------------+---------------------------------------|
+| 14 | Reading Week                     |                                       |
+|----+----------------------------------+---------------------------------------|
+
+

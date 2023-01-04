@@ -4,6 +4,8 @@
 #+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
 #+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
 #+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmax}{arg\,max}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmin}{arg\,min}
 #+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
 #+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
 #+LaTeX_HEADER: \newcommand \Param {\Theta}
@@ -25,7 +27,7 @@ The philosophy of this course is as follows:
 - We describe algorithms to /solve/ general problems.
 - We implement algorithms to solve the specific examples.
 
-In genral, the course will start from the simplest problems and
+In general, the course will start from the simplest problems and
 slowly progress to the more complex ones.
 
 ** What is Artificial Intelligence?
@@ -36,23 +38,59 @@ slowly progress to the more complex ones.
 - Make a move in chess.
 
 *** Learning.
-- Decisions change as information changes.
+- Decisions depend on infirmation.
 
   
 ** Methods for Artificial Intelligence
 *** Optimisation and Decision Theory
-- How to find the "best" decision
+**** Optimal decisions
+- Problem-dependent
+- Require defining a cost- or utility function
+- The optimal solution has the lowest cost or maximal utility
+
+**** Optimisation: algorithms for optimal solutions
+- Discrete optimisation.
+- Linear optimisation.
+- Non-linear optimisation.
+
 *** Statistics and Machine Lerning
 - How to learn from data and interactions.
 
 * Single agent problems with no uncertainty
 ** Elementary Decision Theory
 *** Preferences
-We assume we prefer one thing $x$ to another thing $y$.
+**** Types of rewards                                               :example:
+- For e.g. a student: Tickets to concerts.
+- For e.g. an investor: A basket of stocks, bonds and currency.
+- For everybody: Money.
+
+**** Preferences among rewards
+For any rewards $x, y \in R$, we either
+- (a) Prefer $x$ at least as much as $y$ and write $x \preceq^* y$.
+- (b) Prefer $x$ not more than $y$ and write $x \succeq^* y$.
+- (c) Prefer $x$ about the same as $y$ and write $x \eqsim^* y$.
+- (d) Similarly define $\succ^*$ and $\prec^*$
+
 *** Utility and Cost
-To make it easy, assign a utility $U(x)$
+
+**** Utility function
+To make it easy, assign a utility $U(x)$ to every reward through a
+utility function $U : R \to \Reals$.
+
+**** Utility-derived preferences
+- (a) $U(x) \geq U(y)$ $\Leftrightarrow$ $x \succ
+eq^* y$
+- (b) $U(x) \leq U(y)$ $\Leftrightarrow$ $x \succ
+eq^* y$
+
 ** Few choices
 *** Enumeration
+- $\argmax_x U(x)$
+#+BEGIN_SRC python
+  # returns the first element maximising U
+  import numpy as np
+  x_star = np.argmax(U)
+#+END_SRC
 ** Infinite choices
 *** First-order gradient methods
 *** Stochastic search
@@ -64,7 +102,6 @@ To make it easy, assign a utility $U(x)$
 *** Breath-first search
 *** Dynamic programming
 
-* Single agent problems with uncertainty
 ** Logic 
 *** Knowledge base
 **** Syntax and Semtantics
@@ -129,6 +166,7 @@ Every sentence is equivalent to a conjunction
 Let's check if $KB \models A$, i.e. if what we know implies $A$.
 From entailment, this means that if our $KB$ is correct, then $A$ must be true.
 
+* Single agent problems with uncertainty
 ** Probability
 
 ** Satatistical Decision Theory
@@ -153,14 +191,66 @@ From entailment, this means that if our $KB$ is correct, then $A$ must be true.
 *** Probability measure
 A probability measure $P$ defined on a space $\Omega$ satisfies
 1. $P(\Omega) = 1$.
-2. $P(\Omega) = 1$.
-** Gradient
+2. $P(A) \geq 0$ for any $A \subset \Omega$.
+3. For any $A \cap B = \emptyset$, $P(A \cup B) = P(A) + P(B)$.
+
+** Calculus
+*** Univariate caclulus
+**** Derivative 
+The derivative of a single-argument function is defined as:
+\[
+\frac{d}{dx} f(x) = \lim_{\epsilon \to 0} \frac{f(x + \epsilon) - f(x)}{\epsilon}.
+\]
+$f$ must be absolutely continuous at $x$ for the derivative to exist.
+
+**** Riemann integral
+If $d/dx F = f$ then its integral from $a$ to $b$ is:
+\[
+\int_a^b f(x) dx = F(b) - F(a),
+\]
+
+**** Fundamental theorem of calculus
+Let $F$ be such that
+\[
+F(x) = \int_a^x f(x) dx.
+\]
+Then
+\[
+f(x) = \frac{d}{dx} F(x).
+\]
+*** Multivariate calculus
+Consider a function $f: \Reals^n \to \Reals$. 
+
+**** Partial derivative
+The partial derivative of $f$ with respect to its $i$-th argument is written as
+\[
+\frac{\partial}{\partial x_i} f(x)
+\]
+is the derivative of the function $f_i$ where all terms other than $x_i$ are held constant.
+
+**** Gradient
+The gradient of $f$ with respect to all its arguments is the column vector of partial derivatives
+\[
+\nabla_x f(x) = 
+\left(
+\frac{\partial}{\partial x_1} f(x)
+\cdots
+\frac{\partial}{\partial x_i} f(x)
+\cdots
+\frac{\partial}{\partial x_n} f(x)
+\right)^\top
+\]
 
 * Optimisation methods
 ** Gradient Descent
+$d_t = \nabla_x f(x_t)$.
+
 ** Stochastic Gradient Descent
+$d_t = \nabla_x f(x_t) + \epsilon_t$.
 ** Newton's Method
+
 ** Simulated Annealing
+
 ** Monte-Carlo Methods
 ** Dynamic Programming and Backwards Induction
 ** Linear Programming

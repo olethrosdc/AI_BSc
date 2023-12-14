@@ -1,6 +1,7 @@
 #+TITLE: Artificial Intelligence
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
+#+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
 #+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
 #+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
 #+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
@@ -30,6 +31,8 @@ The philosophy of this course is as follows:
 In general, the course will start from the simplest problems and
 slowly progress to the more complex ones.
 
+This notebook contains a summary of all the foundational material in the course.
+
 ** What is Artificial Intelligence?
 
 *** Decision making and interaction
@@ -38,8 +41,8 @@ slowly progress to the more complex ones.
 - Make a move in chess.
 
 *** Learning.
-- Decisions depend on infirmation.
-
+- Decisions depend on information.
+- How do we incorporate new information?
   
 ** Methods for Artificial Intelligence
 *** Optimisation and Decision Theory
@@ -52,6 +55,7 @@ slowly progress to the more complex ones.
 - Discrete optimisation.
 - Linear optimisation.
 - Non-linear optimisation.
+
 
 *** Statistics and Machine Lerning
 - How to learn from data and interactions.
@@ -93,12 +97,76 @@ eq^* y$
 #+END_SRC
 ** Infinite choices
 *** First-order gradient methods
+- Gradient descent
+- Stochastic gradient descent
+  
+*** Single-variable gradient descent
+**** Setting
+- Input: $f : \Reals \to \Reals$
+- Problem: $\max_x f(x)$
+- Derivative: $\frac{d}{dx} f(x) \defn \lim_{\Delta \to 0} \frac{f(x + \Delta)  - f(x)}{\Delta}$.
+**** Algorithm
+1) Input: $x^{(0)}$, f
+2) For $t = 1, \ldots$:
+3) Calculate direction $g_t = \frac{d}{dx} f(x_{t-1})$
+4) Select step-size $\alpha_t$
+5) Update $x^{(t)} = x^{(t-1)} + \alpha_t g_t$.
+   
+*** Multiple-variable gradient descent
+**** Setting
+- Input: $f : \Reals^d \to \Reals$, $x = (x_1, \ldots, x_d)$
+- Problem: $\max_x f(x)$
+- Partial Derivative: $\frac{\partial}{\partial x_i} f(x) \defn \lim_{\Delta \to 0} \frac{f(x_1, \ldots, x_i + \Delta, \ldots, x_d)  - f(x)}{\Delta}$.
+**** Algorithm
+1) Input: $x_0$, f
+2) For $t = 1, \ldots$:
+3) Calculate direction $g_t = \frac{d}{dx} f(x_{t-1})$
+4) Select step-size $\alpha_t$
+5) Update $x_{t} = x_{t-1} + \alpha_t g_t$.
+   
 *** Stochastic search
 
 ** Structured choices
-*** The structure of choices
+*** Graph definitions
+**** Graph $G = \langle N, A \rangle$
+A graph $G$ is defined by:
+- Set of *nodes* $N$
+- Set of *arcs* $A$, with $\langle x,y \rangle \in A$ and $x, y \in N$
+**** Labels and costs
+- Nodes can be labelled as e.g. start and goal states.
+- Arcs can be labelled according to *actions*
+**** Paths and cycles
+- A path from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
+  $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
+- A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
+- If a graph has no cycles, it is *acyclic*
+*** Shortest path
+
+**** Costs
+- Traversing arc $\langle x,y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
+- Following a path $p$ has a total cost
+\[
+  C(p) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
+\]
+
+**** The shortest path problem
+- Input: a set of *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
+- Output: Find a path $p$ from $X$ to $Y$ so that $C(p) \leq C(p')$ for all $p$ 
+
+**** Notes
+- In the simplest cast $c(a) = 1$ for all arcs.
+- We can maximise rewards instead of minimising costs.
 
 *** Depth-first search
+  \begin{algorithmic}
+	\STATE \textbf{function} \texttt{DepthFirst}($V, F$)
+	\FOR {$n \in F$}
+	\FOR {$j : \langle n,j \rangle \in A \AND $}
+	\STATE \texttt{DepthFirst}($S, F$)
+	\ENDFOR 
+	\ENDFOR
+	\STATE La
+  \end{algorithmic}
 *** Breath-first search
 *** Dynamic programming
 
@@ -227,20 +295,15 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 |        | Branch and bound                 | 3.5. Branch and bound         |
 |        |                                  |                               |
 |--------+----------------------------------+-------------------------------|
-|      4 | Local Search                     | 4. Reasoning with constraints |
-|        |                                  |                               |
-|        | Propositional Constraints        |                               |
-|        |                                  |                               |
-|        |                                  |                               |
-|--------+----------------------------------+-------------------------------|
-|        | 6.1. States, Actions, Goals      |                               |
-|      4 | Deterministic Planning           | 6.2. Forward Planning         |
+|      4 | Constraint programming           | 4. Reasoning with constraints |
+|        | Deterministic planning           |                               |
+|        |                                  | 6.1. States, Actions, Goals   |
+|        |                                  | 6.2. Forward Planning         |
 |        |                                  | 6.2. Regressoin Planning      |
 |        |                                  | 6.4. Planning as CSP          |
 |        |                                  | 6.5. Partial Order Planning   |
 |--------+----------------------------------+-------------------------------|
-|      5 | Stochastic Gradient              | (4.1)                         |
-|        | The Perceptron                   |                               |
+|      5 | Logical reasoning                |                               |
 |--------+----------------------------------+-------------------------------|
 |      6 | Probability Theory               | 12. Uncertainty               |
 |        | Bayes Theorem                    | 13. Probabilistic Reasoning   |

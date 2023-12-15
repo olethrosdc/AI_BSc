@@ -212,9 +212,7 @@ Precedence: $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 - $(A \Rightarrow B) \equiv (\neg A \vee B)$
 
 
-**** Models
-A model fixes the truth value for every symbol
-For any model $m$:
+**** For any model $m$:
 - $\neg P$ is true iff $P$ is false in $m$.
 - $P \wedge Q$ is true iff $P, Q$ are true in $m$.
 - $P \vee Q$ is true iff either $P$ or $Q$ is true in $m$.
@@ -272,58 +270,62 @@ $d_t = \nabla_x f(x_t) + \epsilon_t$.
 Artificial Intelligence: Foundations of Computational Agents, 3rd Edition
 Artificial Intelligence: a Modern Approach, 4th Edition
 
-|--------+----------------------------------+-------------------------------|
-| Module | Topics                           | AI:FoCA                       |
-|--------+----------------------------------+-------------------------------|
-|      1 | - Preferences                    | 1. AI and Agents              |
-|        | - Utility                        | 1.2. Complexity               |
-|        | - States                         | 1.3. Application domains      |
-|        | - Actions                        | 1.4. Knowledge representation |
-|        | - Beliefs                        | 2. Architecture               |
-|        | - Fairness                       | 2.1. Control                  |
-|        |                                  | 2.2. Hierarchical control     |
-|        |                                  | 2.3. Moral machines           |
-|--------+----------------------------------+-------------------------------|
-|      2 | Depth-First Search               | 3. Search                     |
-|        | Breadth-First Search             | 3.1. Search in graphs         |
-|        | Heuristic Search                 | 3.2. Uninformed search        |
-|        | A* Search                        | 3.3. Heuristic search         |
-|        |                                  |                               |
-|--------+----------------------------------+-------------------------------|
-|      3 | Dynamic Programming              | 3.3. Heuristic search         |
-|        | Bounded Search                   | 3.4. Dynamic programming      |
-|        | Branch and bound                 | 3.5. Branch and bound         |
-|        |                                  |                               |
-|--------+----------------------------------+-------------------------------|
-|      4 | Constraint programming           | 4. Reasoning with constraints |
-|        | Deterministic planning           |                               |
-|        |                                  | 6.1. States, Actions, Goals   |
-|        |                                  | 6.2. Forward Planning         |
-|        |                                  | 6.2. Regressoin Planning      |
-|        |                                  | 6.4. Planning as CSP          |
-|        |                                  | 6.5. Partial Order Planning   |
-|--------+----------------------------------+-------------------------------|
-|      5 | Logical reasoning                |                               |
-|--------+----------------------------------+-------------------------------|
-|      6 | Probability Theory               | 12. Uncertainty               |
-|        | Bayes Theorem                    | 13. Probabilistic Reasoning   |
-|--------+----------------------------------+-------------------------------|
-|      7 | Reading week                     |                               |
-|--------+----------------------------------+-------------------------------|
-|      8 | Expected Utility Theory          | 15. Making Simple Decisions   |
-|--------+----------------------------------+-------------------------------|
-|      9 | Markov Decision Processes        | 16. Making Complex Decisions  |
-|        | Dynamic Programming              |                               |
-|--------+----------------------------------+-------------------------------|
-|     10 | Alternating Zero-Sum Games       | 6. Games                      |
-|        | Stochastic Zero-Sum Games        |                               |
-|--------+----------------------------------+-------------------------------|
-|     11 | Simultaneous Move Zero-Sum Games |                               |
-|        | Linear Programming               |                               |
-|        | General games                    |                               |
-|--------+----------------------------------+-------------------------------|
-|     12 | Project Presentations            |                               |
-|--------+----------------------------------+-------------------------------|
+|--------+----------------------------------+--------------------------------|
+| Module | Topics                           | AI:FoCA                        |
+|--------+----------------------------------+--------------------------------|
+|      1 | - Preferences                    | 1. AI and Agents               |
+|        | - Utility                        | 1.2. Complexity                |
+|        | - States                         | 1.3. Application domains       |
+|        | - Actions                        | 1.4. Knowledge representation  |
+|        | - Beliefs                        | 2. Architecture                |
+|        | - Fairness                       | 2.1. Control                   |
+|        |                                  | 2.2. Hierarchical control      |
+|        |                                  | 2.3. Moral machines            |
+|--------+----------------------------------+--------------------------------|
+|      2 | Depth-First Search               | 3. Search                      |
+|        | Breadth-First Search             | 3.1. Search in graphs          |
+|        | Heuristic Search                 | 3.2. Uninformed search         |
+|        | A* Search                        | 3.3. Heuristic search          |
+|        |                                  |                                |
+|--------+----------------------------------+--------------------------------|
+|      3 | Dynamic Programming              |                                |
+|        |                                  | 3.4. Dynamic programming       |
+|        | Branch and bound                 | 3.5. Branch and bound          |
+|--------+----------------------------------+--------------------------------|
+|      4 | Constraint programming           | 4. Reasoning with constraints  |
+|        |                                  | 4.1. Variables and Constraints |
+|        |                                  | 4.2. CSPs and Search           |
+|        |                                  | 4.6. Local Search              |
+|        | Deterministic planning           | 4.8. Optimization              |
+|        |                                  |                                |
+|--------+----------------------------------+--------------------------------|
+|        |                                  | 6.1. States, Actions, Goals    |
+|        |                                  | 6.2. Forward Planning          |
+|        |                                  | 6.2. Regressoin Planning       |
+|        |                                  | 6.4. Planning as CSP           |
+|        |                                  | 6.5. Partial Order Planning    |
+|--------+----------------------------------+--------------------------------|
+|      5 | Logical reasoning                |                                |
+|--------+----------------------------------+--------------------------------|
+|      6 | Probability Theory               | 12. Uncertainty                |
+|        | Bayes Theorem                    | 13. Probabilistic Reasoning    |
+|--------+----------------------------------+--------------------------------|
+|      7 | Reading week                     |                                |
+|--------+----------------------------------+--------------------------------|
+|      8 | Expected Utility Theory          | 15. Making Simple Decisions    |
+|--------+----------------------------------+--------------------------------|
+|      9 | Markov Decision Processes        | 16. Making Complex Decisions   |
+|        | Dynamic Programming              |                                |
+|--------+----------------------------------+--------------------------------|
+|     10 | Alternating Zero-Sum Games       | 6. Games                       |
+|        | Stochastic Zero-Sum Games        |                                |
+|--------+----------------------------------+--------------------------------|
+|     11 | Simultaneous Move Zero-Sum Games |                                |
+|        | Linear Programming               |                                |
+|        | General games                    |                                |
+|--------+----------------------------------+--------------------------------|
+|     12 | Project Presentations            |                                |
+|--------+----------------------------------+--------------------------------|
 
 
 

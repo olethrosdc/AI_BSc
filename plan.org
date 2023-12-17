@@ -1,6 +1,7 @@
 #+TITLE: Artificial Intelligence
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
+# -*- mode: python; python-indent-offset: 2 -*-
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
 #+LaTeX_HEADER: \usepackage{tikz}
 #+LaTeX_HEADER: \usepackage{amsmath}
@@ -125,44 +126,41 @@ We prefer items with higher utility, i.e.
 It is sometimes more convenient to define a cost function $C: R \to \Reals$ so that we prefer items with lower cost, i.e.
 - $C(x) \geq C(y)$ $\Leftrightarrow$ $y \succeq^* x$
 
-** Few choices
-*** Enumeration
-- $\argmax_x U(x)$
+**** Decision making as an optimisation problem
+How can we find the decision maximising utility / minimising cost?
+
+** Few choices and beyond
+*** Brute Force
+In the simplest case, we need to choose among a finite number of options:
+\[
+x^* = \argmax_x U(x)
+\]
+**** Python function
 #+BEGIN_SRC python
   # returns the first element maximising U
   import numpy as np
   x_star = np.argmax(U)
 #+END_SRC
-** Infinite choices
-*** First-order gradient methods
-- Gradient descent
-- Stochastic gradient descent
-  
-*** Single-variable gradient descent
-**** Setting
-- Input: $f : \Reals \to \Reals$
-- Problem: $\max_x f(x)$
-- Derivative: $\frac{d}{dx} f(x) \defn \lim_{\Delta \to 0} \frac{f(x + \Delta)  - f(x)}{\Delta}$.
-**** Algorithm
-1) Input: $x^{(0)}$, f
-2) For $t = 1, \ldots$:
-3) Calculate direction $g_t = \frac{d}{dx} f(x_{t-1})$
-4) Select step-size $\alpha_t$
-5) Update $x^{(t)} = x^{(t-1)} + \alpha_t g_t$.
-   
-*** Multiple-variable gradient descent
-**** Setting
-- Input: $f : \Reals^d \to \Reals$, $x = (x_1, \ldots, x_d)$
-- Problem: $\max_x f(x)$
-- Partial Derivative: $\frac{\partial}{\partial x_i} f(x) \defn \lim_{\Delta \to 0} \frac{f(x_1, \ldots, x_i + \Delta, \ldots, x_d)  - f(x)}{\Delta}$.
-**** Algorithm
-1) Input: $x_0$, f
-2) For $t = 1, \ldots$:
-3) Calculate direction $g_t = \frac{d}{dx} f(x_{t-1})$
-4) Select step-size $\alpha_t$
-5) Update $x_{t} = x_{t-1} + \alpha_t g_t$.
-   
-*** Stochastic search
+**** Implementation
+#+BEGIN_SRC python
+  def argmax(U):
+	arg_max = 0
+	U_max = U[0]
+	for x in range(1, len(U)):
+	  if (U[x] > U_max):
+		U_max = U[x]
+		arg_max = x
+  return arg_max
+#+END_SRC
+*** Large or infinite choices
+**** Large, structured choices
+- Shortest path: Sequences of places to pass along a route.
+- Matching: Assign items to individuals.
+- Theorem proving: Prove a mathematical theorem in the simplest possible way.
+**** Infinite choices
+- Control: Drive a car.
+
+
 
 ** Structured choices
 *** Graph definitions
@@ -333,6 +331,37 @@ From entailment, this means that if our $KB$ is correct, then $A$ must be true.
 - Effect: Assigns values to *some* atoms.
 **** Feature-based
 - Effect: Transition function $\tau_i: S \times A \to \{0,1\}$ for each $i \in [n]$.
+
+** Infinite choices
+*** First-order gradient methods
+- Gradient descent
+- Stochastic gradient descent
+  
+*** Single-variable gradient descent
+**** Setting
+- Input: $f : \Reals \to \Reals$
+- Problem: $\max_x f(x)$
+- Derivative: $\frac{d}{dx} f(x) \defn \lim_{\Delta \to 0} \frac{f(x + \Delta)  - f(x)}{\Delta}$.
+**** Algorithm
+1) Input: $x^{(0)}$, f
+2) For $t = 1, \ldots$:
+3) Calculate direction $g_t = \frac{d}{dx} f(x_{t-1})$
+4) Select step-size $\alpha_t$
+5) Update $x^{(t)} = x^{(t-1)} + \alpha_t g_t$.
+   
+*** Multiple-variable gradient descent
+**** Setting
+- Input: $f : \Reals^d \to \Reals$, $x = (x_1, \ldots, x_d)$
+- Problem: $\max_x f(x)$
+- Partial Derivative: $\frac{\partial}{\partial x_i} f(x) \defn \lim_{\Delta \to 0} \frac{f(x_1, \ldots, x_i + \Delta, \ldots, x_d)  - f(x)}{\Delta}$.
+**** Algorithm
+1) Input: $x_0$, f
+2) For $t = 1, \ldots$:
+3) Calculate direction $g_t = \frac{d}{dx} f(x_{t-1})$
+4) Select step-size $\alpha_t$
+5) Update $x_{t} = x_{t-1} + \alpha_t g_t$.
+   
+*** Stochastic search
 
 
 * Single agent problems with uncertainty

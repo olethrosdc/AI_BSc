@@ -161,7 +161,6 @@ x^* = \argmax_x U(x)
 - Control: Drive a car.
 
 
-
 ** Structured choices
 *** Graph definitions
 **** Graph $G = \langle N, A \rangle$
@@ -238,7 +237,6 @@ $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 - $A \subset B$ if $x \in A \Rightarrow x \in B$ - (c.f. $A \implies B$)
 - $A = B$ if $x \in A \Leftrightarrow x \in B$ - (c.f. $A \Leftrightarrow B$)
 
-
 *** Knowledge base
 **** Syntax and Semtantics
 - Syntax: How to construct sentences
@@ -301,7 +299,6 @@ Precedence: $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 - $\neg (\neg A) \equiv A$
 - $(A \Rightarrow B) \equiv (\neg B \Rightarrow \neg A)$
 - $(A \Rightarrow B) \equiv (\neg A \vee B)$
-
 
 **** For any model $m$:
 - $\neg P$ is true iff $P$ is false in $m$.

@@ -155,6 +155,10 @@ For any real-valued random variable $f: \Omega \to \Reals$, the expectation with
 \[
 \E_P(f) = \sum_{\omega \in \Omega} f(\omega) P(\omega).
 \]
+When $\Omega$ is continuous, we can use a density $p$
+\[
+\E_P(f) = \int_{\Omega} f(\omega) p(\omega) d\omega.
+\]
 **** Linearity of expectations
 For any RVs $x, y$:
 \[

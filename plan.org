@@ -360,7 +360,10 @@ f(z) < f(y) + L |y - z|
 *** First-order gradient methods
 - Gradient descent
 - Stochastic gradient descent
-  
+**** Properties  
+- Incremental algorithms
+- Can converge to a *local* optimum
+
 *** Single-variable gradient descent
 **** Setting
 - Input: $f : \Reals \to \Reals$
@@ -378,15 +381,36 @@ f(z) < f(y) + L |y - z|
 - Input: $f : \Reals^d \to \Reals$, $x = (x_1, \ldots, x_d)$
 - Problem: $\max_x f(x)$
 - Partial Derivative: $\frac{\partial}{\partial x_i} f(x) \defn \lim_{\Delta \to 0} \frac{f(x_1, \ldots, x_i + \Delta, \ldots, x_d)  - f(x)}{\Delta}$.
+- Gradient $\nabla_x f(x) = \left[\frac{\partial}{\partial x_1} f(x), \ldots, \frac{\partial}{\partial x_i} f(x), \ldots, \frac{\partial}{\partial x_d} f(x)\right]^\top$.
 **** Algorithm
 1) Input: $x_0$, f
 2) For $t = 1, \ldots$:
-3) Calculate direction $g_t = \frac{d}{dx} f(x_{t-1})$
+3) Calculate direction $g_t = \nabla_x f(x_{t-1})$
 4) Select step-size $\alpha_t$
 5) Update $x_{t} = x_{t-1} + \alpha_t g_t$.
    
+*** Stochastic gradient descent
+**** As gradient descent with errors
+- Calculate direction $g_t = \nabla_x f(x_{t-1}) + \epsilon_t$
+- $\epsilon_t$ is typically zero-mean noise.
+**** In learning from data
+The gradient can be broken up into a sum of gradients:
+\[
+f(x) = \sum_t v(x, z_t),
+\qquad
+\nabla_x f(x) = \sum_t \nabla_x v(x, z_t),
+\]
+$x_t = x_{t-1} + \alpha_t \nabla_x v(x, z_t)$.
+**** In Bayesian quadrature
+The function is an expectation:
+\[
+f(x) = \int_Z v(x, z) p(z) dz.
+\qquad
+\nabla_x f(x) \approx \sum_t \nabla_x v(x, z_t), 
+\]
+where $z_t \sim p(z)$ are samples from $p$.
 
-* Single agent problems with uncertainty
+* single agent problems with uncertainty
 ** Probability
 *** Probability fundamentals
 **** Probability measure $P$

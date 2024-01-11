@@ -1,7 +1,6 @@
 #+TITLE: Artificial Intelligence
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
-# -*- mode: python; python-indent-offset: 2 -*-
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
 #+LaTeX_HEADER: \usepackage{tikz}
 #+LaTeX_HEADER: \usepackage{amsmath}

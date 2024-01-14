@@ -1,7 +1,6 @@
 #+TITLE: Artificial Intelligence
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
-# -*- mode: python; python-indent-offset: 2 -*-
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
 #+LaTeX_HEADER: \usepackage{tikz}
 #+LaTeX_HEADER: \usepackage{amsmath}
@@ -85,7 +84,6 @@ slowly progress to the more complex ones.
 - Decisions depend on information.
 - How do we incorporate new information?
   
-** Methods for Artificial Intelligence
 *** Optimisation and Decision Theory
 **** Optimal decisions
 - Problem-dependent
@@ -100,8 +98,41 @@ slowly progress to the more complex ones.
 
 *** Statistics and Machine Lerning
 - How to learn from data and interactions.
-
 * Single agent problems with no uncertainty
+** The agent and the environment
+*** Agent
+- Obtains stimuli/observations
+- Generates actions/decisions
+*** Environment
+- Reacts to agent's actions
+- Generates observations
+*** The mind/body interface
+- The body can be seen as part of the mind's environment
+** Learning and memory
+*** Belief state
+- Memory
+- A summary of the agent's knowledge
+- The state in a state machine
+- The contents of the tape and read/write heads on a Turing machien.
+*** Belief transitions
+- 
+
+*** Exercises and Assignments
+**** Exercises (From AI3e, 2.7)
+- 1. Representations
+- 2. Top-level controller.
+- 3. Obstacle avoidance.
+- 4. Robot trap.
+- 10. Autonomous cars: driver preferences
+**** Assignments (From AI3e, 2.7)
+- 5. Moving targets
+- 7. Sensing
+- 8. Batteries
+- 9. Which functions?
+- 11. Autonomous cars: state of the art.
+  
+
+
 ** Elementary Decision Theory
 *** Preferences
 **** Types of rewards                                               :example:

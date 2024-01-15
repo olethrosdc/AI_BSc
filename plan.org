@@ -674,6 +674,8 @@ $d_t = \nabla_x f(x_t)$.
 
 ** Stochastic Gradient Descent
 $d_t = \nabla_x f(x_t) + \epsilon_t$.
+** Newton's Method
+
 ** Simulated Annealing
 
 ** Monte-Carlo Methods

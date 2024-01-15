@@ -259,7 +259,7 @@ A graph $G$ is defined by:
         \STATE \textbf{input} $n$: Current node
 	\STATE \textbf{function} \texttt{DepthFirst}($G, n$)
 	\FOR {$j \in F: \langle n,j \rangle \in A$}
-	\STATE \texttt{DepthFirst}($V, j$)F \setminus \{n\}$)
+	\STATE $\texttt{DepthFirst}(V, F \setminus \{n\})$
 	\ENDFOR
   \end{algorithmic}
 **** Discussion
@@ -453,9 +453,9 @@ f(z) < f(y) + L |y - z|
 \ENDFOR
 \end{algorithmic}
 **** Discussion
-- This is guaranteed to \alert{converge} to the optimal solution.
-- If $L$ is \alert{unknown}, DIRECT [[http://www.planchet.net/EXT/ISFA/1226.nsf/769998e0a65ea348c1257052003eb94f/f9ca730ca27def69c12576d8002ed895/$FILE/Jones93.pdf][(Jones et al. 1993)]] can be used.
-- If $f$ is noisy, the problem becomes a \alert{continuum bandit} problem.
+- This is guaranteed to *converge* to the optimal solution.
+- If $L$ is *unknown*, DIRECT [[http://www.planchet.net/EXT/ISFA/1226.nsf/769998e0a65ea348c1257052003eb94f/f9ca730ca27def69c12576d8002ed895/$FILE/Jones93.pdf][(Jones et al. 1993)]] can be used.
+- If $f$ is noisy, the problem becomes a *continuum bandit* problem.
 *** First-order gradient methods
 - Gradient descent
 - Stochastic gradient descent

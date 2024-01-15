@@ -75,17 +75,16 @@ slowly progress to the more complex ones.
 
 ** What is Artificial Intelligence?
 
-*** Decision making and interaction
+*** Decisions and learning
+**** Decision making and interaction
 - Recommend a route.
 - Buy and sell stocks.
 - Make a move in chess.
-
-*** Learning.
+**** Learning.
 - Decisions depend on information.
 - How do we incorporate new information?
-  
-*** Optimisation and Decision Theory
-**** Optimal decisions
+*** The view from statistics  
+ ,**** Optimal decisions
 - Problem-dependent
 - Require defining a cost- or utility function
 - The optimal solution has the lowest cost or maximal utility
@@ -95,27 +94,49 @@ slowly progress to the more complex ones.
 - Linear optimisation.
 - Non-linear optimisation.
 
-
-*** Statistics and Machine Lerning
+**** Statistics and Machine Learning
 - How to learn from data and interactions.
-* Single agent problems with no uncertainty
+- Summarising knowledge into a model.
+- Using the knowledge to make decisions.
+
 ** The agent and the environment
-*** Agent
-- Obtains stimuli/observations
-- Generates actions/decisions
-*** Environment
+*** Agent-environment interface
+**** Agent
+- Obtains stimuli/observations $x_t$
+- Generates actions/decisions $a_t$
+**** Environment
 - Reacts to agent's actions
 - Generates observations
-*** The mind/body interface
+**** The mind/body interface
 - The body can be seen as part of the mind's environment
-** Learning and memory
-*** Belief state
+**** Policy and history
+- The agent's next action $a_{t+1}$ depends on previous observation's and actions.
+- The policy is implemented through an *algorithm*
+*** Example policies
+**** Reactive maze policy
+- Ordered actions $A = \{\textrm{Up}, \textrm{Right}, \textrm{Down}, \textrm{Left}\}$
+- Take action $a_{t+1} = a_t$ unless there is a wall in front.
+- If there is a wall, take the next action, $a_{t+1} = a_t + 1$.
+
+**** Problems with this policy
+- Can it solve any maze?
+- Why yes/no?
+
+*** Learning and memory
+**** Belief state
 - Memory
 - A summary of the agent's knowledge
 - The state in a state machine
 - The contents of the tape and read/write heads on a Turing machien.
-*** Belief transitions
-- 
+**** Belief transitions
+- A (possibly randomised) function $f : S \times A \times X \to S$ 
+\[
+b_{t+1} = f(b_t, a_t, x_t)
+\]
+- $b_t$: Belief at time $t$.
+- $a_t$: Action at time $t$
+- $x_t$: Observation at time $t$.
+- $f$ is implemented by the agent's algorithm
 
 *** Exercises and Assignments
 **** Exercises (From AI3e, 2.7)
@@ -132,6 +153,8 @@ slowly progress to the more complex ones.
 - 11. Autonomous cars: state of the art.
   
 
+
+* Single agent problems with no uncertainty
 
 ** Elementary Decision Theory
 *** Preferences
@@ -205,13 +228,13 @@ A graph $G$ is defined by:
 - Set of *arcs* $A$, with $\langle x,y \rangle \in A$ and $x, y \in N$
 **** Labels and costs
 - Nodes can be labelled as e.g. start and goal states.
-- Arcs can be labelled according to *actions*
+- Arcs can be labelled according to *actions*.
 **** Paths and cycles
 - A path from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
   $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
 - A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
 - If a graph has no cycles, it is *acyclic*
-*** Shortest path
+*** The shortest path problem
 
 **** Costs
 - Traversing arc $\langle x,y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
@@ -229,17 +252,62 @@ A graph $G$ is defined by:
 - We can maximise rewards instead of minimising costs.
 
 *** Depth-first search
+**** Generic depth-first search
   \begin{algorithmic}
-	\STATE \textbf{function} \texttt{DepthFirst}($V, F$)
+        \STATE \textbf{global} $F$: Nodes left to search
+	\STATE \textbf{input} $G = \langle N, A \rangle$: Graph.
+        \STATE \textbf{input} $n$: Current node
+	\STATE \textbf{function} \texttt{DepthFirst}($G, n$)
+	\FOR {$j \in F: \langle n,j \rangle \in A$}
+	\STATE \texttt{DepthFirst}($V, j$)F \setminus \{n\}$)
+	\ENDFOR
+  \end{algorithmic}
+**** Discussion
+- This function goes through all the nodes in the graph
+- How can we modify it to identify all paths to the goal?
+- How can we modify it to identify the shortest path to the goal?
+
+*** Goal-oriented depth-first search
+  \begin{algorithmic}
+	\STATE $G = \langle N, A \rangle$: Graph.
+        \STATE $F$: Set of nodes to search
+        \STATE $x$: goal state.
+	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)
+        \STATE \texttt{found} = \textbf{false}
 	\FOR {$n \in F$}
-	\FOR {$j : \langle n,j \rangle \in A \AND $}
-	\STATE \texttt{DepthFirst}($S, F$)
+	\FOR {$j \in F: \langle n,j \rangle \in A$}
+	\IF{\texttt{GoalDepthFirst}($V, F \setminus \{n\}$)}
+	\STATE \texttt{found} = \textbf{true}
+	\ENDIF
 	\ENDFOR 
 	\ENDFOR
-	\STATE La
+	\RETURN \texttt{found}
   \end{algorithmic}
+*** Shortest-path depth-first search
+  \begin{algorithmic}
+	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)
+	\STATE $G = \langle N, A \rangle$: Graph.
+        \STATE $F$: Set of nodes to search
+        \STATE $x$: goal state.
+        \STATE \texttt{dist} = $\infty$.
+	\FOR {$n \in F$}
+	\FOR {$j \in F: \langle n,j \rangle \in A$}
+	\STATE $\texttt{dist} = \min \{\texttt{dist}, {\texttt{GoalDepthFirst}(V, F \setminus \{n\})}\}$.
+	\ENDFOR 
+	\ENDFOR
+	\RETURN \texttt{dist}
+  \end{algorithmic}
+- This is a recursive implementation
+- 
+
+
 *** Breath-first search
+*** Heuristics
+*** $A^*$-search
+
 *** Dynamic programming
+
+*** Branch and Bound
 
 ** Logic 
 *** Logic
@@ -764,7 +832,7 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 
 
 
-* Book chapters
+* Schedule
 
 1. 1-2 Introduction
 2. 3.1-3.5 Search, State Spaces, Graphs, Uniformed Search.
@@ -777,5 +845,7 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 9. Simultaneous games
 10. Supervised Learning
 11. Reinforcement Learning
-
+12. Project work
+13. Project work
+14. Project presentations
 

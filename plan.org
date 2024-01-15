@@ -84,7 +84,7 @@ slowly progress to the more complex ones.
 - Decisions depend on information.
 - How do we incorporate new information?
 *** The view from statistics  
- ,**** Optimal decisions
+**** Optimal decisions
 - Problem-dependent
 - Require defining a cost- or utility function
 - The optimal solution has the lowest cost or maximal utility
@@ -129,13 +129,13 @@ slowly progress to the more complex ones.
 - The state in a state machine
 - The contents of the tape and read/write heads on a Turing machien.
 **** Belief transitions
-- A (possibly randomised) function $f : S \times A \times X \to S$ 
+- A (possibly randomised) function $f : B \times A \times X \to B$ 
 \[
 b_{t+1} = f(b_t, a_t, x_t)
 \]
-- $b_t$: Belief at time $t$.
-- $a_t$: Action at time $t$
-- $x_t$: Observation at time $t$.
+- $b_t \in S$: Belief at time $t$.
+- $a_t \in A$: Action at time $t$
+- $x_t \in X$: Observation at time $t$.
 - $f$ is implemented by the agent's algorithm
 
 *** Exercises and Assignments
@@ -188,12 +188,17 @@ It is sometimes more convenient to define a cost function $C: R \to \Reals$ so t
 **** Decision making as an optimisation problem
 How can we find the decision maximising utility / minimising cost?
 
-** Few choices and beyond
-*** Brute Force
-In the simplest case, we need to choose among a finite number of options:
+** Decision making as optimisation
+*** The basic decision problem
+If we have defined a utility function assigning a value to every possible choice, then by assumption the *optimal* choice /maximises/ utility. So, we need to solve this problem:
+
 \[
 x^* = \argmax_x U(x)
 \]
+*** Brute Force
+In the simplest case, we need to choose among a (small) finite number of options,
+so finding the maximum is easy:
+
 **** Python function
 #+BEGIN_SRC python
   # returns the first element maximising U
@@ -254,35 +259,30 @@ A graph $G$ is defined by:
 *** Depth-first search
 **** Generic depth-first search
   \begin{algorithmic}
-        \STATE \textbf{global} $F$: Nodes left to search
+        \STATE \textbf{global} $F = \emptyset$ : Nodes searched
 	\STATE \textbf{input} $G = \langle N, A \rangle$: Graph.
-        \STATE \textbf{input} $n$: Current node
+        \STATE \textbf{input} $n$ : Current node
 	\STATE \textbf{function} \texttt{DepthFirst}($G, n$)
+    \STATE $F = F \setminus \{n\}$ : mark $n$ as searched
 	\FOR {$j \in F: \langle n,j \rangle \in A$}
-	\STATE $\texttt{DepthFirst}(V, F \setminus \{n\})$
+	\STATE $\texttt{DepthFirst}(V, j)$
 	\ENDFOR
   \end{algorithmic}
 **** Discussion
 - This function goes through all the nodes in the graph
+- How can we use it to identify a paths to the goal?
 - How can we modify it to identify all paths to the goal?
 - How can we modify it to identify the shortest path to the goal?
 
-*** Goal-oriented depth-first search
-  \begin{algorithmic}
-	\STATE $G = \langle N, A \rangle$: Graph.
-        \STATE $F$: Set of nodes to search
-        \STATE $x$: goal state.
-	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)
-        \STATE \texttt{found} = \textbf{false}
-	\FOR {$n \in F$}
-	\FOR {$j \in F: \langle n,j \rangle \in A$}
-	\IF{\texttt{GoalDepthFirst}($V, F \setminus \{n\}$)}
-	\STATE \texttt{found} = \textbf{true}
-	\ENDIF
-	\ENDFOR 
-	\ENDFOR
-	\RETURN \texttt{found}
-  \end{algorithmic}
+*** Goals and DFS
+**** Main idea
+- Go through all nodes
+- Return true for nodes that reach the goal.
+**** Goal-DFS
+#+BEGIN_SRC python
+F = []
+#+END_SRC
+  
 *** Shortest-path depth-first search
   \begin{algorithmic}
 	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)

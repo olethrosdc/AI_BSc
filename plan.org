@@ -45,6 +45,11 @@
 #+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
 #+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
 #+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
+#+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
+#+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
+#+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
+#+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
 #+LaTeX_CLASS_OPTIONS: [smaller]
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
@@ -188,6 +193,17 @@ It is sometimes more convenient to define a cost function $C: R \to \Reals$ so t
 **** Decision making as an optimisation problem
 How can we find the decision maximising utility / minimising cost?
 
+*** Choice of the utility function
+**** Designer input
+- The AI designer selects the utility (or goals)
+- The choice is not always obvious!
+**** The *value-alignment* problem
+- The designer selects a utility they *think* is the best choice
+- However, their choice results in unintended behaviour
+- Example: Autonomous vehicles
+
+**** The value-alignment in *populations*
+- 
 ** Decision making as optimisation
 *** The basic decision problem
 If we have defined a utility function assigning a value to every possible choice, then by assumption the *optimal* choice /maximises/ utility. So, we need to solve this problem:
@@ -239,6 +255,65 @@ A graph $G$ is defined by:
   $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
 - A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
 - If a graph has no cycles, it is *acyclic*
+*** Tree example
+\begin{tikzpicture}
+      \node[RV] at (0,0) (0) {0};
+      \node[RV] at (1,1) (1) {1};
+      \node[RV] at (1,-1) (2) {2};
+      \node[RV] at (2,1.5) (3) {3};
+      \node[RV] at (2,0.5) (4) {4};
+      \node[RV] at (2,-0.5) (5) {5};
+      \node[RV] at (2,-1.5) (6) {6};
+      \draw[->] (0) to (1);
+      \draw[->] (0) to (2);
+      \draw[->] (1) to (3);
+      \draw[->] (1) to (4);
+      \draw[->] (2) to (5);
+      \draw[->] (2) to (6);
+\end{tikzpicture}
+- No matter where the goal is, there is a unique path to it.
+- Depending on how the edges are ordered, finding it may require up to 6 steps.
+- For binary trees of depth $D$, the worst-case complexity is $2^D$.
+
+*** Shortcut example
+\begin{tikzpicture}
+      \node[RV] at (0,0) (0) {0};
+      \node[RV] at (1,0) (1) {1};
+      \node[RV] at (2,0) (2) {2};
+      \node[RV] at (3,0) (3) {3};
+      \node[RV] at (1,1) (4) {4};
+      \node[RV] at (1,-1) (5) {5};
+      \draw[->] (0) to (1);
+      \draw[->] (1) to (2);
+      \draw[->] (2) to (3);
+      \draw[->] (1) to (5);
+      \draw[->] (1) to (4);
+      \draw[->] (4) to (3);
+\end{tikzpicture}
+- There are two paths to node 3.
+- Depending on how we search, we may find the longest path first.
+- Why would we *prefer* one path to another?
+- How should we search to find the /best/ path?
+*** Depth-first search
+**** Generic depth-first search
+\begin{algorithmic}
+\STATE \textbf{global} $F = \emptyset$ : Nodes searched
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $n$ : Current node
+\STATE \textbf{function} \texttt{DepthFirst}($G, n$)
+  \STATE $F = F \cup \{n\}$ : mark $n$ as searched
+  \FOR {$c \notin F: \langle c,j \rangle \in E$}
+     \IF {$\texttt{DepthFirst}(G, j, S)$}
+          \RETURN 1.
+     \ENDIF
+\ENDFOR
+\end{algorithmic}
+**** Discussion
+- This function goes through all the nodes in the graph
+- How can we use it to identify a paths to the goal?
+- How can we modify it to identify all paths to the goal?
+- How can we modify it to identify the shortest path to the goal?
+
 *** The shortest path problem
 
 **** Costs
@@ -256,46 +331,30 @@ A graph $G$ is defined by:
 - In the simplest cast $c(a) = 1$ for all arcs.
 - We can maximise rewards instead of minimising costs.
 
-*** Depth-first search
-**** Generic depth-first search
-  \begin{algorithmic}
-        \STATE \textbf{global} $F = \emptyset$ : Nodes searched
-	\STATE \textbf{input} $G = \langle N, A \rangle$: Graph.
-        \STATE \textbf{input} $n$ : Current node
-	\STATE \textbf{function} \texttt{DepthFirst}($G, n$)
-    \STATE $F = F \setminus \{n\}$ : mark $n$ as searched
-	\FOR {$j \in F: \langle n,j \rangle \in A$}
-	\STATE $\texttt{DepthFirst}(V, j)$
-	\ENDFOR
-  \end{algorithmic}
-**** Discussion
-- This function goes through all the nodes in the graph
-- How can we use it to identify a paths to the goal?
-- How can we modify it to identify all paths to the goal?
-- How can we modify it to identify the shortest path to the goal?
-
 *** Goals and DFS
 **** Main idea
-- Go through all nodes
+- Go through all nodes, marking searched nodes.
 - Return true for nodes that reach the goal.
-- At the root, we have the value 'true' for the child reaching the goal.
-- The path is not saved, however.
 **** Goal-DFS
-#+BEGIN_SRC python
-  from include/graph import graph
-  searched = set()
-  def GoalDFS(graph, current):
-      searched.add(current)
-      found = false
-      for c in graph.children(current):
-	  if not (c in searched):
-	      if (GoalDFS(graph, c)):
-		  found = true
+\begin{algorithmic}
+\STATE \textbf{global} $F = \emptyset$ : Nodes searched
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $n$ : Current node
+\STATE \textbf{input} $S$ : Set of goals
+\STATE \textbf{function} \texttt{DepthFirst}($G, n, S$)
+\STATE $F = F \cup \{n\}$ : mark $n$ as searched
+\IF {$n \in S$}
+    \RETURN 1
+\ENDIF
+\FOR {$c \notin F: \langle c,j \rangle \in E$}
+     \IF {$\texttt{DepthFirst}(G, j, S)$}
+          \RETURN 1.
+     \ENDIF
+\ENDFOR
+\end{algorithmic}
 
-        
-        
-#+END_SRC
-  
+
+
 *** Shortest-path depth-first search
   \begin{algorithmic}
 	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)
@@ -624,8 +683,7 @@ The conditional expectation of a random variable $f: \Omega \to \Reals$, with re
 \E_P(f | B) = \sum_{\omega \in \Omega} f(\omega) P(\omega | B).
 \]
 
-
-** Satatistical Decision Theory
+** Statistical Decision Theory
 *** Expected utility
 **** Actions, outcomes and utility
 In this setting, we obtain random outcomes that depend on our actions.

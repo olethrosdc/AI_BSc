@@ -278,9 +278,22 @@ A graph $G$ is defined by:
 **** Main idea
 - Go through all nodes
 - Return true for nodes that reach the goal.
+- At the root, we have the value 'true' for the child reaching the goal.
+- The path is not saved, however.
 **** Goal-DFS
 #+BEGIN_SRC python
-F = []
+  from include/graph import graph
+  searched = set()
+  def GoalDFS(graph, current):
+      searched.add(current)
+      found = false
+      for c in graph.children(current):
+	  if not (c in searched):
+	      if (GoalDFS(graph, c)):
+		  found = true
+
+        
+        
 #+END_SRC
   
 *** Shortest-path depth-first search

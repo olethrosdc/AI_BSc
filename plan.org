@@ -280,7 +280,12 @@ A graph $G$ is defined by:
 - Return true for nodes that reach the goal.
 **** Goal-DFS
 #+BEGIN_SRC python
-F = []
+  F = []
+  def GoalDFS(graph, n, goal):
+    
+	  for j in graph.children(n):
+		  if not(j in F):
+			  GoalDFS
 #+END_SRC
   
 *** Shortest-path depth-first search

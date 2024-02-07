@@ -78,8 +78,7 @@ slowly progress to the more complex ones.
 - This notebook contains a summary of all the foundational material in the course.
 - For details, use the links to external resources.
 
-** What is Artificial Intelligence?
-
+** AI agents and the environment
 *** Decisions and learning
 **** Decision making and interaction
 - Recommend a route.
@@ -104,7 +103,6 @@ slowly progress to the more complex ones.
 - Summarising knowledge into a model.
 - Using the knowledge to make decisions.
 
-** The agent and the environment
 *** Agent-environment interface
 **** Agent
 - Obtains stimuli/observations $x_t$
@@ -117,6 +115,36 @@ slowly progress to the more complex ones.
 **** Policy and history
 - The agent's next action $a_{t+1}$ depends on previous observation's and actions.
 - The policy is implemented through an *algorithm*
+*** Environment types
+**** Observability
+- Known/Unknown environment
+- Fully/Partially observable
+**** Agents
+- Single/Multi
+**** Randomness
+- Deterministic/Stochastic
+**** Temporal structure
+- One-shot/Sequential
+- Static/Dynamic
+**** Variable structure
+- Discrete/Continuous
+*** Example environments
+|-------------+---------+--------+------+-------+------|
+| Environment | Observ. | Agents | Rand | Temp. | Var  |
+|-------------+---------+--------+------+-------+------|
+| Crossword   | Full    |      1 | Det  | One   | Disc |
+| Chess       | Full    |      2 | Det  | Seq   | Disc |
+|-------------+---------+--------+------+-------+------|
+| Poker       | Partial |      n | Stoc | Seq   | Disc |
+| Backgammon  | Full    |      2 | Stoc | Seq   | Disc |
+|-------------+---------+--------+------+-------+------|
+| Driving     | Partial |      n | Stoc | Seq   | Cont |
+| Diagnosis   | Partial |      1 | Stoc | Seq   | Cont |
+|-------------+---------+--------+------+-------+------|
+| Image Rec.  | Partial |      1 | Det  | One   | Cont |
+| Robot Chef. | Partial |      1 | Stoc | Seq   | Cont |
+|-------------+---------+--------+------+-------+------|
+
 *** Example policies
 **** Reactive maze policy
 - Ordered actions $A = \{\textrm{Up}, \textrm{Right}, \textrm{Down}, \textrm{Left}\}$
@@ -127,12 +155,30 @@ slowly progress to the more complex ones.
 - Can it solve any maze?
 - Why yes/no?
 
+*** Agent structures
+**** Simple reflex agents
+- The agent takes an action based on just the current observations:
+\[
+\pi(a_t | x_t)
+\]
+**** Model-based reflex agents
+- Maintains a model of the environment
+- The agent has an internal state $\bel_t$ describing what it knows
+\[
+\pol(a_t | \bel_t)
+\]
+**** Planning agents
+- The agent policy is not a simply function of observations and internal state
+- At each step, the agent uses an algorithm to select its next action
+**** Utility-based agents
+- The agent has a specific utility function that it wishes to maximise
+
 *** Learning and memory
 **** Belief state
 - Memory
 - A summary of the agent's knowledge
 - The state in a state machine
-- The contents of the tape and read/write heads on a Turing machien.
+- The contents of the tape and read/write heads on a Turing machine.
 **** Belief transitions
 - A (possibly randomised) function $f : B \times A \times X \to B$ 
 \[
@@ -142,6 +188,18 @@ b_{t+1} = f(b_t, a_t, x_t)
 - $a_t \in A$: Action at time $t$
 - $x_t \in X$: Observation at time $t$.
 - $f$ is implemented by the agent's algorithm
+*** Example belief state
+**** A known maze, known location
+- What does the optimal policy look like?
+**** An unknown maze, known location
+- Observations: nearby walls, co-ordinates.
+- What should the agent remember?
+- What does the optimal policy look like?
+**** A known maze, unknown location
+- Observations: nearby walls
+- What should the agent remember?
+- What does the optimal policy look like?
+
 
 *** Exercises and Assignments
 **** Exercises (From AI3e, 2.7)
@@ -157,9 +215,14 @@ b_{t+1} = f(b_t, a_t, x_t)
 - 9. Which functions?
 - 11. Autonomous cars: state of the art.
   
+*** Readings
+**** Artificial Intelligence: FoCA 3E
+- Chapter 1: Artificial Intelligence and Agents
+- Chapter 2: Agent Architectures and Hierarchical Control
 
-
-* Single agent problems with no uncertainty
+**** Artificial Intelligence: aMA 
+- Chapter 1: Introduction
+- Chapter 2: Intelligent Agents
 
 ** Elementary Decision Theory
 *** Preferences
@@ -204,7 +267,6 @@ How can we find the decision maximising utility / minimising cost?
 
 **** The value-alignment in *populations*
 - 
-** Decision making as optimisation
 *** The basic decision problem
 If we have defined a utility function assigning a value to every possible choice, then by assumption the *optimal* choice /maximises/ utility. So, we need to solve this problem:
 
@@ -240,8 +302,15 @@ so finding the maximum is easy:
 **** Infinite choices
 - Control: Drive a car.
 
+*** Readings
+**** Artificial Intelligence: FoCA 3E
+- Chapter 12.1: Preferences and Utility
 
-** Structured choices
+**** Artificial Intelligence: aMA 
+- Chapter 2: Intelligent Agents
+
+
+** Uninformed search
 *** Graph definitions
 **** Graph $G = \langle N, A \rangle$
 A graph $G$ is defined by:
@@ -384,8 +453,8 @@ A graph $G$ is defined by:
 - This is a recursive implementation
 - 
 
-
 *** Breath-first search
+** Informed search
 *** Heuristics
 *** $A^*$-search
 
@@ -718,8 +787,6 @@ We prefer $a$ to $a'$ if and only if
 ** Supervised learning
 *** Supervised learning
 
-
-
 ** Markov decision processes
 *** Markov decision process
 - Action space $A$.
@@ -786,9 +853,7 @@ The optimal policy is deterministic with:
 a_t = \argmax_a Q^*(s_t, a)
 \]
 
-
-
-* Multiple agent problems with no uncertainty
+* Multi-player Games
 ** Introduction
 *** Multi-agent decision making
 - *Two* versus $n$-player games
@@ -797,6 +862,8 @@ a_t = \argmax_a Q^*(s_t, a)
 - General-sum games
 - *Stochastic* games
 - Partial information games
+*** Prisoner's Dilemma
+*** Prisoner's Choice
 
 ** Two-Player zero-sum Games
 *** Extensive-form alternating-move games
@@ -818,20 +885,7 @@ $U = \sum_t \rho(a_t, b_t)$.
 - Players observe both actions
 - Player $a$ receives $U(a,b)$, and $b$ receives $-U(a,b)$. 
 
-
-* Summary of Optimisation methods
-** Gradient Descent
-$d_t = \nabla_x f(x_t)$.
-
-** Stochastic Gradient Descent
-$d_t = \nabla_x f(x_t) + \epsilon_t$.
-** Newton's Method
-
-** Simulated Annealing
-
-** Monte-Carlo Methods
-** Dynamic Programming and Backwards Induction
-** Linear Programming
+*** Linear Programming
 *** The linear programming problem
 Linear programming is a constrained minimisation problem where the objective and the constraints are both linear.
 \begin{align*}
@@ -917,7 +971,7 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 
 
 
-* Schedule
+** Schedule
 
 1. 1-2 Introduction
 2. 3.1-3.5 Search, State Spaces, Graphs, Uniformed Search.

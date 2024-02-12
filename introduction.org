@@ -118,6 +118,23 @@ slowly progress to the more complex ones.
 **** Policy and history
 - The agent's next action $a_{t+1}$ depends on previous observation's and actions.
 - The policy is implemented through an *algorithm*
+*** Examples
+- Maze
+- Algebraic manipulation
+- Chess game
+- Poker game
+- City driving
+- Navigation assistant
+** Environments
+*** Environment components
+- We generally consider dynamic environments
+- $s_t$: state of the environment
+- $x_t$: observation of the environment by the agent
+**** Example: Mazes
+- $s_t$: the location of the agent in the maze
+- $x_t$: What the agent observes (exact location, or just surroundings?)
+
+
 ** Policies
 *** Example policies
 **** Reactive maze policy
@@ -195,6 +212,10 @@ b_{t+1} = f(b_t, a_t, x_t)
 
 * Designing agents
 ** Goals
+*** Goals as a design principle
+**** Fix the car
+**** Planning
+
 ** Elementary Decision Theory
 *** Preferences
 **** Types of rewards                                               :example:
@@ -220,7 +241,7 @@ We prefer items with higher utility, i.e.
 - (b) $U(x) \leq U(y)$ $\Leftrightarrow$ $y \succeq^* x$
 
 **** Cost
-It is sometimes more convenient to define a cost function $C: R \to \Reals$ so that we prefer items with lower cost, i.e.
+     It is sometimes more convenient to define a cost function $C: R \to \Reals$ so that we prefer items with lower cost, i.e.
 - $C(x) \geq C(y)$ $\Leftrightarrow$ $y \succeq^* x$
 
 **** Decision making as an optimisation problem

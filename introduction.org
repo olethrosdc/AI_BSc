@@ -74,20 +74,56 @@ The philosophy of this course is as follows:
 In general, the course will start from the simplest problems and
 slowly progress to the more complex ones.
 
-*** How to use this notebook
-- This notebook contains a summary of all the foundational material in the course.
-- For details, use the links to external resources.
+*** How-to
+
+**** Lectures
+- All the relevant course content is given in-class.
+- The slides only contain a summary.
+- More details in the reference books.
+**** Assignments
+- Assignments are obligatory but not marked.
+- You have a free pass on not handing in two assingments
+**** Projects in teams of 2-3 people (60% of grade)
+1. Problem formulation [Project proposal]
+2. Problem formalisation
+3. Selection of algorithms [Mid-term report]
+4. Method evaluation.
+5. Summarise findings and discuss alternatives to 1-3. [Final report]
+**** Written exam (40% of grade)
 
 ** What is Artificial Intelligence?
+*** Intelligence
+**** What makes something intelligent?
+- Thoughts?
+- Behaviour?
+**** Why do we need artificial intelligence?
+- To do something a human can do (better? worse?)
+- To do something a human cannot do?
+- To help humans do something more efficiently?
 
 *** Decisions and learning
+**** Algorithms as thoughts
+- Incorporating new information
+- Deciding what to do.
+
+**** Learning: Using information to update knowledge.
+- Situational awareness: what is going on right now?
+- Epistemic knowledge: How does the world work.
 **** Decision making and interaction
 - Recommend a route.
 - Buy and sell stocks.
 - Make a move in chess.
-**** Learning.
-- Decisions depend on information.
-- How do we incorporate new information?
+*** To the moon!
+Goal: See if humans can live on the moon.
+**** Learning
+- Orbital mechanics: What are the equations of motion?
+- Trajectory following: Where is the spaceship right now?
+**** Decisions
+- How much should we spend?
+- How much payload/fuel/time?
+- What is a good trajectory for a given payload/fuel?
+- How can the spaceship follow the trajectory?
+- How can the spaceship land on the moon?
 *** The view from statistics  
 **** Optimal decisions
 - Problem-dependent
@@ -119,32 +155,51 @@ slowly progress to the more complex ones.
 - The agent's next action $a_{t+1}$ depends on previous observation's and actions.
 - The policy is implemented through an *algorithm*
 *** Examples
-- Maze
+- Mazes
 - Algebraic manipulation
 - Chess game
 - Poker game
 - City driving
 - Navigation assistant
+- Space exploration
+
 ** Environments
 *** Environment components
-- We generally consider dynamic environments
+We generally consider dynamic environments, so at time $t$:
 - $s_t$: state of the environment
 - $x_t$: observation of the environment by the agent
+- $a_t$: actions taken by the agent
 **** Example: Mazes
 - $s_t$: the location of the agent in the maze
 - $x_t$: What the agent observes (exact location, or just surroundings?)
-
+- $a_t$: Direction in which the agent moves
 
 ** Policies
+*** Policies
+- Policies determine the behaviour of the agent.
+- They define what the agent does at any given time.
+**** Reactive policies
+We allow agents to randomise. The simplest agent choose actions only depending on the current observation:
+\[
+\pi(a_t | x_t) \tag{the probability with which the agent takes action $a_t$}
+\]
+**** Deterministic (reactive) policies
+Then for each $x_t$ the same action $f(x_t)$ is always taken, so that $\pi(a_t = f(x_t) | x_t) = 1$.
+**** Adaptive policies
+The action taken may change over time, depending on what happened in the past:
+\[
+\pi(a_t \mid x_t, a_{t-1}, x_{t-1}, \ldots, a_1, x_1)
+\]
 *** Example policies
 **** Reactive maze policy
 - Ordered actions $A = \{\textrm{Up}, \textrm{Right}, \textrm{Down}, \textrm{Left}\}$
 - Take action $a_{t+1} = a_t$ unless there is a wall in front.
-- If there is a wall, take the next action, $a_{t+1} = a_t + 1$.
+- If there is a wall, take the next action, $a_{t+1} = a_t + 1$. (where + cycles over the 4 actions)
 
 **** Problems with this policy
 - Can it solve any maze?
 - Why yes/no?
+- What can we do to make sure that the agent visits every point of the maze?
 
 ** Agent structures
 *** Example: taking an exam
@@ -172,6 +227,24 @@ slowly progress to the more complex ones.
 - Breathe with lungs.
 - Pump blood with heart.
 
+*** Example: Planning a trip
+There are three train routes from Neuchatel to Luzerne 
+- Neuchatel 6:58-IC-7:57 Olten 8:07-RE-8:55 Luzern (18 CHF)
+- Neuchatel 7:01-S-7:52 Bern  8:00-IR-9:01 Luzern (22 CHF)
+- Neuchatel 7:26-IC-8:18 Olten 8:30-IR-9:05 Luzern (26 CHF)
+**** Criteria for choosing
+- Price
+- Train type
+- Crowdedness
+- Length of time
+**** Planning the trip
+- Is "go through Bern" enough of a plan?
+- What about delays or cancellations?
+**** Multiple levels of actions 
+- Which route to use, and fallbacks.
+- What to pack
+- How to get to the station
+- Putting one foot in front of the other.
 *** Hierarchical control
 **** High-level plan
 
@@ -193,28 +266,31 @@ b_{t+1} = f(b_t, a_t, x_t)
 - $x_t \in X$: Observation at time $t$.
 - $f$ is implemented by the agent's algorithm
 
-** Exercises
-*** Exercises and Assignments
-**** Exercises (From AI3e, 2.7)
-- 1. Representations
-- 2. Top-level controller.
-- 3. Obstacle avoidance.
-- 4. Robot trap.
-- 10. Autonomous cars: driver preferences
-**** Assignments (From AI3e, 2.7)
-- 5. Moving targets
-- 7. Sensing
-- 8. Batteries
-- 9. Which functions?
-- 11. Autonomous cars: state of the art.
-  
 
 
 * Designing agents
 ** Goals
 *** Goals as a design principle
-**** Fix the car
-**** Planning
+- Easy to define
+- Can be too vague.
+**** Example: mazes
+- Assign "goal" to a maze location
+- The agent should find the way to the goal.
+**** Example: exams
+- Goal: pass the exam
+- The agent should find a strategy so that it passes the exam!
+
+** Utilities
+*** Utility as a design principle
+- Hard to define.
+- Can be too specific.
+**** Example: mazes
+- Prefer shortest path to longer ones to the goal.
+**** Example: exams
+- Prefer higher grades than lower grades.
+- Prefer to study less than more
+
+
 
 ** Elementary Decision Theory
 *** Preferences
@@ -257,7 +333,24 @@ How can we find the decision maximising utility / minimising cost?
 - Example: Autonomous vehicles
 
 **** The value-alignment in *populations*
-- 
+- Not everybody wants the same thing.
+- We need to design *fair* policies.
+
 ** Discussion
 *** Goals versus preferences
-** Exercises
+**** Exam taking
+- What if you say you want to perform super-well in the exam?
+** Exercises and assignments
+*** Exercises (From AI3e, 2.7)
+- 1. Representations
+- 2. Top-level controller.
+- 3. Obstacle avoidance.
+- 4. Robot trap.
+- 10. Autonomous cars: driver preferences
+*** Assignments (From AI3e, 2.7)
+- 5. Moving targets
+- 7. Sensing
+- 8. Batteries
+- 9. Which functions?
+- 11. Autonomous cars: state of the art.
+  

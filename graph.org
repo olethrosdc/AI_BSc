@@ -64,9 +64,11 @@
 - A path $x_1, \ldots,  x_t$ is a series of nodes (and edges) in the graph so that
 $(x_{i}, x_{i+1}) \in E$.
 
+To assign meaning to the graph, we can assign labels.
 ** Edge Labels
-To assign meaning to the graph, we can assign labels to the edges:
 - Action (each edge corresponds to an agent action)
 - Costs/reward (the cost/gain of each action)
-
+** Node labels
+- Goals
+- Costs/reward (the cost/gain of going to a node)
 

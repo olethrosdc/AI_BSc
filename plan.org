@@ -166,9 +166,8 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 | 4.18 | Statistical estimation and supervised learning                          |
 | 4.25 | Markov decision processes                                               |
 | 5.02 | Markov games                                                            |
-| 5.09 | Simultaneous games [ICLR]                                               |
-| 5.16 | Reinforcement Learning                                                  |
-| 5.23 | Project discussions                                                     |
+| 5.16 | Simultaneous Games                                                      |
+| 5.23 | Reinforcement Learning                                                  |
 | 5.30 | Project presentations                                                   |
 
 

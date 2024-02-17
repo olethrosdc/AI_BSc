@@ -156,396 +156,38 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 
 ** Schedule
 
-1. 1-2 Introduction
-2. 3.1-3.5 Search, State Spaces, Graphs, Uniformed Search.
-3. 3.6. Heuristic Search
-4. 4.1-4.2, 4.8 Constrained Search
-5. 5.1. Propositions, Constraints, 6.1. Representations, 6.2-6.4. Planning
-6. 9.1 Probability, Independence, Belief Networks
-7. 12.1. Preferences and Utility, 12.5 Decision Processes
-8. Alternative move games
-9. Simultaneous games
-10. Supervised Learning
-11. Reinforcement Learning
-12. Project work
-13. Project work
-14. Project presentations
+| 2.22 | 1-2 Introduction                                                        |
+| 2.29 | 3.1-3.5 Search, State Spaces, Graphs, Uniformed Search.                 |
+| 3.07 | 3.6. Informed Search, Heuristics, A*                                    |
+| 3.14 | 4.1-4.2, 4.8 Constrained Search                                         |
+| 3.21 | 5.1. Propositions, Constraints, 6.1. Representations, 6.2-6.4. Planning |
+| 3.28 | 9.1 Probability, Independence, Belief Networks                          |
+| 4.11 | 12.1. Preferences and Utility. Probability                              |
+| 4.18 | Statistical estimation and supervised learning                          |
+| 4.25 | Markov decision processes                                               |
+| 5.02 | Markov games                                                            |
+| 5.09 | Simultaneous games [ICLR]                                               |
+| 5.16 | Reinforcement Learning                                                  |
+| 5.23 | Project discussions                                                     |
+| 5.30 | Project presentations                                                   |
 
-** AI agents and the environment
-*** Decisions and learning
-**** Decision making and interaction
-- Recommend a route.
-- Buy and sell stocks.
-- Make a move in chess.
-**** Learning.
-- Decisions depend on information.
-- How do we incorporate new information?
-*** The view from statistics  
-**** Optimal decisions
-- Problem-dependent
-- Require defining a cost- or utility function
-- The optimal solution has the lowest cost or maximal utility
-
-**** Optimisation: algorithms for optimal solutions
-- Discrete optimisation.
-- Linear optimisation.
-- Non-linear optimisation.
-
-**** Statistics and Machine Learning
-- How to learn from data and interactions.
-- Summarising knowledge into a model.
-- Using the knowledge to make decisions.
-
-*** Agent-environment interface
-**** Agent
-- Obtains stimuli/observations $x_t$
-- Generates actions/decisions $a_t$
-**** Environment
-- Reacts to agent's actions
-- Generates observations
-**** The mind/body interface
-- The body can be seen as part of the mind's environment
-**** Policy and history
-- The agent's next action $a_{t+1}$ depends on previous observation's and actions.
-- The policy is implemented through an *algorithm*
-*** Environment types
-**** Observability
-- Known/Unknown environment
-- Fully/Partially observable
-**** Agents
-- Single/Multi
-**** Randomness
-- Deterministic/Stochastic
-**** Temporal structure
-- One-shot/Sequential
-- Static/Dynamic
-**** Variable structure
-- Discrete/Continuous
-*** Example environments
-|-------------+---------+--------+------+-------+------|
-| Environment | Observ. | Agents | Rand | Temp. | Var  |
-|-------------+---------+--------+------+-------+------|
-| Crossword   | Full    |      1 | Det  | One   | Disc |
-| Chess       | Full    |      2 | Det  | Seq   | Disc |
-|-------------+---------+--------+------+-------+------|
-| Poker       | Partial |      n | Stoc | Seq   | Disc |
-| Backgammon  | Full    |      2 | Stoc | Seq   | Disc |
-|-------------+---------+--------+------+-------+------|
-| Driving     | Partial |      n | Stoc | Seq   | Cont |
-| Diagnosis   | Partial |      1 | Stoc | Seq   | Cont |
-|-------------+---------+--------+------+-------+------|
-| Image Rec.  | Partial |      1 | Det  | One   | Cont |
-| Robot Chef. | Partial |      1 | Stoc | Seq   | Cont |
-|-------------+---------+--------+------+-------+------|
-
-*** Example policies
-**** Reactive maze policy
-- Ordered actions $A = \{\textrm{Up}, \textrm{Right}, \textrm{Down}, \textrm{Left}\}$
-- Take action $a_{t+1} = a_t$ unless there is a wall in front.
-- If there is a wall, take the next action, $a_{t+1} = a_t + 1$.
-
-**** Problems with this policy
-- Can it solve any maze?
-- Why yes/no?
-
-*** Agent structures
-**** Simple reflex agents
-- The agent takes an action based on just the current observations:
-\[
-\pi(a_t | x_t)
-\]
-**** Model-based reflex agents
-- Maintains a model of the environment
-- The agent has an internal state $\bel_t$ describing what it knows
-\[
-\pol(a_t | \bel_t)
-\]
-**** Planning agents
-- The agent policy is not a simply function of observations and internal state
-- At each step, the agent uses an algorithm to select its next action
-**** Utility-based agents
-- The agent has a specific utility function that it wishes to maximise
-
-*** Learning and memory
-**** Belief state
-- Memory
-- A summary of the agent's knowledge
-- The state in a state machine
-- The contents of the tape and read/write heads on a Turing machine.
-**** Belief transitions
-- A (possibly randomised) function $f : B \times A \times X \to B$ 
-\[
-b_{t+1} = f(b_t, a_t, x_t)
-\]
-- $b_t \in S$: Belief at time $t$.
-- $a_t \in A$: Action at time $t$
-- $x_t \in X$: Observation at time $t$.
-- $f$ is implemented by the agent's algorithm
-*** Example belief state
-**** A known maze, known location
-- What does the optimal policy look like?
-**** An unknown maze, known location
-- Observations: nearby walls, co-ordinates.
-- What should the agent remember?
-- What does the optimal policy look like?
-**** A known maze, unknown location
-- Observations: nearby walls
-- What should the agent remember?
-- What does the optimal policy look like?
-
-*** Exercises and Assignments
-**** Exercises (From AI3e, 2.7)
-- 1. Representations
-- 2. Top-level controller.
-- 3. Obstacle avoidance.
-- 4. Robot trap.
-- 10. Autonomous cars: driver preferences
-**** Assignments (From AI3e, 2.7)
-- 5. Moving targets
-- 7. Sensing
-- 8. Batteries
-- 9. Which functions?
-- 11. Autonomous cars: state of the art.
-  
-*** Readings
-**** Artificial Intelligence: FoCA 3E
-- Chapter 1: Artificial Intelligence and Agents
-- Chapter 2: Agent Architectures and Hierarchical Control
-
-**** Artificial Intelligence: aMA 
-- Chapter 1: Introduction
-- Chapter 2: Intelligent Agents
-
-** Elementary Decision Theory
-*** Preferences
-**** Types of rewards                                               :example:
-- For e.g. a student: Tickets to concerts.
-- For e.g. an investor: A basket of stocks, bonds and currency.
-- For everybody: Money.
-
-**** Preferences among rewards
-For any rewards $x, y \in R$, we either
-- (a) Prefer $x$ at least as much as $y$ and write $x \preceq^* y$.
-- (b) Prefer $x$ not more than $y$ and write $x \succeq^* y$.
-- (c) Prefer $x$ about the same as $y$ and write $x \eqsim^* y$.
-- (d) Similarly define $\succ^*$ and $\prec^*$
-  
-*** Utility and Cost
-
-**** Utility function
-To make it easy, assign a utility $U(x)$ to every reward through a
-utility function $U : R \to \Reals$.
-
-**** Utility-derived preferences
-We prefer items with higher utility, i.e.
-- (a) $U(x) \geq U(y)$ $\Leftrightarrow$ $x \succeq^* y$
-- (b) $U(x) \leq U(y)$ $\Leftrightarrow$ $y \succeq^* x$
-
-**** Cost
-It is sometimes more convenient to define a cost function $C: R \to \Reals$ so that we prefer items with lower cost, i.e.
-- $C(x) \geq C(y)$ $\Leftrightarrow$ $y \succeq^* x$
-
-**** Decision making as an optimisation problem
-How can we find the decision maximising utility / minimising cost?
-
-*** Choice of the utility function
-**** Designer input
-- The AI designer selects the utility (or goals)
-- The choice is not always obvious!
-**** The *value-alignment* problem
-- The designer selects a utility they *think* is the best choice
-- However, their choice results in unintended behaviour
-- Example: Autonomous vehicles
-
-**** The value-alignment in *populations*
-- 
-*** The basic decision problem
-If we have defined a utility function assigning a value to every possible choice, then by assumption the *optimal* choice /maximises/ utility. So, we need to solve this problem:
-
-\[
-x^* = \argmax_x U(x)
-\]
-*** Brute Force
-In the simplest case, we need to choose among a (small) finite number of options,
-so finding the maximum is easy:
-
-**** Python function
-#+BEGIN_SRC python
-  # returns the first element maximising U
-  import numpy as np
-  x_star = np.argmax(U)
-#+END_SRC
-**** Implementation
-#+BEGIN_SRC python
-  def argmax(U):
-	arg_max = 0
-	U_max = U[0]
-	for x in range(1, len(U)):
-	  if (U[x] > U_max):
-		U_max = U[x]
-		arg_max = x
-  return arg_max
-#+END_SRC
-*** Large or infinite choices
-**** Large, structured choices
-- Shortest path: Sequences of places to pass along a route.
-- Matching: Assign items to individuals.
-- Theorem proving: Prove a mathematical theorem in the simplest possible way.
-**** Infinite choices
-- Control: Drive a car.
-
-*** Readings
-**** Artificial Intelligence: FoCA 3E
-- Chapter 12.1: Preferences and Utility
-
-**** Artificial Intelligence: aMA 
-- Chapter 2: Intelligent Agents
 
 * single agent problems with certainty
 ** Uninformed search
-*** Graph definitions
-**** Graph $G = \langle N, A \rangle$
-A graph $G$ is defined by:
-- Set of *nodes* $N$
-- Set of *arcs* $A$, with $\langle x,y \rangle \in A$ and $x, y \in N$
-**** Labels and costs
-- Nodes can be labelled as e.g. start and goal states.
-- Arcs can be labelled according to *actions*.
-**** Paths and cycles
-- A path from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
-  $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
-- A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
-- If a graph has no cycles, it is *acyclic*
-*** Tree example
-\begin{tikzpicture}
-      \node[RV] at (0,0) (0) {0};
-      \node[RV] at (1,1) (1) {1};
-      \node[RV] at (1,-1) (2) {2};
-      \node[RV] at (2,1.5) (3) {3};
-      \node[RV] at (2,0.5) (4) {4};
-      \node[RV] at (2,-0.5) (5) {5};
-      \node[RV] at (2,-1.5) (6) {6};
-      \draw[->] (0) to (1);
-      \draw[->] (0) to (2);
-      \draw[->] (1) to (3);
-      \draw[->] (1) to (4);
-      \draw[->] (2) to (5);
-      \draw[->] (2) to (6);
-\end{tikzpicture}
-- No matter where the goal is, there is a unique path to it.
-- Depending on how the edges are ordered, finding it may require up to 6 steps.
-- For binary trees of depth $D$, the worst-case complexity is $2^D$.
+| Graph definitions         | 10 |
+| Tree example              |  5 |
+| Shortcut example          |  5 |
+| Depth-first search        | 10 |
+| The shortest path problem | 10 |
+| Goals and DFS             | 10 |
+| Shortest-path DFS         | 10 |
+| Breadth-first search      | 10 |
+| Iterative deepening       | 10 |
+| Uniform cost search       | 10 |
+|---------------------------+----|
+|                           | 95 |
+#+TBLFM: @11$2=vsum(@1..@10)
 
-*** Shortcut example
-\begin{tikzpicture}
-      \node[RV] at (0,0) (0) {0};
-      \node[RV] at (1,0) (1) {1};
-      \node[RV] at (2,0) (2) {2};
-      \node[RV] at (3,0) (3) {3};
-      \node[RV] at (1,1) (4) {4};
-      \node[RV] at (1,-1) (5) {5};
-      \draw[->] (0) to (1);
-      \draw[->] (1) to (2);
-      \draw[->] (2) to (3);
-      \draw[->] (1) to (5);
-      \draw[->] (1) to (4);
-      \draw[->] (4) to (3);
-\end{tikzpicture}
-- There are two paths to node 3.
-- Depending on how we search, we may find the longest path first.
-- Why would we *prefer* one path to another?
-- How should we search to find the /best/ path?
-*** Depth-first search
-**** Generic depth-first search
-\begin{algorithmic}
-\STATE \textbf{global} $F = \emptyset$ : Nodes searched
-\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
-\STATE \textbf{input} $n$ : Current node
-\STATE \textbf{function} \texttt{DepthFirst}($G, n$)
-  \STATE $F = F \cup \{n\}$ : mark $n$ as searched
-  \FOR {$c \notin F: \langle c,j \rangle \in E$}
-     \IF {$\texttt{DepthFirst}(G, j, S)$}
-          \RETURN 1.
-     \ENDIF
-\ENDFOR
-\end{algorithmic}
-**** Discussion
-- This function goes through all the nodes in the graph
-- How can we use it to identify a paths to the goal?
-- How can we modify it to identify all paths to the goal?
-- How can we modify it to identify the shortest path to the goal?
-
-*** The shortest path problem
-
-**** Costs
-- Traversing arc $\langle x,y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
-- Following a path $p$ has a total cost
-\[
-  C(p) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
-\]
-
-**** The shortest path problem
-- Input: a set of *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
-- Output: Find a path $p$ from $X$ to $Y$ so that $C(p) \leq C(p')$ for all $p$ 
-
-**** Notes
-- In the simplest cast $c(a) = 1$ for all arcs.
-- We can maximise rewards instead of minimising costs.
-
-*** Goals and DFS
-**** Main idea
-- Go through all nodes, marking searched nodes.
-- Return true for nodes that reach the goal.
-**** Goal-DFS
-<<<<<<< HEAD
-#+BEGIN_SRC python
-  F = []
-  def GoalDFS(graph, n, goal):
-    
-	  for j in graph.children(n):
-		  if not(j in F):
-			  GoalDFS
-#+END_SRC
-  
-=======
-\begin{algorithmic}
-\STATE \textbf{global} $F = \emptyset$ : Nodes searched
-\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
-\STATE \textbf{input} $n$ : Current node
-\STATE \textbf{input} $S$ : Set of goals
-\STATE \textbf{function} \texttt{DepthFirst}($G, n, S$)
-\STATE $F = F \cup \{n\}$ : mark $n$ as searched
-\IF {$n \in S$}
-    \RETURN 1
-\ENDIF
-\FOR {$c \notin F: \langle c,j \rangle \in E$}
-     \IF {$\texttt{DepthFirst}(G, j, S)$}
-          \RETURN 1.
-     \ENDIF
-\ENDFOR
-\end{algorithmic}
-
-
-
->>>>>>> ef106c1943dc95180f579656ecdc1bddb04e1abb
-*** Shortest-path depth-first search
-  \begin{algorithmic}
-	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)
-	\STATE $G = \langle N, A \rangle$: Graph.
-        \STATE $F$: Set of nodes to search
-        \STATE $x$: goal state.
-        \STATE \texttt{dist} = $\infty$.
-	\FOR {$n \in F$}
-	\FOR {$j \in F: \langle n,j \rangle \in A$}
-	\STATE $\texttt{dist} = \min \{\texttt{dist}, {\texttt{GoalDepthFirst}(V, F \setminus \{n\})}\}$.
-	\ENDFOR 
-	\ENDFOR
-	\RETURN \texttt{dist}
-  \end{algorithmic}
-- This is a recursive implementation
-- 
-
-*** Breath-first search
 ** Informed search
 *** Heuristics
 *** $A^*$-search
@@ -553,6 +195,7 @@ A graph $G$ is defined by:
 *** Dynamic programming
 
 *** Branch and Bound
+
 
 ** Logic 
 *** Logic

@@ -54,4 +54,148 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
+** Uninformed search
+*** Graph definitions
+**** Graph $G = \langle N, A \rangle$
+A graph $G$ is defined by:
+- Set of *nodes* $N$
+- Set of *arcs* $A$, with $\langle x,y \rangle \in A$ and $x, y \in N$
+**** Labels and costs
+- Nodes can be labelled as e.g. start and goal states.
+- Arcs can be labelled according to *actions*.
+**** Paths and cycles
+- A path from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
+  $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
+- A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
+- If a graph has no cycles, it is *acyclic*
+*** Tree example
+\begin{tikzpicture}
+      \node[RV] at (0,0) (0) {0};
+      \node[RV] at (1,1) (1) {1};
+      \node[RV] at (1,-1) (2) {2};
+      \node[RV] at (2,1.5) (3) {3};
+      \node[RV] at (2,0.5) (4) {4};
+      \node[RV] at (2,-0.5) (5) {5};
+      \node[RV] at (2,-1.5) (6) {6};
+      \draw[->] (0) to (1);
+      \draw[->] (0) to (2);
+      \draw[->] (1) to (3);
+      \draw[->] (1) to (4);
+      \draw[->] (2) to (5);
+      \draw[->] (2) to (6);
+\end{tikzpicture}
+- No matter where the goal is, there is a unique path to it.
+- Depending on how the edges are ordered, finding it may require up to 6 steps.
+- For binary trees of depth $D$, the worst-case complexity is $2^D$.
 
+*** Shortcut example
+\begin{tikzpicture}
+      \node[RV] at (0,0) (0) {0};
+      \node[RV] at (1,0) (1) {1};
+      \node[RV] at (2,0) (2) {2};
+      \node[RV] at (3,0) (3) {3};
+      \node[RV] at (1,1) (4) {4};
+      \node[RV] at (1,-1) (5) {5};
+      \draw[->] (0) to (1);
+      \draw[->] (1) to (2);
+      \draw[->] (2) to (3);
+      \draw[->] (1) to (5);
+      \draw[->] (1) to (4);
+      \draw[->] (4) to (3);
+\end{tikzpicture}
+- There are two paths to node 3.
+- Depending on how we search, we may find the longest path first.
+- Why would we *prefer* one path to another?
+- How should we search to find the /best/ path?
+*** Depth-first search
+**** Generic depth-first search
+\begin{algorithmic}
+\STATE \textbf{global} $F = \emptyset$ : Nodes searched
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $n$ : Current node
+\STATE \textbf{function} \texttt{DepthFirst}($G, n$)
+  \STATE $F = F \cup \{n\}$ : mark $n$ as searched
+  \FOR {$c \notin F: \langle c,j \rangle \in E$}
+     \IF {$\texttt{DepthFirst}(G, j, S)$}
+          \RETURN 1.
+     \ENDIF
+\ENDFOR
+\end{algorithmic}
+**** Discussion
+- This function goes through all the nodes in the graph
+- How can we use it to identify a paths to the goal?
+- How can we modify it to identify all paths to the goal?
+- How can we modify it to identify the shortest path to the goal?
+
+*** The shortest path problem
+
+**** Costs
+- Traversing arc $\langle x,y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
+- Following a path $p$ has a total cost
+\[
+  C(p) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
+\]
+
+**** The shortest path problem
+- Input: a set of *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
+- Output: Find a path $p$ from $X$ to $Y$ so that $C(p) \leq C(p')$ for all $p$ 
+
+**** Notes
+- In the simplest cast $c(a) = 1$ for all arcs.
+- We can maximise rewards instead of minimising costs.
+
+*** Goals and DFS
+**** Main idea
+- Go through all nodes, marking searched nodes.
+- Return true for nodes that reach the goal.
+**** Goal-DFS
+<<<<<<< HEAD
+#+BEGIN_SRC python
+  F = []
+  def GoalDFS(graph, n, goal):
+    
+	  for j in graph.children(n):
+		  if not(j in F):
+			  GoalDFS
+#+END_SRC
+  
+=======
+\begin{algorithmic}
+\STATE \textbf{global} $F = \emptyset$ : Nodes searched
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $n$ : Current node
+\STATE \textbf{input} $S$ : Set of goals
+\STATE \textbf{function} \texttt{DepthFirst}($G, n, S$)
+\STATE $F = F \cup \{n\}$ : mark $n$ as searched
+\IF {$n \in S$}
+    \RETURN 1
+\ENDIF
+\FOR {$c \notin F: \langle c,j \rangle \in E$}
+     \IF {$\texttt{DepthFirst}(G, j, S)$}
+          \RETURN 1.
+     \ENDIF
+\ENDFOR
+\end{algorithmic}
+
+
+
+>>>>>>> ef106c1943dc95180f579656ecdc1bddb04e1abb
+*** Shortest-path depth-first search
+  \begin{algorithmic}
+	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)
+	\STATE $G = \langle N, A \rangle$: Graph.
+        \STATE $F$: Set of nodes to search
+        \STATE $x$: goal state.
+        \STATE \texttt{dist} = $\infty$.
+	\FOR {$n \in F$}
+	\FOR {$j \in F: \langle n,j \rangle \in A$}
+	\STATE $\texttt{dist} = \min \{\texttt{dist}, {\texttt{GoalDepthFirst}(V, F \setminus \{n\})}\}$.
+	\ENDFOR 
+	\ENDFOR
+	\RETURN \texttt{dist}
+  \end{algorithmic}
+- This is a recursive implementation
+- 
+
+*** Breath-first search
+    

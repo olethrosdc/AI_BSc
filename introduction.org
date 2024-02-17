@@ -286,6 +286,7 @@ b_{t+1} = f(b_t, a_t, x_t)
 - Can be too specific.
 **** Example: mazes
 - Prefer shortest path to longer ones to the goal.
+- More complicated if we have intermediate goals.
 **** Example: exams
 - Prefer higher grades than lower grades.
 - Prefer to study less than more
@@ -338,8 +339,16 @@ How can we find the decision maximising utility / minimising cost?
 
 ** Discussion
 *** Goals versus preferences
+**** Maze-solving
+- How should we define the utility/cost of every path?
+- Is an additive utility sufficient?
+
 **** Exam taking
 - What if you say you want to perform super-well in the exam?
+- How can set up the decision problem of how to study for the exam?
+
+
+
 ** Exercises and assignments
 *** Exercises (From AI3e, 2.7)
 - 1. Representations

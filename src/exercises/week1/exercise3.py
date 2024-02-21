@@ -25,9 +25,10 @@ env = Rob_env(walls)
 
 
 # Controller setup
-robot_body = Rob_body(environment)
-robot_middle = Rob_middle_layer(body)
-robot_top = Rob_top_layer(middle,
+# Controller setup
+robot_body = Rob_body(env)
+robot_middle = Rob_middle_layer(robot_body)
+robot_top = Rob_top_layer(robot_middle,
                     timeout=200,
                     locations=locations
                     )

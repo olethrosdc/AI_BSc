@@ -2,10 +2,9 @@
 # https://artint.info/3e/html/ArtInt3e.Ch2.S7.html
 
 
-
 from ai_python.agentEnv import Rob_env, Rob_body
 from ai_python.agentMiddle import Rob_middle_layer
-from ai_python.agentTop import Rob_top_layer, Plot_env, setup_robot
+from ai_python.agentTop import Rob_top_layer, Plot_env
 from ai_python.agents import Environment
 
 
@@ -28,10 +27,14 @@ walls = {
 
 env = Rob_env(walls)
 
-robot_body, robot_middle, robot_top = setup_robot(environment=env,
-                                                  timeout=500,
-                                                  locations=locations
-                                                  )
+# Controller setup
+robot_body = Rob_body(environment)
+robot_middle = Rob_middle_layer(body)
+robot_top = Rob_top_layer(middle,
+                    timeout=500,
+                    locations=locations
+                    )
+                    
 pl = Plot_env(robot_body,
               robot_top
               )

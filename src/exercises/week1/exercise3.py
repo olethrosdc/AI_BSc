@@ -36,6 +36,3 @@ if __name__ == '__main__':
 
     # The top layer allows you to make the robot visit points
     robot_top.do({'visit': ['o109', 'storage', 'o109', 'o103']})
-    
-    # We want the robot to keep going after executing the plan.
-    # TODO : Modify Rob_top_layer in ai_python/agentTop.py

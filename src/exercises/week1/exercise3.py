@@ -10,6 +10,11 @@ from ai_python.agents import Environment
 # TODO (1): try changing target locations and adding obtacles.
 # TODO (2): update Rob_middle_layer in ai_python/agentMiddle to make the robot always reach its destination
 
+# Try with:
+# locations = {
+#     'G': (-5, 0),
+#     'G2': (30, 30)
+# }
 locations = {
     'mail': (-5, 10),
     'o103': (50, 10),

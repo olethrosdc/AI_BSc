@@ -1,4 +1,4 @@
-# Exercise 2.2
+# Exercise 2.3
 # https://artint.info/3e/html/ArtInt3e.Ch2.S7.html
 
 from ai_python.agentEnv import Rob_env, Rob_body

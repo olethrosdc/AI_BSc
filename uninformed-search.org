@@ -1,4 +1,4 @@
-#+TITLE: Artificial Intelligence
+#+TITLE: Uninformed search
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
@@ -46,6 +46,7 @@
 #+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
 #+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
 #+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
+#+LaTeX_HEADER: \usetikzlibrary{arrows.meta}
 #+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
 #+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
 #+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
@@ -54,20 +55,44 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
-** Uninformed search
+* Introduction
+** Graphs
 *** Graph definitions
-**** Graph $G = \langle N, A \rangle$
+**** Graph $G = \langle N, E \rangle$
 A graph $G$ is defined by:
 - Set of *nodes* $N$
-- Set of *arcs* $A$, with $\langle x,y \rangle \in A$ and $x, y \in N$
+- Set of *edges* $E$, with $\langle x,y \rangle \in E$ and $x, y \in N$
 **** Labels and costs
 - Nodes can be labelled as e.g. start and goal states.
 - Arcs can be labelled according to *actions*.
 **** Paths and cycles
-- A path from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
+- A path $\tau$ from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
   $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
+- We write $\tau_j$ for the $j$-th element of the path.
 - A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
 - If a graph has no cycles, it is *acyclic*
+*** Graph labels
+\begin{tikzpicture}
+      \node[RV] at (0,0) (0) {0};
+      \node[RV] at (4,2) (1) {1};
+      \node[RV] at (0,2) (2) {2};
+      \node[RV] at (4,0) (3) {3};
+      \draw[->] (0) to (1);
+      \draw[->] (1) to (2);
+      \draw[->] (0) to (3);
+      \draw[->] (2) to (3);
+\end{tikzpicture}
+- Action labels: Tells you which action allows you to traverse an edge
+- Edge costs: Optionally, 
+- Goal labels: Some nodes are *goal* nodes, and we can label them as such.
+**** Notation
+- For a node $i \in N$, we write $g(i) = 1$ if it's a goal label.
+- For an edge $(i,j) \in E$, we write $c(i, j) \in \Reals$ for its cost.
+- The total cost for a path $p = \langle x, \ldots, y \rangle$ from node $x$ to a node $y$ is
+\[
+\sum_{k=1}^{|p|-1} c(p_k, p_{k+1}), \qquad \textrm{where $|p|$ is the length of $p$}
+\]
+
 *** Tree example
 \begin{tikzpicture}
       \node[RV] at (0,0) (0) {0};
@@ -107,6 +132,8 @@ A graph $G$ is defined by:
 - Depending on how we search, we may find the longest path first.
 - Why would we *prefer* one path to another?
 - How should we search to find the /best/ path?
+* Uninformed search
+** Depth-first search
 *** Depth-first search
 **** Generic depth-first search
 \begin{algorithmic}

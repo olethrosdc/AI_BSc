@@ -204,12 +204,12 @@ It helps to keep track of the following:
 - Traversing arc $\langle x,y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
 - Following a path $h$ has a total cost
 \[
-  C(p) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
+  C(h) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
 \]
 
 **** The shortest path problem
 - Input: a set of *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
-- Output: Find a path $h$ from $X$ to $Y$ so that $C(p) \leq C(p')$ for all $p$ 
+- Output: Find a path $h$ from $X$ to $Y$ so that $C(h) \leq C(h')$ for all $h'$ 
 
 **** Notes
 - In the simplest cast $c(a) = 1$ for all arcs.

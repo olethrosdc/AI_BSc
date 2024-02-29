@@ -82,9 +82,9 @@ A graph $G$ is defined by:
 - Nodes can be labelled as e.g. start and goal states.
 - Arcs can be labelled according to *actions*.
 **** Paths and cycles
-- A path $\tau$ from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
+- A path $h$ from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
   $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
-- We write $\tau_j$ for the $j$-th element of the path.
+- We write $h_j$ for the $j$-th element of the path.
 - A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
 - If a graph has no cycles, it is *acyclic*
 
@@ -105,7 +105,7 @@ A graph $G$ is defined by:
 **** Notation
 - For a node $i \in N$, we write $g(i) = 1$ if it's a goal label.
 - For an edge $(i,j) \in E$, we write $c(i, j) \in \Reals$ for its cost.
-- The total cost for a path $p = \langle x, \ldots, y \rangle$ from node $x$ to a node $y$ is
+- The total cost for a path $h = \langle x, \ldots, y \rangle$ from node $x$ to a node $y$ is
 \[
 \sum_{k=1}^{|p|-1} c(p_k, p_{k+1}), \qquad \textrm{where $|p|$ is the length of $p$}
 \]
@@ -202,14 +202,14 @@ It helps to keep track of the following:
 
 **** Costs
 - Traversing arc $\langle x,y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
-- Following a path $p$ has a total cost
+- Following a path $h$ has a total cost
 \[
   C(p) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
 \]
 
 **** The shortest path problem
 - Input: a set of *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
-- Output: Find a path $p$ from $X$ to $Y$ so that $C(p) \leq C(p')$ for all $p$ 
+- Output: Find a path $h$ from $X$ to $Y$ so that $C(p) \leq C(p')$ for all $p$ 
 
 **** Notes
 - In the simplest cast $c(a) = 1$ for all arcs.

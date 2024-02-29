@@ -1,4 +1,4 @@
-#+TITLE: Artificial Intelligence
+#+TITLE: Uninformed search
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
@@ -46,6 +46,7 @@
 #+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
 #+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
 #+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
+#+LaTeX_HEADER: \usetikzlibrary{arrows.meta, positioning, quotes}
 #+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
 #+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
 #+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
@@ -54,20 +55,61 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
-** Uninformed search
+* Introduction
+** Introduction
+*** Search to find a solution
+- Input: Problem specification (e.g. route-finding)
+- Output: Solution (e.g. a policy)
+
+**** Algorithms for finding solutions
+- Must *search* through solution space
+- Will ideally return an *optimal* solution
+*** Graphs in Search Algorithms
+**** Problem Graph
+- Specifies the problem.
+- An abstraction of a real-world problem
+**** Search Graph
+- Saves the state of the search.
+
+** Graphs
+
 *** Graph definitions
-**** Graph $G = \langle N, A \rangle$
+**** Graph $G = \langle N, E \rangle$
 A graph $G$ is defined by:
 - Set of *nodes* $N$
-- Set of *arcs* $A$, with $\langle x,y \rangle \in A$ and $x, y \in N$
+- Set of *edges* $E$, with $\langle x,y \rangle \in E$ and $x, y \in N$
 **** Labels and costs
 - Nodes can be labelled as e.g. start and goal states.
 - Arcs can be labelled according to *actions*.
 **** Paths and cycles
-- A path from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
+- A path $h$ from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
   $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
+- We write $h_j$ for the $j$-th element of the path.
 - A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
 - If a graph has no cycles, it is *acyclic*
+
+*** Graph labels
+\begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
+      \node[RV,label=below:{start}] at (0,0) (0) {0};
+      \node[RV] at (0,2) (1) {1};
+      \node[RV] at (4,2) (2) {2};
+      \node[RV,label=below:{goal}] at (4,0) (3) {3};
+      \draw[->] (0) edge["a=1~c=1"] (1);
+      \draw[->] (1) edge["a=0~c=2"] (2);
+      \draw[->] (0) edge["a=0~c=5"] (3);
+      \draw[->] (2) edge["a=0~c=1"] (3);
+\end{tikzpicture}
+- Action labels $a$: Tell you which action traverses an edge
+- Edge costs $c$: Optionally, $c$
+- Node labels: Some nodes are *goal* or *start* nodes.
+**** Notation
+- For a node $i \in N$, we write $g(i) = 1$ if it's a goal label.
+- For an edge $(i,j) \in E$, we write $c(i, j) \in \Reals$ for its cost.
+- The total cost for a path $h = \langle x, \ldots, y \rangle$ from node $x$ to a node $y$ is
+\[
+\sum_{k=1}^{|p|-1} c(p_k, p_{k+1}), \qquad \textrm{where $|p|$ is the length of $p$}
+\]
+
 *** Tree example
 \begin{tikzpicture}
       \node[RV] at (0,0) (0) {0};
@@ -87,6 +129,7 @@ A graph $G$ is defined by:
 - No matter where the goal is, there is a unique path to it.
 - Depending on how the edges are ordered, finding it may require up to 6 steps.
 - For binary trees of depth $D$, the worst-case complexity is $2^D$.
+- The *branching factor* is the number of children that each node can have.
 
 *** Shortcut example
 \begin{tikzpicture}
@@ -107,6 +150,34 @@ A graph $G$ is defined by:
 - Depending on how we search, we may find the longest path first.
 - Why would we *prefer* one path to another?
 - How should we search to find the /best/ path?
+** Search algorithms
+*** State-space graphs
+- $s \in S$: *state* space
+- $a \in A$: *action* space (with $A_s \subset S$ *available* actions in state $s$)
+- $\tau S \times A \to A$: *transition* model (deterministic)
+**** Graph specification
+- Nodes: $S$
+- Edges from node $i$: $\{(i, \tau(i, a) | a \in A_s\}$
+**** Problem specifications
+One or more of the following:
+- $g : S \to \{0, 1\}$: goal indicator
+- $c : S \times A \to \Reals$: step cost or constraint.
+- $r : S \times A \to \Reals$: step reward.
+**** Solution specification
+- $\pi : S \to A$ deterministic policy
+- If both the problem and the policy are deterministic, the policy is *open loop*
+*** The search graph
+- Node $0$ is *root* of the search graph.
+- Each node $i$ corresponds to a search *path* $s^i_1, s^i_2, \ldots$
+- When the search graph is a *tree* then the nodes correspond to the path
+**** Node variables
+It helps to keep track of the following:
+- $d_i = 1 + d_{\textrm{parent}(i)}$: The depth of the node, with $d_0 = 0$.
+- $s_{d_i}^i \in S$: The state corresponding to the $i$-th search graph node.
+**** Frontier
+
+* Uninformed search
+** Depth-first search
 *** Depth-first search
 **** Generic depth-first search
 \begin{algorithmic}
@@ -131,14 +202,14 @@ A graph $G$ is defined by:
 
 **** Costs
 - Traversing arc $\langle x,y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
-- Following a path $p$ has a total cost
+- Following a path $h$ has a total cost
 \[
-  C(p) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
+  C(h) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
 \]
 
 **** The shortest path problem
 - Input: a set of *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
-- Output: Find a path $p$ from $X$ to $Y$ so that $C(p) \leq C(p')$ for all $p$ 
+- Output: Find a path $h$ from $X$ to $Y$ so that $C(h) \leq C(h')$ for all $h'$ 
 
 **** Notes
 - In the simplest cast $c(a) = 1$ for all arcs.
@@ -197,5 +268,5 @@ A graph $G$ is defined by:
 - This is a recursive implementation
 - 
 
-*** Breath-first search
-    
+** Breath-first search
+** Minimum-cost search    

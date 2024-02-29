@@ -33,4 +33,6 @@ class Graph:
             self.edges.add(tuple([dst, src]))
 
         
-        
+    def size(self):
+        return self.n_nodes
+    

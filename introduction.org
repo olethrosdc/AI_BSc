@@ -246,11 +246,12 @@ There are three train routes from Neuchatel to Luzerne
 - How to get to the station
 - Putting one foot in front of the other.
 *** Hierarchical control
-**** High-level plan
-
-**** Low-level control
-
+**** High-level planner
+Selecting plans for the low-level controller
+**** Low-level controller
+Selects actions for each plan selected by the high-level planner
 *** Learning and memory
+
 **** Belief state
 - Memory
 - A summary of the agent's knowledge
@@ -259,12 +260,28 @@ There are three train routes from Neuchatel to Luzerne
 **** Belief transitions
 - A (possibly randomised) function $f : B \times A \times X \to B$ 
 \[
-b_{t+1} = f(b_t, a_t, x_t)
+\bel_{t+1} = f(\bel_t, a_t, x_t)
 \]
-- $b_t \in S$: Belief at time $t$.
+- $\bel_t \in S$: Belief at time $t$.
 - $a_t \in A$: Action at time $t$
 - $x_t \in X$: Observation at time $t$.
 - $f$ is implemented by the agent's algorithm
+*** Memory in the maze example
+**** Known maze, known location
+- Agent observes everything.
+- No memory required.
+**** Known maze, unknown co-ordinates
+- Agent only observes immediate surroundings.
+- Memory keeps track of location.
+**** Unknown maze, known co-ordinates
+- Agent only observes immediate surroundings.
+- Memory keeps track of maze layout
+- Agent always knows its exact co-ordinates.
+**** Unknown maze and co-ordinates
+- Agent only observes immediate surroundings.
+- Memory keeps track of maze layout and co-ordinates
+
+
 
 
 
@@ -290,8 +307,6 @@ b_{t+1} = f(b_t, a_t, x_t)
 **** Example: exams
 - Prefer higher grades than lower grades.
 - Prefer to study less than more
-
-
 
 ** Elementary Decision Theory
 *** Preferences
@@ -336,6 +351,17 @@ How can we find the decision maximising utility / minimising cost?
 **** The value-alignment in *populations*
 - Not everybody wants the same thing.
 - We need to design *fair* policies.
+
+*** Multi-agent problems
+
+**** External agents
+- Have their own utility/goals
+- Are partly rational
+
+**** Designed agents
+- We can choose their utility/goals
+- Computation/Optimality trade-off
+
 
 ** Discussion
 *** Goals versus preferences

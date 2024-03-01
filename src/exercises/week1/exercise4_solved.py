@@ -65,7 +65,7 @@ class Rob_middle_layer_ex4(Environment):
             # Stop following the right-hand wall
             self.follows_right_wall = False
 
-        # We are not following the right wall.
+        # We are not following the right wall. go to the goal
         self.left_turns = 0
         self.right_turns = 0
         return self.head_towards(target_pos)
@@ -97,7 +97,7 @@ class Rob_middle_layer_ex4(Environment):
     def keep_following_right_wall(self):
         """
         Do we keep following the right wall ?
-        Until the number of left turns equals the number of right turns
+        If we are already following the right wall and until the number of left turns equals the number of right turns
         """
         return (self.left_turns != self.right_turns) and self.follows_right_wall
 

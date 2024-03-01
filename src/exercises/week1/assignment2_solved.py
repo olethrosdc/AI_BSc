@@ -6,8 +6,6 @@ from ai_python.agentMiddle import Rob_middle_layer
 from ai_python.agentTop import Rob_top_layer, Plot_env
 import math
 import random
-from exercise2_solved import Rob_top_layer_ex2
-
 
 class Rob_top_layer_sensing(Rob_top_layer):
     """
@@ -29,15 +27,7 @@ class Rob_top_layer_sensing(Rob_top_layer):
             self.middle.do({'go_to': position})
 
 
-
 class Rob_middle_layer_sensing(Rob_middle_layer):
-
-    def __init__(self, env):
-        self.env = env
-        self.percept = env.initial_percept()
-        self.straight_angle = 11  # angle that is close enough to straight ahead
-        self.close_threshold = 2  # distance that is close enough to arrived
-        self.close_threshold_squared = self.close_threshold ** 2  # just compute it once
 
     def get_target_position(self, name):
         """
@@ -97,7 +87,6 @@ class Rob_body_sensing(Rob_body):
         super().__init__(env)
 
         self.locations = locations
-        self.sensing_radius = 30
 
         # We suppose we cannot know the coordinates of locations if we are not near them,
         # We need to sense them.

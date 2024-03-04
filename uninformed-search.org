@@ -154,7 +154,7 @@ A graph $G$ is defined by:
 *** State-space graphs
 - $s \in S$: *state* space
 - $a \in A$: *action* space (with $A_s \subset S$ *available* actions in state $s$)
-- $\tau S \times A \to A$: *transition* model (deterministic)
+- $\tau: S \times A \to A$: *transition* model (deterministic)
 **** Graph specification
 - Nodes: $S$
 - Edges from node $i$: $\{(i, \tau(i, a) | a \in A_s\}$

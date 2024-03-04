@@ -53,7 +53,7 @@ class Rob_top_layer_moving_targets(Rob_top_layer_ex2):
 
     def do(self, plan):
         """
-        We take of the timeout/arrived loop here rather than in the middle layer, this allows us to communicate
+        We take care of the timeout/arrived loop here rather than in the middle layer, this allows us to communicate
         the updated locations each time.
         """
 

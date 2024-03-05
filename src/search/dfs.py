@@ -1,36 +1,40 @@
+## Depth-First Search
+
 from graph import Graph
-searched = set()
+import numpy as np
 
-## This function greedily searches for a path to the goal.  For a
-## fixed-depth search it does not make a huge difference if we use DFS
-## or not, as the complexity is the same. Indeed, it might be easier
-## to expand the search frontier using DFS.
-def GoalDFS(graph, current, goals):
-    searched.add(current)
-    if (current in goals):
-        return True
-    found = False
-    #print (current, graph.children(current))
-    for c in graph.children(current):
-        if (not (c in searched)):
-            if (GoalDFS(graph, c, goals)):
-                found = True
-    return found
 
-## Now we wan to try the shortest path version of 
-def ShortestPathDFS(graph, current, goals):
-    searched.add(current)
-    if (current in goals):
-        print ("Goal found: ", current)
-        return True
-    found = False
-    #print (current, graph.children(current))
-    for c in graph.children(current):
-        if (not (c in searched)):
-            if (GoalDFS(graph, c, goals)):
-                print (current, "->", c)
-                found = True
-    return found
+## This function greedily searches for a path to the goal.  It always
+## expands the deepest node first.  DFS is very sensitive to how we
+## add expanded nodes' children to the frontier.
+## We need the searched variable to avoid loops.
+## Inputs:
+## - graph: The graph structure
+## - current: node to search
+## - goals: set of goal nodes
+## Returns:
+## - found: True if a goal was found
+## - path: a path to the goal
+class DepthFirstSearch:
+    def __init__ (self, graph):
+        self.graph = graph
+    def GoalSearch(self, start_node, goals):
+        self.goals = goals
+        self.searched = set()
+        return self.GoalDFS(start_node)
+    def GoalDFS(self, current):
+        self.searched.add(current)
+        if (current in self.goals):
+            return True, [current]
+        print (current, self.graph.children(current))
+        for c in self.graph.children(current):
+            if (not (c in self.searched)):
+                found, path = self.GoalDFS(c)
+                if (found):
+                    path.insert(0, current)
+                    return found, path
+        return false, []
+
 
 
 # test graph
@@ -49,5 +53,9 @@ graph.add_edge(0,4)
 
 # When calling the simple GoalDFS, we get just one valid path to the goal, but not the shortest path
 
-GoalDFS(graph, 0, set([3]))
+search = DepthFirstSearch(graph)
+found, path = search.GoalSearch(0, set([3]))
+print(found, path)
 
+found, path, length = search.ShortestPathSearch(0, set([3]))
+print(found, path, length)

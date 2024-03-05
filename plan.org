@@ -156,19 +156,19 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 
 ** Schedule
 
-| 2.22 | 1-2 Introduction                                                        |
-| 2.29 | 3.1-3.5 Search, State Spaces, Graphs, Uniformed Search.                 |
-| 3.07 | 3.6. Informed Search, Heuristics, A*                                    |
-| 3.14 | 4.1-4.2, 4.8 Constrained Search                                         |
-| 3.21 | 5.1. Propositions, Constraints, 6.1. Representations, 6.2-6.4. Planning |
-| 3.28 | 9.1 Probability, Independence, Belief Networks                          |
-| 4.11 | 12.1. Preferences and Utility. Probability                              |
-| 4.18 | Statistical estimation and supervised learning                          |
-| 4.25 | Markov decision processes                                               |
-| 5.02 | Markov games                                                            |
-| 5.16 | Simultaneous Games                                                      |
-| 5.23 | Reinforcement Learning                                                  |
-| 5.30 | Project presentations                                                   |
+| 2.22 | 1-2 Introduction                                        |
+| 2.29 | 3.1-3.5 Search, State Spaces, Graphs, Uniformed Search. |
+| 3.07 | 3.6. Informed Search, Heuristics, A*                    |
+| 3.14 | 4.1-4.2, 4.8 Constrained Search                         |
+| 3.21 | Exercises and Project Day                               |
+| 3.28 | 9.1 Probability, Independence, Belief Networks          |
+| 4.11 | 12.1. Preferences and Utility. Probability              |
+| 4.18 | Statistical estimation and supervised learning          |
+| 4.25 | Markov decision processes                               |
+| 5.02 | Markov games                                            |
+| 5.16 | Simultaneous Games                                      |
+| 5.23 | Reinforcement Learning                                  |
+| 5.30 | Project presentations                                   |
 
 
 * single agent problems with certainty

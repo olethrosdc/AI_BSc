@@ -37,9 +37,7 @@
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
 
-
-* Probability background
-#+TOC: headlines [currentsection]
+* Elementary background
 ** Logic and Set theory
 *** Logic
 **** Statements
@@ -61,24 +59,76 @@ $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 *** Set theory
 - First, consider some universal set $\Omega$.
 - A set $A$ is a collection of points $x$ in $\Omega$.
-- $\{x \in \Omega : f(x)\}$: the set of points in $\Omega$ with the property that $f(x)$ is true.
+- $\{x \in \Omega : f(x)\}$: the points in $\Omega$ for which $f(x)$ is true.
+- Empty set: $\emptyset$. No point ever belong in the empty set.
 
 **** Unary operators
-- $\neg A =  \{x \in \Omega : x \notin A\}$.
+- Negation: $\neg A =  \{x \in \Omega : x \notin A\} = \Omega \setminus A$.
 **** Binary operators
-- $A \cup B$ if $\{x \in \Omega : x \in A \vee x \in B\}$ - (c.f. $A \vee B$)
-- $A \cap B$ if $\{x \in \Omega : x \in A \wedge x \in B\}$ - (c.f. $A \wedge B$)
+- Union: $A \cup B = \{x \in \Omega : x \in A \vee x \in B\}$ - (c.f. $A \vee B$)
+- Intersection: $A \cap B = \{x \in \Omega : x \in A \wedge x \in B\}$ - (c.f. $A \wedge B$)
+- Difference: $A \setminus B = \{x \in \Omega: x \in A \wedge x \notin B\}$ (c.f. $A \wedge \not B$)
 **** Binary relations
-- $A \subset B$ if $x \in A \Rightarrow x \in B$ - (c.f. $A \implies B$)
-- $A = B$ if $x \in A \Leftrightarrow x \in B$ - (c.f. $A \Leftrightarrow B$)
+- $A \subset B$ iff $x \in A \Rightarrow x \in B$ - (c.f. $A \implies B$)
+- $A = B$ iff $x \in A \Leftrightarrow x \in B$ - (c.f. $A \Leftrightarrow B$)
+
+** Functions, sequences and sums
+*** Functions
+
+**** Definition
+A function $f : X \to Y$ is a relation from a set $X$ to a set $Y$ so that,
+for any $x \in X$,  there exists a unique $y \in Y$ so that $y = f(x)$.
+
+**** Inverse of a function
+A function $f : X \to Y$ has an inverse $f^{-1} : Y \to X$ if, for any $y \in Y$, there exists a *unique* $x \in X$ such that $f(x) = y$, and so that $f^{-1}(y) = x$.
+
+
+*** Sequences
+
+**** Sequences
+A sequence $x_1, \ldots, x_t$ is written $\{x_i | i = 1, \ldots, t\}$ or $\{x_i\}$ for brevity
+
+**** Sums
+A sum of a sequence of variables $\{x_i\}$ is defined as:
+\[
+\sum_{i=1}^t x_i = x_1 + x_2 + \cdots + x_t.
+\]
+The python notation \texttt{sum([f(x) for x in A])} corresponds to:
+\[
+\sum_{x \in A} f(x)
+\]
+**** Products
+A product is similarly defined at
+\[
+\prod_{i=1}^t x_i = x_1 \times x_2 \times \cdots \times x_t.
+\]
+
+
+* Probability background
+#+TOC: headlines [currentsection]
 
 ** Probability facts
+*** Events as sets
+**** The universe and random outcomes
+- The $\Omega$ contains all events that can happen.
+- When something happens, we observe an  element $\omega \in \Omega$.
+**** Events in the universe
+- An event is true if $\omega \in A$, and false if $\omega \notin A$.
+- The negative event $\neg A = \Omega \setminus A$ is the set
+- The possible events are a collection of subsets $\Sigma$ of $\Omega$ so that
+(i) $\Omega \in \Sigma$, (ii) $A, B \in \Sigma \Rightarrow A \cup B in \Sigma$ (iii) $A \in \Sigma \Rightarrow \neg A \in \Sigma$
+**** Example: Traffic violation
+- A car is moving with speed $\omega \in [0,\infty)$ in front of the speed camera.
+- $A_0 = [0,50]$: below the speed limit
+- $A_1 = (50,60]$: low fine
+- $A_2 = (60,\infty]$: high fine
+- $A_3 = (100, \infty)$: Suspension of license
+- All combinations of the above events are interesting.
 *** Probability fundamentals
+
 **** Probability measure $P$
-- Defined on a universe $\Omega$
-- $P : \Sigma \to [0,1]$ is a function of subsets of $\Omega$.
-- A subset $A \subset \Omega$ is an *event* and $P$ measures its likelihood.
-**** Axioms of probability
+Probability can be seen as an area-like function assigning a likelihood to sets.
+- $P : \Sigma \to [0,1]$  gives the likelihood $P(A)$ of an event $A \in \Sigma$.
 - $P(\Omega) = 1$
 - For $A, B \subset \Omega$, if $A \cap B = \emptyset$ then $P(A \cup B) = P(A) + P(B)$.
 **** Marginalisation

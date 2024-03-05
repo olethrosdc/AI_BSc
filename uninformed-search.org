@@ -45,8 +45,9 @@
 #+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
 #+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
 #+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
+#+LaTeX_HEADER: \newcommand \parent {\texttt{parent}}
 #+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
-#+LaTeX_HEADER: \usetikzlibrary{arrows.meta}
+#+LaTeX_HEADER: \usetikzlibrary{arrows.meta, positioning, quotes}
 #+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
 #+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
 #+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
@@ -56,7 +57,23 @@
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
 * Introduction
+** Introduction
+*** Search to find a solution
+- Input: Problem specification (e.g. route-finding)
+- Output: Solution (e.g. a policy)
+
+**** Algorithms for finding solutions
+- Must *search* through solution space
+- Will ideally return an *optimal* solution
+*** Graphs in Search Algorithms
+**** Problem Graph
+- Specifies the problem.
+- An abstraction of a real-world problem
+**** Search Graph
+- Saves the state of the search.
+
 ** Graphs
+
 *** Graph definitions
 **** Graph $G = \langle N, E \rangle$
 A graph $G$ is defined by:
@@ -66,29 +83,30 @@ A graph $G$ is defined by:
 - Nodes can be labelled as e.g. start and goal states.
 - Arcs can be labelled according to *actions*.
 **** Paths and cycles
-- A path $\tau$ from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
+- A path $h$ from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
   $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
-- We write $\tau_j$ for the $j$-th element of the path.
+- We write $h_j$ for the $j$-th element of the path.
 - A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
 - If a graph has no cycles, it is *acyclic*
+
 *** Graph labels
-\begin{tikzpicture}
-      \node[RV] at (0,0) (0) {0};
-      \node[RV] at (4,2) (1) {1};
-      \node[RV] at (0,2) (2) {2};
-      \node[RV] at (4,0) (3) {3};
-      \draw[->] (0) to (1);
-      \draw[->] (1) to (2);
-      \draw[->] (0) to (3);
-      \draw[->] (2) to (3);
+\begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
+      \node[RV,label=below:{start}] at (0,0) (0) {0};
+      \node[RV] at (0,2) (1) {1};
+      \node[RV] at (4,2) (2) {2};
+      \node[RV,label=below:{goal}] at (4,0) (3) {3};
+      \draw[->] (0) edge["a=1~c=1"] (1);
+      \draw[->] (1) edge["a=0~c=2"] (2);
+      \draw[->] (0) edge["a=0~c=5"] (3);
+      \draw[->] (2) edge["a=0~c=1"] (3);
 \end{tikzpicture}
-- Action labels: Tells you which action allows you to traverse an edge
-- Edge costs: Optionally, 
-- Goal labels: Some nodes are *goal* nodes, and we can label them as such.
+- Action labels $a$: Tell you which action traverses an edge
+- Edge costs $c$: Optionally, $c$
+- Node labels: Some nodes are *goal* or *start* nodes.
 **** Notation
 - For a node $i \in N$, we write $g(i) = 1$ if it's a goal label.
 - For an edge $(i,j) \in E$, we write $c(i, j) \in \Reals$ for its cost.
-- The total cost for a path $p = \langle x, \ldots, y \rangle$ from node $x$ to a node $y$ is
+- The total cost for a path $h = \langle x, \ldots, y \rangle$ from node $x$ to a node $y$ is
 \[
 \sum_{k=1}^{|p|-1} c(p_k, p_{k+1}), \qquad \textrm{where $|p|$ is the length of $p$}
 \]
@@ -112,6 +130,7 @@ A graph $G$ is defined by:
 - No matter where the goal is, there is a unique path to it.
 - Depending on how the edges are ordered, finding it may require up to 6 steps.
 - For binary trees of depth $D$, the worst-case complexity is $2^D$.
+- The *branching factor* is the number of children that each node can have.
 
 *** Shortcut example
 \begin{tikzpicture}
@@ -132,6 +151,38 @@ A graph $G$ is defined by:
 - Depending on how we search, we may find the longest path first.
 - Why would we *prefer* one path to another?
 - How should we search to find the /best/ path?
+** Search algorithms
+*** State-space graphs
+- $s \in S$: *state* space
+- $a \in A$: *action* space (with $A_s \subset S$ *available* actions in state $s$)
+- $\tau: S \times A \to A$: *transition* model (deterministic)
+- When we reach a *terminal* state, we stop. (See formalisation of shortest path)
+**** Graph specification
+- Nodes: $S$
+- Edges from node $i$: $\{(i, \tau(i, a) | a \in A_s\}$
+**** Problem specifications
+One or more of the following:
+- $g : S \to \{0, 1\}$: goal indicator
+- $c : S \times A \to \Reals$: step cost or constraint.
+- $r : S \times A \to \Reals$: step reward.
+**** Solution specification
+- $\pi : S \to A$ deterministic policy
+- If both the problem and the policy are deterministic, the policy is *open loop*
+*** The search graph $S'$
+- Node $0$ is *root* of the search graph.
+- Each node $i \in S'$ corresponds to both a state $s^i \in S$.
+- It also corresponds to a  *path* $s^0, \ldots, \parent(\parent(s^i)), \parent(s^i), s^{i}$.
+- Node depth: $d_i = 1 + d_{\parent(i)}$, with $d_0 = 0$.
+**** Frontier: Keeping track of what to search next
+At step $0$, the frontier is $F_0 = \{0\}$ and set of searched nodes $S'_0 = \emptyset$. 
+
+At step $k = 0, 1, \ldots$:
+- The frontier is $F_k$, and searched nodes $S'_k$.
+- Select a node $i$, where $s^i \notin S'_k$.
+- We select action $a$ in node $i$, and observe $s' = \tau(s^i, a)$.
+- $i + 1$ is now a child of $i$, with $s^{i+1} = s'$.
+- Update the frontier $F_{k+1} = F_k \cup \{i + 1\} \setminus \{i\}$.
+
 * Uninformed search
 ** Depth-first search
 *** Depth-first search
@@ -153,24 +204,6 @@ A graph $G$ is defined by:
 - How can we use it to identify a paths to the goal?
 - How can we modify it to identify all paths to the goal?
 - How can we modify it to identify the shortest path to the goal?
-
-*** The shortest path problem
-
-**** Costs
-- Traversing arc $\langle x,y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
-- Following a path $p$ has a total cost
-\[
-  C(p) = \sum_{\langle x,y \rangle \in p} c(\langle x,y \rangle)
-\]
-
-**** The shortest path problem
-- Input: a set of *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
-- Output: Find a path $p$ from $X$ to $Y$ so that $C(p) \leq C(p')$ for all $p$ 
-
-**** Notes
-- In the simplest cast $c(a) = 1$ for all arcs.
-- We can maximise rewards instead of minimising costs.
-
 *** Goals and DFS
 **** Main idea
 - Go through all nodes, marking searched nodes.
@@ -193,22 +226,104 @@ A graph $G$ is defined by:
 \ENDFOR
 \end{algorithmic}
 
-*** Shortest-path depth-first search
-  \begin{algorithmic}
-	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)
-	\STATE $G = \langle N, A \rangle$: Graph.
-        \STATE $F$: Set of nodes to search
-        \STATE $x$: goal state.
-        \STATE \texttt{dist} = $\infty$.
-	\FOR {$n \in F$}
-	\FOR {$j \in F: \langle n,j \rangle \in A$}
-	\STATE $\texttt{dist} = \min \{\texttt{dist}, {\texttt{GoalDepthFirst}(V, F \setminus \{n\})}\}$.
-	\ENDFOR 
-	\ENDFOR
-	\RETURN \texttt{dist}
-  \end{algorithmic}
-- This is a recursive implementation
-- 
+*** BFS
+\begin{algorithmic}
+\STATE \textbf{function} \texttt{breadthFirst}($G, n, S$)
+\STATE $S_{k+1} = S_k \cup \{n\}$ : mark $n$ as searched
+\FOR {$a \in A_s \notin F: \langle c,j \rangle \in E$}
+     \IF {$\texttt{DepthFirst}(G, j, S)$}
+          \RETURN 1.
+     \ENDIF
+\ENDFOR
+\end{algorithmic}
 
-*** Breath-first search
-    
+** Minimum-cost search    
+** The shortest path problem
+*** The shortest path problem
+#+ATTR_BEAMER: :overlay <+->
+- Traversing arc $\langle x, y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
+- Following a *path* $h$ has a total cost $C(h) = \sum_{\langle x,y \rangle \in h} c(\langle x,y \rangle)$
+- We can equivalently consider state-action *costs* $c(s,a)$.
+- A policy $\pi$ specifies a path $x_1, \ldots$ with $x_{k+1} = \tau(x_k, \pi(x_k))$
+- Following a *policy* $\pi$ from state $x_1 = x$ has a total cost $C^\pi(x_1) = \sum_{k=1}^{t} c(x_k, \pi(x_k))$.
+#+BEAMER: \pause
+**** The shortest path problem
+- Input:  *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
+- Output: Find a path $h$ from $X$ to $Y$ so that $C(h) \leq C(h')$ for all $h'$ 
+#+BEAMER: \pause
+**** Notes
+- If the path/policy does not reach a goal, the cost is infinite.
+- We can maximise rewards instead of minimising costs.
+
+
+*** Formalising the shortest path problem
+The cost from state $x$ of a policy that reaches a goal is
+\[
+C^\pi(s) \defn \sum_{i=1}^\infty c[s_{t}, \pi(s_t)], \qquad s_{t+1} = \tau[s_t, \pi(s_t)], \quad s_{1} = s
+\]
+where for every $s \in Y$,  $c(s, a) = 0$ and $\tau(s,a) = s$ for all actions.
+- We can calculate this recursively (from the goal state)
+\begin{align}
+C^\pi(s)
+& = \sum_{i=1}^\infty c[s_{t}, \pi(s_t)]\\
+& = c[s, \pi(s)] + \sum_{i=2}^\infty c[s_{t}, \pi(s_t)]\\
+& = c[s, \pi(s)] + C^\pi\{\tau[s, \pi(s)]\}.
+\end{align}
+- The same idea applies for the *shortest* path
+\begin{align}
+C^*(s) 
+\defn \min_\pi C^\pi(s)
+= \min_a \left\{c[s, a] + C^*[\tau(s, a)]\right\}.
+\end{align}
+
+*** The shortest path algorithm: backward search
+**** Shortest path algorithm
+\begin{algorithmic}
+\STATE Input: Goal states $Y$, starting state $x$.
+\STATE Set $C(s) = 0$ for all states $s \in Y$, $F_0 = Y$.
+\FOR {$t = 0,1, \ldots$}
+\FOR {$s' \in F_t$}
+\STATE $\pol(s) = \argmin_a c(s,a) + C(\tau(s, a))$
+\STATE $C(s) = \min_a c(s,a) + C(\tau(s, a))$
+\ENDFOR
+\STATE $F_{t+1} = \parent(F_t)$.
+\IF {$F_{t+1} = \emptyset$ or $x \in F_t$}
+\RETURN $\pol, C$
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+**** Algorithm idea
+- Start from goal states
+- Go back one step each time, adding the cost.
+- Stop whenever there are no more states to go back to, or if we reach the start state.
+
+*** Optimality proof
+**** Theorem
+$C(s) = C^*(s)$
+**** Proof
+- If $s \in Y$, then $C(s) = 0 = C^*(s)$.
+- For any other $s', s = \parent(s')$: we will show that:
+ if $C(s') \leq C^*(s')$ then $C(s) \leq C^*(s)$.
+\begin{align*}
+C(s)
+&=
+\min_a \left\{c(s,a) + C(\tau(s,a))\right\}
+\tag{by definition}
+\\
+&\leq
+\min_a \left\{ c(s,a) + C^*(\tau(s,a)) \right\}
+\tag{by induction}
+\\
+&\leq
+\min_a \left\{ c(s,a) + C^{\pi'}(\tau(s,a)) \right\},
+\qquad \forall \pi'
+\tag{by optimality}
+\\
+&\leq
+C^\pi(s), \qquad \forall \pi.
+\end{align*}
+For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s)$, so $C(s) \leq C^*(s)$. Finally,
+\[
+C^*(s) \leq C^{\pi}(s) = C(s) \geq C^*(s),
+\]
+since $C^{\pi}(s) = C(s)$ for the policy returned by the algorithm.

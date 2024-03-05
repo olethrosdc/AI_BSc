@@ -88,6 +88,7 @@ A graph $G$ is defined by:
 - We write $h_j$ for the $j$-th element of the path.
 - A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
 - If a graph has no cycles, it is *acyclic*
+- A state with no outgoing edges to other states is *terminal*
 
 *** Graph labels
 \begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
@@ -156,7 +157,7 @@ A graph $G$ is defined by:
 - $s \in S$: *state* space
 - $a \in A$: *action* space (with $A_s \subset S$ *available* actions in state $s$)
 - $\tau: S \times A \to A$: *transition* model (deterministic)
-- When we reach a *terminal* state, we stop. (See formalisation of shortest path)
+- When we reach a *terminal* state, we stop. 
 **** Graph specification
 - Nodes: $S$
 - Edges from node $i$: $\{(i, \tau(i, a) | a \in A_s\}$
@@ -170,7 +171,7 @@ One or more of the following:
 - If both the problem and the policy are deterministic, the policy is *open loop*
 *** The search graph $S'$
 - Node $0$ is *root* of the search graph.
-- Each node $i \in S'$ corresponds to both a state $s^i \in S$.
+- Each node $i \in S'$ corresponds to a state $s^i \in S$.
 - It also corresponds to a  *path* $s^0, \ldots, \parent(\parent(s^i)), \parent(s^i), s^{i}$.
 - Node depth: $d_i = 1 + d_{\parent(i)}$, with $d_0 = 0$.
 **** Frontier: Keeping track of what to search next
@@ -182,6 +183,9 @@ At step $k = 0, 1, \ldots$:
 - We select action $a$ in node $i$, and observe $s' = \tau(s^i, a)$.
 - $i + 1$ is now a child of $i$, with $s^{i+1} = s'$.
 - Update the frontier $F_{k+1} = F_k \cup \{i + 1\} \setminus \{i\}$.
+- In the end, no more nodes can be added: $F_k = \emptyset$ and $S'_k = S'_{k+1}$
+
+*** Graph visualisation
 
 * Uninformed search
 ** Depth-first search

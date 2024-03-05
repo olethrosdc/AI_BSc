@@ -176,37 +176,23 @@ A graph $G$ is defined by:
 - Go through all nodes, marking searched nodes.
 - Return true for nodes that reach the goal.
 **** Goal-DFS
-<<<<<<< HEAD
-#+BEGIN_SRC python
-  F = []
-  def GoalDFS(graph, n, goal):
-    
-	  for j in graph.children(n):
-		  if not(j in F):
-			  GoalDFS
-#+END_SRC
-  
-=======
 \begin{algorithmic}
-\STATE \textbf{global} $F = \emptyset$ : Nodes searched
-\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{global} $S = \emptyset$ : Nodes searched
+\STATE \textbf{input} $G = \langle N, A \rangle$: Graph.
 \STATE \textbf{input} $n$ : Current node
-\STATE \textbf{input} $S$ : Set of goals
-\STATE \textbf{function} \texttt{DepthFirst}($G, n, S$)
-\STATE $F = F \cup \{n\}$ : mark $n$ as searched
-\IF {$n \in S$}
+\STATE \textbf{input} $X$ : Set of goals
+\STATE \textbf{function} \texttt{DepthFirst}($G, n, X$)
+\STATE $S = S \cup \{n\}$ : mark $n$ as searched
+\IF {$n \in X$}
     \RETURN 1
 \ENDIF
 \FOR {$c \notin F: \langle c,j \rangle \in E$}
-     \IF {$\texttt{DepthFirst}(G, j, S)$}
+     \IF {$\texttt{DepthFirst}(G, j, X)$}
           \RETURN 1.
      \ENDIF
 \ENDFOR
 \end{algorithmic}
 
-
-
->>>>>>> ef106c1943dc95180f579656ecdc1bddb04e1abb
 *** Shortest-path depth-first search
   \begin{algorithmic}
 	\STATE \textbf{function} \texttt{GoalDepthFirst}($G, F, x$)

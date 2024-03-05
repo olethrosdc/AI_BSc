@@ -34,35 +34,7 @@ class DepthFirstSearch:
                     path.insert(0, current)
                     return found, path
         return false, []
-    def ShortestPathSearch(self, start_node, goals):
-        self.goals = goals
-        self.searched = set()
-        self.shortest = graph.size() + 1
-        self.distances = np.zeros(graph.size()) + np.infty
-        for i in self.goals:
-            self.distances[i] = 0
-        return self.ShortestPathDFS(start_node, 0)
-    
-    def ShortestPathDFS(self, current, path_length):
-        self.searched.add(current)
-        found = False
-        best_path = []
-        path_length += 1
-        if (current in self.goals):
-            return True, [current], path_length
-        print (current, self.graph.children(current))
-        for c in self.graph.children(current):
-            if (not (c in self.searched)):
-                was_found, path, length = self.ShortestPathDFS(c, path_length)
-                if (was_found and length <= self.shortest):
-                    self.shortest = length
-                    found = True
-                    best_path = path
-            else:
-                if (c in self.searched)
-        if (found):
-            best_path.insert(0, current)
-        return found, best_path, self.shortest
+
 
 
 # test graph

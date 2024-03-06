@@ -1,0 +1,148 @@
+#+TITLE: Uninformed search
+#+AUTHOR: Christos Dimitrakakis
+#+EMAIL:christos.dimitrakakis@unine.ch
+#+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
+#+LaTeX_HEADER: \usepackage{tikz}
+#+LaTeX_HEADER: \usepackage{amsmath}
+#+LaTeX_HEADER: \usepackage{amssymb}
+#+LaTeX_HEADER: \usepackage{isomath}
+#+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
+#+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmax}{arg\,max}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmin}{arg\,min}
+#+LaTeX_HEADER: \DeclareMathOperator*{\sgn}{sgn}
+#+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
+#+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
+#+LaTeX_HEADER: \newcommand \Param {\Theta}
+#+LaTeX_HEADER: \newcommand \param {\theta}
+#+LaTeX_HEADER: \newcommand \vparam {\vectorsym{\theta}}
+#+LaTeX_HEADER: \newcommand \mparam {\matrixsym{\Theta}}
+#+LaTeX_HEADER: \newcommand \bW {\matrixsym{W}}
+#+LaTeX_HEADER: \newcommand \bw {\vectorsym{w}}
+#+LaTeX_HEADER: \newcommand \wi {\vectorsym{w}_i}
+#+LaTeX_HEADER: \newcommand \wij {w_{i,j}}
+#+LaTeX_HEADER: \newcommand \bA {\matrixsym{A}}
+#+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
+#+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
+#+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
+#+LaTeX_HEADER: \newcommand \cset[2] {\left\{#1 ~\middle|~ #2 \right\}}
+#+LaTeX_HEADER: \newcommand \pol {\pi}
+#+LaTeX_HEADER: \newcommand \Pols {\Pi}
+#+LaTeX_HEADER: \newcommand \mdp {\mu}
+#+LaTeX_HEADER: \newcommand \MDPs {\mathcal{M}}
+#+LaTeX_HEADER: \newcommand \bel {\beta}
+#+LaTeX_HEADER: \newcommand \Bels {\mathcal{B}}
+#+LaTeX_HEADER: \newcommand \Unif {\textrm{Unif}}
+#+LaTeX_HEADER: \newcommand \Ber {\textrm{Bernoulli}}
+#+LaTeX_HEADER: \newcommand \Mult {\textrm{Mult}}
+#+LaTeX_HEADER: \newcommand \Beta {\textrm{Beta}}
+#+LaTeX_HEADER: \newcommand \Dir {\textrm{Dir}}
+#+LaTeX_HEADER: \newcommand \Normal {\textrm{Normal}}
+#+LaTeX_HEADER: \newcommand \Simplex {\mathbb{\Delta}}
+#+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
+#+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
+#+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
+#+LaTeX_HEADER: \newcommand \parent {\texttt{parent}}
+#+LaTeX_HEADER: \newcommand \child {\texttt{child}}
+#+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
+#+LaTeX_HEADER: \usetikzlibrary{arrows.meta, positioning, quotes}
+#+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
+#+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
+#+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_CLASS_OPTIONS: [smaller]
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+TAGS: activity advanced definition exercise homework project example theory code
+#+OPTIONS:   H:3
+** The shortest path problem
+*** The shortest path problem
+#+ATTR_BEAMER: :overlay <+->
+- Traversing arc $\langle x, y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
+- Following a *path* $h$ has a total cost $C(h) = \sum_{\langle x,y \rangle \in h} c(\langle x,y \rangle)$
+- We can equivalently consider state-action *costs* $c(s,a)$.
+- A policy $\pi$ specifies a path $x_1, \ldots$ with $x_{k+1} = \tau(x_k, \pi(x_k))$
+- Following a *policy* $\pi$ from state $x_1 = x$ has a total cost $C^\pi(x_1) = \sum_{k=1}^{t} c(x_k, \pi(x_k))$.
+#+BEAMER: \pause
+**** The shortest path problem
+- Input:  *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
+- Output: Find a path $h$ from $X$ to $Y$ so that $C(h) \leq C(h')$ for all $h'$ 
+#+BEAMER: \pause
+**** Notes
+- If the path/policy does not reach a goal, the cost is infinite.
+- We can maximise rewards instead of minimising costs.
+
+
+*** Formalising the shortest path problem
+The cost from state $x$ of a policy that reaches a goal is
+\[
+C^\pi(s) \defn \sum_{i=1}^\infty c[s_{t}, \pi(s_t)], \qquad s_{t+1} = \tau[s_t, \pi(s_t)], \quad s_{1} = s
+\]
+where for every $s \in Y$,  $c(s, a) = 0$ and $\tau(s,a) = s$ for all actions.
+- We can calculate this recursively (from the goal state)
+\begin{align}
+C^\pi(s)
+& = \sum_{i=1}^\infty c[s_{t}, \pi(s_t)]\\
+& = c[s, \pi(s)] + \sum_{i=2}^\infty c[s_{t}, \pi(s_t)]\\
+& = c[s, \pi(s)] + C^\pi\{\tau[s, \pi(s)]\}.
+\end{align}
+- The same idea applies for the *shortest* path
+\begin{align}
+C^*(s) 
+\defn \min_\pi C^\pi(s)
+= \min_a \left\{c[s, a] + C^*[\tau(s, a)]\right\}.
+\end{align}
+
+*** The shortest path algorithm: backward search
+**** Shortest path algorithm
+\begin{algorithmic}
+\STATE Input: Goal states $Y$, starting state $x$.
+\STATE Set $C(s) = 0$ for all states $s \in Y$, $F_0 = Y$.
+\FOR {$t = 0,1, \ldots$}
+\FOR {$s' \in F_t$}
+\STATE $\pol(s) = \argmin_a c(s,a) + C(\tau(s, a))$
+\STATE $C(s) = \min_a c(s,a) + C(\tau(s, a))$
+\ENDFOR
+\STATE $F_{t+1} = \parent(F_t)$.
+\IF {$F_{t+1} = \emptyset$ or $x \in F_t$}
+\RETURN $\pol, C$
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+**** Algorithm idea
+- Start from goal states
+- Go back one step each time, adding the cost.
+- Stop whenever there are no more states to go back to, or if we reach the start state.
+
+*** Optimality proof
+**** Theorem
+$C(s) = C^*(s)$
+**** Proof
+- If $s \in Y$, then $C(s) = 0 = C^*(s)$.
+- For any other $s', s = \parent(s')$: we will show that:
+ if $C(s') \leq C^*(s')$ then $C(s) \leq C^*(s)$.
+\begin{align*}
+C(s)
+&=
+\min_a \left\{c(s,a) + C(\tau(s,a))\right\}
+\tag{by definition}
+\\
+&\leq
+\min_a \left\{ c(s,a) + C^*(\tau(s,a)) \right\}
+\tag{by induction}
+\\
+&\leq
+\min_a \left\{ c(s,a) + C^{\pi'}(\tau(s,a)) \right\},
+\qquad \forall \pi'
+\tag{by optimality}
+\\
+&\leq
+C^\pi(s), \qquad \forall \pi.
+\end{align*}
+For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s)$, so $C(s) \leq C^*(s)$. Finally,
+\[
+C^*(s) \leq C^{\pi}(s) = C(s) \geq C^*(s),
+\]
+since $C^{\pi}(s) = C(s)$ for the policy returned by the algorithm.

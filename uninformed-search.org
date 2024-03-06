@@ -46,6 +46,7 @@
 #+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
 #+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
 #+LaTeX_HEADER: \newcommand \parent {\texttt{parent}}
+#+LaTeX_HEADER: \newcommand \child {\texttt{child}}
 #+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
 #+LaTeX_HEADER: \usetikzlibrary{arrows.meta, positioning, quotes}
 #+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
@@ -192,13 +193,13 @@ At step $k = 0, 1, \ldots$:
 *** Depth-first search
 **** Generic depth-first search
 \begin{algorithmic}
-\STATE \textbf{global} $F = \emptyset$ : Nodes searched
+\STATE \textbf{global} $S' = \emptyset$ : Nodes searched
 \STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
 \STATE \textbf{input} $n$ : Current node
 \STATE \textbf{function} \texttt{DepthFirst}($G, n$)
-  \STATE $F = F \cup \{n\}$ : mark $n$ as searched
+  \STATE $S' = S' \cup \{n\}$ : mark $n$ as searched
   \FOR {$c \notin F: \langle c,j \rangle \in E$}
-     \IF {$\texttt{DepthFirst}(G, j, S)$}
+     \IF {$\texttt{DepthFirst}(G, j)$}
           \RETURN 1.
      \ENDIF
 \ENDFOR
@@ -208,126 +209,49 @@ At step $k = 0, 1, \ldots$:
 - How can we use it to identify a paths to the goal?
 - How can we modify it to identify all paths to the goal?
 - How can we modify it to identify the shortest path to the goal?
-*** Goals and DFS
-**** Main idea
-- Go through all nodes, marking searched nodes.
-- Return true for nodes that reach the goal.
-**** Goal-DFS
+
+*** Breadth-first search
+Unlike Depth-First search, this cannot easily use a recursive function call
+implementation.
+
 \begin{algorithmic}
-\STATE \textbf{global} $S = \emptyset$ : Nodes searched
-\STATE \textbf{input} $G = \langle N, A \rangle$: Graph.
-\STATE \textbf{input} $n$ : Current node
-\STATE \textbf{input} $X$ : Set of goals
-\STATE \textbf{function} \texttt{DepthFirst}($G, n, X$)
-\STATE $S = S \cup \{n\}$ : mark $n$ as searched
-\IF {$n \in X$}
-    \RETURN 1
+
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $x$ : Start node
+\STATE \textbf{function} \texttt{BreadthFirst}($G, x$)
+\STATE $S' = \emptyset$ : Nodes searched.
+\STATE $F = \{x\}$. Initialise the frontier
+\WHILE {$F \neq \emptyset$}
+\STATE $s = \argmin_{i \in F} d_i$. Select minimum depth node.
+\STATE $S' = S' \cup \{s\}$. Add $s$ to the list of searched nodes.
+\STATE $F = F \setminus \{s\}$. Remove $s$ from the frontier.
+\STATE $F = F \cup \child(s)$. Add $s$'s children to the frontier.
+\ENDWHILE
+\end{algorithmic}
+
+
+
+*** Minimum-cost search    
+
+Note that DFS always adds the minimum depth node. We can instead add the minimum-cost node.
+
+\begin{algorithmic}
+
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $x$ : Start node
+\STATE \textbf{function} \texttt{BreadthFirst}($G, x$)
+\STATE $S' = \emptyset$ : Nodes searched.
+\STATE $F = \{x\}$. Initialise the frontier
+\STATE $c_x = 0$. Initialise the cost of node $x$
+\WHILE {$F \neq \emptyset$}
+\STATE $n = \argmin_{f \in F} c_f$. Select minimum cost node.
+\STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
+\IF {$n \notin S'$}
+\STATE $B = \child(n) \setminus S'$. Get the set of unsearched children of $n$.
+\STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
+\STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
+\STATE $F = F \cup B$. Add $n$'s children to the frontier.
 \ENDIF
-\FOR {$c \notin F: \langle c,j \rangle \in E$}
-     \IF {$\texttt{DepthFirst}(G, j, X)$}
-          \RETURN 1.
-     \ENDIF
-\ENDFOR
+\ENDWHILE
 \end{algorithmic}
 
-*** BFS
-\begin{algorithmic}
-\STATE \textbf{function} \texttt{breadthFirst}($G, n, S$)
-\STATE $S_{k+1} = S_k \cup \{n\}$ : mark $n$ as searched
-\FOR {$a \in A_s \notin F: \langle c,j \rangle \in E$}
-     \IF {$\texttt{DepthFirst}(G, j, S)$}
-          \RETURN 1.
-     \ENDIF
-\ENDFOR
-\end{algorithmic}
-
-** Minimum-cost search    
-** The shortest path problem
-*** The shortest path problem
-#+ATTR_BEAMER: :overlay <+->
-- Traversing arc $\langle x, y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
-- Following a *path* $h$ has a total cost $C(h) = \sum_{\langle x,y \rangle \in h} c(\langle x,y \rangle)$
-- We can equivalently consider state-action *costs* $c(s,a)$.
-- A policy $\pi$ specifies a path $x_1, \ldots$ with $x_{k+1} = \tau(x_k, \pi(x_k))$
-- Following a *policy* $\pi$ from state $x_1 = x$ has a total cost $C^\pi(x_1) = \sum_{k=1}^{t} c(x_k, \pi(x_k))$.
-#+BEAMER: \pause
-**** The shortest path problem
-- Input:  *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
-- Output: Find a path $h$ from $X$ to $Y$ so that $C(h) \leq C(h')$ for all $h'$ 
-#+BEAMER: \pause
-**** Notes
-- If the path/policy does not reach a goal, the cost is infinite.
-- We can maximise rewards instead of minimising costs.
-
-
-*** Formalising the shortest path problem
-The cost from state $x$ of a policy that reaches a goal is
-\[
-C^\pi(s) \defn \sum_{i=1}^\infty c[s_{t}, \pi(s_t)], \qquad s_{t+1} = \tau[s_t, \pi(s_t)], \quad s_{1} = s
-\]
-where for every $s \in Y$,  $c(s, a) = 0$ and $\tau(s,a) = s$ for all actions.
-- We can calculate this recursively (from the goal state)
-\begin{align}
-C^\pi(s)
-& = \sum_{i=1}^\infty c[s_{t}, \pi(s_t)]\\
-& = c[s, \pi(s)] + \sum_{i=2}^\infty c[s_{t}, \pi(s_t)]\\
-& = c[s, \pi(s)] + C^\pi\{\tau[s, \pi(s)]\}.
-\end{align}
-- The same idea applies for the *shortest* path
-\begin{align}
-C^*(s) 
-\defn \min_\pi C^\pi(s)
-= \min_a \left\{c[s, a] + C^*[\tau(s, a)]\right\}.
-\end{align}
-
-*** The shortest path algorithm: backward search
-**** Shortest path algorithm
-\begin{algorithmic}
-\STATE Input: Goal states $Y$, starting state $x$.
-\STATE Set $C(s) = 0$ for all states $s \in Y$, $F_0 = Y$.
-\FOR {$t = 0,1, \ldots$}
-\FOR {$s' \in F_t$}
-\STATE $\pol(s) = \argmin_a c(s,a) + C(\tau(s, a))$
-\STATE $C(s) = \min_a c(s,a) + C(\tau(s, a))$
-\ENDFOR
-\STATE $F_{t+1} = \parent(F_t)$.
-\IF {$F_{t+1} = \emptyset$ or $x \in F_t$}
-\RETURN $\pol, C$
-\ENDIF
-\ENDFOR
-\end{algorithmic}
-**** Algorithm idea
-- Start from goal states
-- Go back one step each time, adding the cost.
-- Stop whenever there are no more states to go back to, or if we reach the start state.
-
-*** Optimality proof
-**** Theorem
-$C(s) = C^*(s)$
-**** Proof
-- If $s \in Y$, then $C(s) = 0 = C^*(s)$.
-- For any other $s', s = \parent(s')$: we will show that:
- if $C(s') \leq C^*(s')$ then $C(s) \leq C^*(s)$.
-\begin{align*}
-C(s)
-&=
-\min_a \left\{c(s,a) + C(\tau(s,a))\right\}
-\tag{by definition}
-\\
-&\leq
-\min_a \left\{ c(s,a) + C^*(\tau(s,a)) \right\}
-\tag{by induction}
-\\
-&\leq
-\min_a \left\{ c(s,a) + C^{\pi'}(\tau(s,a)) \right\},
-\qquad \forall \pi'
-\tag{by optimality}
-\\
-&\leq
-C^\pi(s), \qquad \forall \pi.
-\end{align*}
-For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s)$, so $C(s) \leq C^*(s)$. Finally,
-\[
-C^*(s) \leq C^{\pi}(s) = C(s) \geq C^*(s),
-\]
-since $C^{\pi}(s) = C(s)$ for the policy returned by the algorithm.

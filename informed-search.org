@@ -1,4 +1,4 @@
-#+TITLE: Uninformed search
+#+TITLE: Informed search
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
@@ -57,6 +57,8 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
+
+* The Shortest Path Problem
 ** The shortest path problem
 *** The shortest path problem
 #+ATTR_BEAMER: :overlay <+->
@@ -74,7 +76,7 @@
 - If the path/policy does not reach a goal, the cost is infinite.
 - We can maximise rewards instead of minimising costs.
 
-
+  
 *** Formalising the shortest path problem
 The cost from state $x$ of a policy that reaches a goal is
 \[
@@ -95,7 +97,7 @@ C^*(s)
 = \min_a \left\{c[s, a] + C^*[\tau(s, a)]\right\}.
 \end{align}
 
-*** The shortest path algorithm: backward search
+*** Dijkstra's shortest path algorithm: backward search
 **** Shortest path algorithm
 \begin{algorithmic}
 \STATE Input: Goal states $Y$, starting state $x$.
@@ -146,3 +148,110 @@ For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s)$, so $C(s) \leq C^*(s)$. 
 C^*(s) \leq C^{\pi}(s) = C(s) \geq C^*(s),
 \]
 since $C^{\pi}(s) = C(s)$ for the policy returned by the algorithm.
+** Heuristic Search
+*** Partial graphs
+- Why do we need search?
+- We do not want to calculate on the whole graph
+- We use *search* to find the shortest path more efficiently (perhaps).
+- We denote the total cost of some path $x_1, \ldots, x_t$ as:
+\[
+C(x_1, \ldots, x_t)
+\]
+- The remaining cost from $x_t$ to the goal using some policy $\pi$ as
+\[
+C^\pi(x_t)$
+\]
+
+*** Generic search
+We define heuristic search in the context of shortest-path problems.
+
+We now consider a general method for searching a node in the frontier.
+
+\begin{algorithmic}
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $f : N \to \Reals$: evaluation function.
+\STATE \textbf{input} $x$ : Start node
+\STATE \textbf{function} \texttt{Heuristic Search}($G, x, h$)
+\STATE $S' = \emptyset$ : Nodes searched.
+\STATE $F = \{x\}$. Initialise the frontier
+\STATE $c_x = 0$. Initialise the cost of node $x$
+\WHILE {$F \neq \emptyset$}
+\STATE $n = \argmin_{i \in F} f(i)$. Select "best" node.
+\STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
+\IF {$n \notin S'$}
+\STATE $B = \child(n) \setminus S'$. Get the set of unsearched children of $n$.
+\STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
+\STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
+\STATE $F = F \cup B$. Add $n$'s children to the frontier.
+\ENDIF
+\ENDWHILE
+\end{algorithmic}
+
+*** $A^*$ search
+We now consider a general method for searching a node in the frontier.
+
+\begin{algorithmic}
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $h : N \to \Reals$: heuristic function.
+\STATE \textbf{input} $x$ : Start node
+\STATE \textbf{function} \texttt{A-Star}($G, x, h$)
+\STATE $S' = \emptyset$ : Nodes searched.
+\STATE $F = \{x\}$. Initialise the frontier
+\STATE $c_x = 0$. Initialise the cost of node $x$
+\WHILE {$F \neq \emptyset$}
+\STATE $n = \argmin_{i \in F} c_i + h(i)$. Select minimum cost + heuristic node.
+\STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
+\IF {$n \notin S'$}
+\STATE $B = \child(n) \setminus S'$. Get the set of unsearched children of $n$.
+\STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
+\STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
+\STATE $F = F \cup B$. Add $n$'s children to the frontier.
+\ENDIF
+\ENDWHILE
+\end{algorithmic}
+
+- You can see that $h = 0$ corresponds to minimum-cost search.
+*** Admissible heuristics
+- If $h$ is arbitrary, then the search can fail.
+- We need $h$ to be admissible. In particular,
+\[
+C^*(n) \geq h(n).
+\]
+*** Admissibility of $A^*$
+**** Theorem
+$A^*$ returns an optimal solution if
+- The graph has a bounded branching factor.
+- All costs are greater that $\epsilon > 0$
+- The heuristic is admissible, i.e. $0 \leq h(n) \leq C^*(n)$ for all $n \in N$.
+**** Proof
+- *Existence*. There is a finite number of paths that will be explored, as the longest possible path to a goal is $C^*(0)/\epsilon$. 
+- *Optimality*. The proof is by contradiction. Let as assume that $A^*$ finds some $\pi \neq \pi^*$ so that $C(\pi) > C(\pi^*)$. That means that at some node $n$ on the path there is an action $a^*$ on the optimal policy, but we keep expanding the path $x_1, x_2, \ldots$ of $\pi$. However, since $C(\pi) > C(\pi^*)$ there must be some $t$ such that $C(n, x_1, \ldots, x_t) > C^{\pi^*}(n)$. But then, to expand $\pi$ requires that $C(n, x_1, \ldots, x_t) + h(x') < h(x) \leq C^{\pi^*}(n)$.
+
+* General weight shortest path
+** General weight shortest path
+*** General weight shortest path
+- In this problem, actions can have positive or negative costs.
+- Negative edges generate problems if we have cycles
+*** Bellman-Ford Algorithm
+\begin{algorithmic}
+\STATE $C(0) = 0$. $C(i) = \infty$, for $i \neq 0$.
+\FOR {$i \in 1, \ldots, |N| - 1$}
+\FOR {all edges $(i,j)$}
+\IF {$C(i) + c(i,j) < C(j)$}
+\STATE $c(j) = C(i) + c(i,j)$
+\ENDIF
+\ENDFOR
+\ENDFOR
+\FOR {all edges $(i,j)$}
+\IF {$C(i) + c(i,j) < C(j)$}
+\STATE \textbf{error} "Negative cycle"
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+
+- Succinctly, the algorithm is just like Dijkstra, but it ensures it goes at most $|N| - 1$ times through all vertices, and has a sanity check as no more updates should be possible at the end.
+- Instead of keeping a track of explored nodes, it uses the fact that $C$ is initialised to infinity.
+
+
+
+

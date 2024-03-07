@@ -227,12 +227,57 @@ $A^*$ returns an optimal solution if
 - *Existence*. There is a finite number of paths that will be explored, as the longest possible path to a goal is $C^*(0)/\epsilon$. 
 - *Optimality*. The proof is by contradiction. Let as assume that $A^*$ finds some $\pi \neq \pi^*$ so that $C(\pi) > C(\pi^*)$. That means that at some node $n$ on the path there is an action $a^*$ on the optimal policy, but we keep expanding the path $x_1, x_2, \ldots$ of $\pi$. However, since $C(\pi) > C(\pi^*)$ there must be some $t$ such that $C(n, x_1, \ldots, x_t) > C^{\pi^*}(n)$. But then, to expand $\pi$ requires that $C(n, x_1, \ldots, x_t) + h(x') < h(x) \leq C^{\pi^*}(n)$.
 
+** Upper and lower bounds algorithms
+*** Calculating Upper and Lower Bounds
+Starting from a set of leaf nodes $S_0$
+**** Upper bound  $U(s) \geq C^*(s)$ for $s \in S_0$
+Setting $U(0) \geq C^*(0)$ and recursing:
+\[
+U(s) = \min_{a \in A_s} c(s,a) + U[\tau(s,a)]
+\]
+By induction, we can prove that this is an upper bound on $C^*$:
+\[
+U(s) = \min_{a \in A_s} c(s,a) + U[\tau(s,a)]
+\geq \min_{a \in A_s} c(s,a) + C^*[\tau(s,a)]
+= C^*(s). 
+\]
+
+**** Lower bound  $L(s) \leq C^*(s)$ for $s \in S_0$
+\[
+L(s) = \min_{a \in A_s} c(s,a) + L[\tau(s,a)]
+\]
+Similarly, we can prove that it is a lower bound:
+\[
+L(s) = \min_{a \in A_s} c(s,a) + L[\tau(s,a)]
+\leq \min_{a \in A_s} c(s,a) + C^*[\tau(s,a)]
+= C^*(s)
+\]
+*** Branch and bound
+The algorithm is rather simple to describe in words.
+- [1] Set $s = 0$.
+- [1.1] Select action $a^*$ minimising $c(s,a) + L(\tau(s,a))$.
+- [1.2] Discard subtrees $(s,a)$ for which $c(s,a) + L(\tau(s,a)) \geq c(s,a^*) + L(\tau(s,a^*))$.
+- [1.3] Proceed to $s = \tau(s,a)$ and go to 1.1. unless we are at a leaf.
+- [2] Expand the leaf node, and generate new leaf nodes with corresponding upper and lower bounds.
+- [3] Calculate $L, S$ for the corresponding subtree.
+- [4] Go to 1.
+
 * General weight shortest path
 ** General weight shortest path
 *** General weight shortest path
 - In this problem, actions can have positive or negative costs.
 - Negative edges generate problems if we have cycles
+- However, the basic algorithmic idea is again Dynamic Programming
+**** Bellman-Ford Algorithm
+In state-action notation, the algorithm is simply
+- $C_0(0) = 0$, $C_i(0) = \infty$ for all $i \neq 0$.
+- For $k \in 1, \ldots, |S|$:
+\[
+C_{k}(s) = \min_a c(s,a) + C_{k-1}(\tau(s,a))
+\]
+
 *** Bellman-Ford Algorithm
+
 \begin{algorithmic}
 \STATE $C(0) = 0$. $C(i) = \infty$, for $i \neq 0$.
 \FOR {$i \in 1, \ldots, |N| - 1$}

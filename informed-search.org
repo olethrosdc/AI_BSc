@@ -145,7 +145,7 @@ C^\pi(s), \qquad \forall \pi.
 \end{align*}
 For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s)$, so $C(s) \leq C^*(s)$. Finally,
 \[
-C^*(s) \leq C^{\pi}(s) = C(s) \geq C^*(s),
+C^*(s) \geq C^{\pi}(s) = C(s) \geq C^*(s),
 \]
 since $C^{\pi}(s) = C(s)$ for the policy returned by the algorithm.
 ** Heuristic Search

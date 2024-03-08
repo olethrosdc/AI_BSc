@@ -159,7 +159,7 @@ C(x_1, \ldots, x_t)
 \]
 - The remaining cost from $x_t$ to the goal using some policy $\pi$ as
 \[
-C^\pi(x_t)$
+C^\pi(x_t)
 \]
 
 *** Generic search

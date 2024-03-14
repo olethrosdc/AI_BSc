@@ -195,98 +195,23 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 
 *** Branch and Bound
 
-
-** Logic 
-*** Logic
-**** Statements
-- A statement $A$ may be true or false
-
-**** Unary operators
-- negation: $\neg A$ is true if $A$ is false (and vice-versa).
-
-**** Binary operators
-- or: $A \vee B$ ($A$ or $B$) is true if either $A$ or $B$ are true.
-- and: $A \wedge B$ is true if both $A$ and $B$ are true.
-- implies: $A \Rightarrow B$: is false if $A$ is true and $B$ is false.
-- iff: $A \Leftrightarrow B$: is true if $A,B$ have equal truth values.
-
-**** Operator precedence
-$\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
-
-*** Set theory
-- First, consider some universal set $\Omega$.
-- A set $A$ is a collection of points $x$ in $\Omega$.
-- $\{x \in \Omega : f(x)\}$: the set of points in $\Omega$ with the property that $f(x)$ is true.
-
-**** Unary operators
-- $\neg A =  \{x \in \Omega : x \notin A\}$.
-**** Binary operators
-- $A \cup B$ if $\{x \in \Omega : x \in A \vee x \in B\}$ - (c.f. $A \vee B$)
-- $A \cap B$ if $\{x \in \Omega : x \in A \wedge x \in B\}$ - (c.f. $A \wedge B$)
-**** Binary relations
-- $A \subset B$ if $x \in A \Rightarrow x \in B$ - (c.f. $A \implies B$)
-- $A = B$ if $x \in A \Leftrightarrow x \in B$ - (c.f. $A \Leftrightarrow B$)
-
-*** Knowledge base
-**** Syntax and Semtantics
-- Syntax: How to construct sentences
-- Semantix: What sentences mean
-**** Truth
-- A statement $A$ is either true or false in any model $m$.
-**** Model
-- $M(A)$ the set of all models where $A$ is true.
-**** Entailment
-- $A \models B$ means that $B$ is true whenever $A$ is true.
-- $A \models B$ if and only if $M(A) \subseteq M(B)$.
-**** Knowledge-Base
-- A set of sentences that are true.
-**** Inference
-- $KB \vdash_i A$: Algorithm $i$ can derive $A$ from KB.
-*** Propositional logic syntax
--Sentence $\to$ Atomic | Complex
--Atomic \to True | False | A | B | C | \ldots
--Complex \to (Sentence) | [Sentence]
-- | $\neg$  Sentence (not)
-- | Sentence $\wedge$ Sentence (and)
-- | Sentence $\vee$ Sentence (or)
-- | Sentence $\Rightarrow$ Sentence (implies)
-- | Sentence $\Leftrightarrow$ Sentence (if and only if)
-
-Precedence: $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
-
-*** Set theory semantics of propositional logic
-**** Atoms as sets 
-- Let $\Omega$ be the universal set.
-- Any atom $A$ is a subset of $\Omega$.
-- Any model $\omega$ is an element of $\Omega$.
-**** Definitions
-- $A \Rightarrow B$ is equivalent to $A \supset B$.
-- $\neg (\neg A) \equiv A$
-- $(A \Rightarrow B) \equiv (\neg B \Rightarrow \neg A)$
-- $(A \Rightarrow B) \equiv (\neg A \vee B)$
-
-**** For any model $m$:
-- $\neg P$ is true iff $P$ is false in $m$.
-- $P \wedge Q$ is true iff $P, Q$ are true in $m$.
-- $P \vee Q$ is true iff either $P$ or $Q$ is true in $m$.
-- $P \Rightarrow Q$ is true unless $P$ is true and $Q$ is false in $m$.
-- $P \Leftrightarrow Q$ if $P,Q$ are both true or both false in $m$.
-
-
-- If $A \subset B$ then, for every $\omega \in A$,  $\omega \in B$.
-- If $\omega \in A \cap B$ then $\omega \in A$.
-
-** Deterministic planning
-*** [[https://artint.info/3e/html/ArtInt3e.Ch6.S1.html][States, actions and goals]]
-- States $s \in S$
-- Actions $a \in A$
-- Transition function $\tau : S \times A \to S$
-**** STRIPS represnetation
-- State: $S \subset \{0,1\}^n$ of $n$ atoms.
-- Precondition: $c(s, a) = 1$ if $a$ can be performed in $s$.
-- Effect: Assigns values to *some* atoms.
-**** Feature-based
-- Effect: Transition function $\tau_i: S \times A \to \{0,1\}$ for each $i \in [n]$.
+** Constraints
+|-------------------------+-----|
+| Local search            |  20 |
+|-------------------------+-----|
+| Constraint Satisfaction |  20 |
+| Graph Colouring         |  20 |
+| Meeting Scheduling      |  20 |
+|-------------------------+-----|
+| Constraint Optimisation |  20 |
+| Travelling Salesman     |  20 |
+| Maximum Flow            |  20 |
+|-------------------------+-----|
+| Logical constraints     |  20 |
+| Towers of Hanoi         |  20 |
+|-------------------------+-----|
+|                         | 160 |
+#+TBLFM: @9$2=vsum(@1..@8)
 
 ** Infinite choices
 *** Lipschitz search

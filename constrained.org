@@ -1,4 +1,4 @@
-#+TITLE: Uninformed search
+#+TITLE: Constrained Problems
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
@@ -28,7 +28,7 @@
 #+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
 #+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
 #+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
-#+LaTeX_HEADER: \newcommand \cset[2] {\left\{#1 ~\middle|~ #2 \right\}}
+#+LaTeX_HEADER: \newcommand \callcset[2] {\left\{#1 ~\middle|~ #2 \right\}}
 #+LaTeX_HEADER: \newcommand \pol {\pi}
 #+LaTeX_HEADER: \newcommand \Pols {\Pi}
 #+LaTeX_HEADER: \newcommand \mdp {\mu}
@@ -56,15 +56,46 @@
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
 * Introduction
+** General optimisation problems
+*** Optimisation on graphs
+**** Discrete optimisation
+- Shortest path.
+- Meeting scheduling.
+- Travelling salesman.
+- Graph colouring.
+- Bipartite matching.
+- Spanning trees.
+**** Continuous optimisation
+- Maximum flow: inequality constraints
+- Minimum-cost flow: equality constraints.
+**** Complexity
+- Currently $\tilde{O}(N^{2/3})$.
+- $Ax = b$ can be solved in approximately linear time. (Spielman-Teng)
 ** Example problems
 *** Network Flow
 - Graph $G = (N, E)$, $s, t \in N$ being the source and sink.
 - Edge capacity $c : E \to \Reals_+$
 **** Flow $f : E \to \Reals$
 The total flow from source to sink is
+\[|f| = \sum_{(s,i) \in E} f_{si}  = \sum_{(j,t) \in E} f_{jt}\]
+**** Flow constraints
+The flow satisfies the following constraints:
+- Capacity constraint: $f_{ij} \leq c_{ij}$
+- Conservation of flows:
 \[
- |f| = \sum_{(s,i) \in E} f_{si}  = \sum_{(j,t) \in E} f_{jt}
+\forall n \in N \setminus \{s, t\}  
+\sum_{i : (i,j) \in E, f_{ij} > 0} f_ij
+=
+\sum_{j : (i,j) \in E, f_{ji} > 0} f_ji.
 \]
+**** The maximum network flow problem
+Maximise $|f|$ while satisfying the capacity and conservation constraints.
+*** Meeting Scheduling
+- Graph $G = (N, E)$, $s, t \in N$ being the source and sink.
+- Edge capacity $c : E \to \Reals_+$
+**** Flow $f : E \to \Reals$
+The total flow from source to sink is
+\[|f| = \sum_{(s,i) \in E} f_{si}  = \sum_{(j,t) \in E} f_{jt}\]
 **** Flow constraints
 The flow satisfies the following constraints:
 - Capacity constraint: $f_{ij} \leq c_{ij}$

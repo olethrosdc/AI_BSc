@@ -78,11 +78,11 @@
 
   
 *** Formalising the shortest path problem
-The cost from state $x$ of a policy that reaches a goal is
+The cost from state $s$ of a policy that reaches a goal in $Y$ is
 \[
 C^\pi(s) \defn \sum_{i=1}^\infty c[s_{t}, \pi(s_t)], \qquad s_{t+1} = \tau[s_t, \pi(s_t)], \quad s_{1} = s
 \]
-where for every $s \in Y$,  $c(s, a) = 0$ and $\tau(s,a) = s$ for all actions.
+where for every $y \in Y$,  $y(s, a) = 0$ and $\tau(y,a) = y$ for all actions.
 - We can calculate this recursively (from the goal state)
 \begin{align}
 C^\pi(s)
@@ -224,7 +224,7 @@ $A^*$ returns an optimal solution if
 - All costs are greater that $\epsilon > 0$
 - The heuristic is admissible, i.e. $0 \leq h(n) \leq C^*(n)$ for all $n \in N$.
 **** Proof
-- *Existence*. There is a finite number of paths that will be explored, as the longest possible path to a goal is $C^*(0)/\epsilon$. 
+- *Existence*. There is a finite number of paths that will be explored, as the longest possible path to a goal is $C^*(0)/\epsilon$ and the branching factor is bounded.
 - *Optimality*. The proof is by contradiction. Let as assume that $A^*$ finds some $\pi \neq \pi^*$ so that $C(\pi) > C(\pi^*)$. That means that at some node $n$ on the path there is an action $a^*$ on the optimal policy, but we keep expanding the path $x_1, x_2, \ldots$ of $\pi$. However, since $C(\pi) > C(\pi^*)$ there must be some $t$ such that $C(n, x_1, \ldots, x_t) > C^{\pi^*}(n)$. But then, to expand $\pi$ requires that $C(n, x_1, \ldots, x_t) + h(x') < h(x) \leq C^{\pi^*}(n)$.
 
 ** Upper and lower bounds algorithms

@@ -95,10 +95,11 @@ Maximise $|f|$ while satisfying the capacity and conservation constraints.
 ** Constraint Satisfaction
 *** Constrained Satisfaction Problems
 **** Variables
-- A set of variables $\{x_1, \ldots, x_n\}$
-- Each variable can take values in $x \in X_i$.
+- A set of variables $\{x_1, \ldots, x_n\} \in X$
+- Each variable can take values in $x_i \in X_i$ (it's *domain*)
 **** Binary constraints
 - $c_{i,j} : X_i \times X_j \to \{0, 1\}$.
+- A constraint $c_{ij}(x_i)$ is violated when it has the value $1$.
 **** Graph representation
 \begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
       \node[RV] at (0,0) (1) {$x_1$};
@@ -110,7 +111,31 @@ Maximise $|f|$ while satisfying the capacity and conservation constraints.
       \draw[->] (3) edge["$x_3 \neq x_4$"] (4);
       \draw[->] (4) edge["$c=c_j$"] (1);
 \end{tikzpicture}
-- Goal: Find $x \in \prod_i X_i$ so that $c = 1$.
+- Goal: Find $x \in \prod_i X_i$ so that $c = 0$.
+
+*** General constraints
+We might have to deal with more than one constraint. Then it makes sense to simply define the set of constraints as
+linking only some variables together.
+**** Example: Meeting scheduling
+- Let $x_1, x_2, x_3$ be the time three people decide to go to a meeting.
+- They can only meet if $x_1 = x_2$ and $x_2 = x_3$ and $x_3 = x_1$
+- This can be formalised as three binary constraints.
+- However, you can also see it as one constraint: $x_1 = x_2 = x_3$.
+**** Graph representation
+\begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
+      \node[RV] at (0,0) (1) {$x_1$};
+      \node[RV] at (0,2) (2) {$x_2$};
+      \node[RV] at (4,2) (3) {$x_3$};
+      \node[RV] at (4,0) (4) {$x_4$};
+      \draw[->] (1) edge["$x_1 = x_2$"] (2);
+      \draw[->] (2) edge["$x_2 \geq x_3$"] (3);
+      \draw[->] (3) edge["$x_3 \neq x_4$"] (4);
+      \draw[->] (4) edge["$c=c_j$"] (1);
+\end{tikzpicture}
+**** From $k$-ary to binary constraints
+Any complex constraint can be factored into multiple binary constraints.
+In particular if $c = c_1 \wedge c_2$ it can be broken down into two constraints $c_1, c_2$.
+
 ** Constrained Optimisation Problems 
 *** Constrained optimisation Problems
 **** Variables
@@ -223,9 +248,9 @@ Precedence: $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 - If $A \subset B$ then, for every $\omega \in A$,  $\omega \in B$.
 - If $\omega \in A \cap B$ then $\omega \in A$.
 
-** Deterministic planning
+** Logic and constraints
 *** [[https://artint.info/3e/html/ArtInt3e.Ch6.S1.html][States, actions and goals]]
 - States $s \in S$
 - Actions $a \in A$
 - Transition function $\tau : S \times A \to S$
-*** State representation
+

@@ -153,6 +153,21 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 
 
 
+*** Notation
+- $\Reals, \Reals^d$: the real line and $d$-dimension Euclidean space
+- $\Simplex^d$ the $d$-dimensional simplex
+- $\Simplex(A)$ the set of distributions over $A$.
+- $\ind{x}$: indicator function (1 if $x$ is true, 0 otherwise)
+- $\Pr$: probability
+- $\E$: expectation
+- $\pol \in \Pols$: policies, or algorithms.
+- $\mdp \in \MDPs$: models
+- $\param \in \Params$: parameters (i.e. models parameterised by vectors in $\Reals^d$)
+- $u$: utility
+- $c$: cost / constraints
+- $s  \in S$: state
+- $a  \in A$: action
+- $r  \in \Reals$: reward
 
 ** Schedule
 
@@ -169,6 +184,7 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 | 5.16 | Simultaneous Games                                      |
 | 5.23 | Reinforcement Learning                                  |
 | 5.30 | Project presentations                                   |
+
 
 
 * single agent problems with certainty
@@ -203,7 +219,7 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 | Graph Colouring         |  20 |
 | Meeting Scheduling      |  20 |
 |-------------------------+-----|
-| Constraint Optimisation |  20 |
+| onstraint Optimisation  |  20 |
 | Travelling Salesman     |  20 |
 | Maximum Flow            |  20 |
 |-------------------------+-----|

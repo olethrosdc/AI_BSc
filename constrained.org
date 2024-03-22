@@ -51,9 +51,11 @@
 #+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
 #+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
 #+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \tikzstyle{con}=[rectangle,draw=white,fill=gray,inner sep=0mm, minimum size=6mm]
 #+LaTeX_CLASS_OPTIONS: [smaller]
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
+
 #+OPTIONS:   H:3
 * Introduction
 ** General optimisation problems
@@ -68,30 +70,11 @@
 **** Continuous optimisation
 - Maximum flow: inequality constraints
 - Minimum-cost flow: equality constraints.
-**** Complexity
-- Currently $\tilde{O}(N^{2/3})$.
-- $Ax = b$ can be solved in approximately linear time. (Spielman-Teng)
-** Example problems
 
-*** Meeting Scheduling
-- Graph $G = (N, E)$, $s, t \in N$ being the source and sink.
-- Edge capacity $c : E \to \Reals_+$
-**** Flow $f : E \to \Reals$
-The total flow from source to sink is
-\[|f| = \sum_{(s,i) \in E} f_{si}  = \sum_{(j,t) \in E} f_{jt}\]
-**** Flow constraints
-The flow satisfies the following constraints:
-- Capacity constraint: $f_{ij} \leq c_{ij}$
-- Conservation of flows:
-\[
-\forall n \in N \setminus \{s, t\}  
-\sum_{i : (i,j) \in E, f_{ij} > 0} f_ij
-=
-\sum_{j : (i,j) \in E, f_{ji} > 0} f_ji.
-\]
-**** The maximum network flow problem
-Maximise $|f|$ while satisfying the capacity and conservation constraints.
 * Constraint optimisation
+** Introduction
+*** Constrained Problems
+#+TOC: headlines [currentsection]
 ** Constraint Satisfaction
 *** Constrained Satisfaction Problems
 **** Variables
@@ -105,43 +88,43 @@ Maximise $|f|$ while satisfying the capacity and conservation constraints.
       \node[RV] at (0,0) (1) {$x_1$};
       \node[RV] at (0,2) (2) {$x_2$};
       \node[RV] at (4,2) (3) {$x_3$};
-      \node[RV] at (4,0) (4) {$x_4$};
+      \node[RV] at (4,0) (4) {$x_3$};
       \draw[->] (1) edge["$x_1 = x_2$"] (2);
-      \draw[->] (2) edge["$x_2 \geq x_3$"] (3);
-      \draw[->] (3) edge["$x_3 \neq x_4$"] (4);
-      \draw[->] (4) edge["$c=c_j$"] (1);
+      \draw[->] (2) edge["$x_2 = x_3$"] (3);
+      \draw[->] (3) edge["$x_3 = x_1$"] (1);
+      \draw[->] (4) edge["$x_4 = x_1$"] (1);	
 \end{tikzpicture}
 - Goal: Find $x \in \prod_i X_i$ so that $c = 0$.
+**** Example: Graph colouring
+- For any neighbouring nodes $i,j$ on the graph, $c_{ij} = \ind{x_i = x_j}$.
 
 *** General constraints
-We might have to deal with more than one constraint. Then it makes sense to simply define the set of constraints as
-linking only some variables together.
 **** Example: Meeting scheduling
 - Let $x_1, x_2, x_3$ be the time three people decide to go to a meeting.
 - They can only meet if $x_1 = x_2$ and $x_2 = x_3$ and $x_3 = x_1$
-- This can be formalised as three binary constraints.
-- However, you can also see it as one constraint: $x_1 = x_2 = x_3$.
+- Instead of 3 binary constraints, use one constraint: $c = \ind{\neg(x_1 = x_2 = x_3)}$.
 **** Graph representation
 \begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
       \node[RV] at (0,0) (1) {$x_1$};
       \node[RV] at (0,2) (2) {$x_2$};
       \node[RV] at (4,2) (3) {$x_3$};
-      \node[RV] at (4,0) (4) {$x_4$};
-      \draw[->] (1) edge["$x_1 = x_2$"] (2);
-      \draw[->] (2) edge["$x_2 \geq x_3$"] (3);
-      \draw[->] (3) edge["$x_3 \neq x_4$"] (4);
-      \draw[->] (4) edge["$c=c_j$"] (1);
+      \node[con] at (4,0) (c) {$c$};
+      \draw[-] (1) -- (c);
+      \draw[-] (2) -- (c);
+      \draw[-] (3) -- (c);
 \end{tikzpicture}
-**** From $k$-ary to binary constraints
-Any complex constraint can be factored into multiple binary constraints.
-In particular if $c = c_1 \wedge c_2$ it can be broken down into two constraints $c_1, c_2$.
+Here the constraint $c$ is linked to all variables it affects.
 
-** Constrained Optimisation Problems 
+**** Example: Sudoku
+Constraints exist between (a) all numbers in a square (b) all numbers in a row (c) all numbers in a column.
+
+
+** Constrained Optimisation Problemss 
 *** Constrained optimisation Problems
 **** Variables
 - A set of variables $\{x_1, \ldots, x_n\}$
 - Each variable can take values in $x \in X_i$, with $X \in \prod_i X_i$.
-**** Pairwise constraints
+**** Binary constraints
 - $c_{i,j} : X_i \times X_j \to \{0, 1\}$.
 **** Objective function
 - Maximise $u: X \to \Reals$.
@@ -169,6 +152,8 @@ Maximise $|f|$ while satisfying the capacity and conservation constraints.
 
 * Logical constraints
 ** Logic 
+*** Logic and constraints
+#+TOC: headlines [currentsection]
 *** Logic
 **** Statements
 - A statement $A$ may be true or false
@@ -200,11 +185,10 @@ $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 - $A = B$ if $x \in A \Leftrightarrow x \in B$ - (c.f. $A \Leftrightarrow B$)
 
 *** Knowledge base
-**** Syntax and Semtantics
 - Syntax: How to construct sentences
-- Semantix: What sentences mean
+- Semantics: What sentences mean
 **** Truth
-- A statement $A$ is either true or false in any model $m$.
+- A statement $A$ is either true or false in any model $m \in \Omega$.
 **** Model
 - $M(A)$ the set of all models where $A$ is true.
 **** Entailment
@@ -213,7 +197,7 @@ $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 **** Knowledge-Base
 - A set of sentences that are true.
 **** Inference
-- $KB \vdash_i A$: Algorithm $i$ can derive $A$ from KB.
+- $KB \vdash_\pi A$: Algorithm $\pi$ can derive $A$ from KB.
 *** Propositional logic syntax
 -Sentence $\to$ Atomic | Complex
 -Atomic \to True | False | A | B | C | \ldots
@@ -231,26 +215,40 @@ Precedence: $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 - Let $\Omega$ be the universal set.
 - Any atom $A$ is a subset of $\Omega$.
 - Any model $\omega$ is an element of $\Omega$.
-**** Definitions
-- $A \Rightarrow B$ is equivalent to $A \supset B$.
-- $\neg (\neg A) \equiv A$
-- $(A \Rightarrow B) \equiv (\neg B \Rightarrow \neg A)$
-- $(A \Rightarrow B) \equiv (\neg A \vee B)$
-
-**** For any model $m$:
-- $\neg P$ is true iff $P$ is false in $m$.
-- $P \wedge Q$ is true iff $P, Q$ are true in $m$.
-- $P \vee Q$ is true iff either $P$ or $Q$ is true in $m$.
-- $P \Rightarrow Q$ is true unless $P$ is true and $Q$ is false in $m$.
-- $P \Leftrightarrow Q$ if $P,Q$ are both true or both false in $m$.
-
-
+**** For any model $\omega$:
+- $\neg P$ is true iff $P$ is false in $\omega$.
+- $P \wedge Q$ is true iff $P, Q$ are true in $\omega$.
+- $P \vee Q$ is true iff either $P$ or $Q$ is true in $\omega$.
+- $P \Rightarrow Q$ is true unless $P$ is true and $Q$ is false in $\omega$.
+- $P \Leftrightarrow Q$ if $P,Q$ are both true or both false in $\omega$.
 - If $A \subset B$ then, for every $\omega \in A$,  $\omega \in B$.
 - If $\omega \in A \cap B$ then $\omega \in A$.
+** Logic as states
+*** Factored state representation
+
+**** Predicates for coffee-making 
+- $x_c$ (machine has cup)
+- $x_g$ (machine has grains)
+- $x_m$ (machine is on)
+- $x_w$ (machine has water)
+To make coffee, $x_c \wedge x_g \wedge x_m \wedge x_w$ must be true.
 
 ** Logic and constraints
-*** [[https://artint.info/3e/html/ArtInt3e.Ch6.S1.html][States, actions and goals]]
-- States $s \in S$
-- Actions $a \in A$
-- Transition function $\tau : S \times A \to S$
-
+*** From n-ary to binary constraints
+Take meeting scheduling as an example.
+The constraint $c = \ind{\neg(x_1 = x_2 = x_3)}$ can be rewritten using the fact that
+ $\neg (A \wedge B) = (\neg A) \vee (\neg B)$:
+\begin{align*}
+\neg(x_1 = x_2 = x_3)
+&= \neg(x_1 = x_2 \wedge x_2 = x_3 \wedge x_3 = x_1)\\
+&= x_1 \neq x_2 \vee x_2 \neq x_3 \vee x_3 \neq x_1.
+\end{align*}
+This leads to:
+\[
+c = \ind{x_1 \neq x_2} + \ind{x_2 \neq x_3} + \ind{x_3 \neq x_1}.
+\]
+Since any constraint can be decomposed into the form
+\[
+c = c_1 + c_2 + \cdots + c_n
+\]
+we can always rewrite n-ary constraints as a collection of binary constraints.

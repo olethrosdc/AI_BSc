@@ -122,23 +122,23 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 |        | Bayes Theorem               |                                 | 12.4. Independence                 |
 |        | Probabilistic inference     |                                 | 12.5. Bayes's theorem              |
 |--------+-----------------------------+---------------------------------+------------------------------------|
-|      7 | Belief networks             | 9.3. Belief Networks            | 13.1. Representing knowledge       |
-|        |                             | 9.4. Probabilistic Inference    | 13.2. Bayesian Networks            |
-|        |                             |                                 | 13.3. Exact inference in BNs       |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      8 | Expected Utility Theory     | 12.1 Preferences and Utility    | 16.1. Beliefs and Desires          |
+|      7 | Expected Utility Theory     | 12.1 Preferences and Utility    | 16.1. Beliefs and Desires          |
 |        |                             | 12.2 One-off decisions          | 16.2. utility theory               |
 |        |                             |                                 | 16.3. Utility functions            |
 |        |                             |                                 | 16.5. Decision networks            |
 |--------+-----------------------------+---------------------------------+------------------------------------|
-|      9 | Markov Decision Processes   | 12.3 Sequential Decisions       | 17.1. Sequential decision problems |
+|      8 | Markov Decision Processes   | 12.3 Sequential Decisions       | 17.1. Sequential decision problems |
 |        | Dynamic Programming         | 12.4 The value of information   | 17.2. Algorithms for MDPs          |
 |        |                             | 12.5 Decision processes         |                                    |
 |--------+-----------------------------+---------------------------------+------------------------------------|
-|     10 | Alternating Zero-Sum Games  | 14.1. Multi-agent framework     | 5.1. Game Theory                   |
+|      9 | Alternating Zero-Sum Games  | 14.1. Multi-agent framework     | 5.1. Game Theory                   |
 |        | Stochastic Zero-Sum Games   | 14.2. Representations of games  | 5.2. Zero-Sum Games                |
 |        | Linear programming          | 14.3. Perfect information games | 5.3. Alpha-Beta Search             |
 |        |                             |                                 | 5.5. Stochastic Games              |
+|--------+-----------------------------+---------------------------------+------------------------------------|
+|     10 | Belief networks             | 9.3. Belief Networks            | 13.1. Representing knowledge       |
+|        |                             | 9.4. Probabilistic Inference    | 13.2. Bayesian Networks            |
+|        |                             |                                 | 13.3. Exact inference in BNs       |
 |--------+-----------------------------+---------------------------------+------------------------------------|
 |     11 | Supervised learning         |                                 |                                    |
 |        | Learning as inference       |                                 |                                    |

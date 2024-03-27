@@ -1,0 +1,296 @@
+#+TITLE: Inference
+#+AUTHOR: Christos Dimitrakakis
+#+EMAIL:christos.dimitrakakis@unine.ch
+#+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
+#+LaTeX_HEADER: \usepackage{tikz}
+#+LaTeX_HEADER: \usepackage{amsmath}
+#+LaTeX_HEADER: \usepackage{amssymb}
+#+LaTeX_HEADER: \usepackage{isomath}
+#+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
+#+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmax}{arg\,max}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmin}{arg\,min}
+#+LaTeX_HEADER: \DeclareMathOperator*{\sgn}{sgn}
+#+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
+#+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
+#+LaTeX_HEADER: \newcommand \Param {\Theta}
+#+LaTeX_HEADER: \newcommand \param {\theta}
+#+LaTeX_HEADER: \newcommand \vparam {\vectorsym{\theta}}
+#+LaTeX_HEADER: \newcommand \mparam {\matrixsym{\Theta}}
+#+LaTeX_HEADER: \newcommand \bW {\matrixsym{W}}
+#+LaTeX_HEADER: \newcommand \bw {\vectorsym{w}}
+#+LaTeX_HEADER: \newcommand \wi {\vectorsym{w}_i}
+#+LaTeX_HEADER: \newcommand \wij {w_{i,j}}
+#+LaTeX_HEADER: \newcommand \bA {\matrixsym{A}}
+#+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
+#+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
+#+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
+#+LaTeX_HEADER: \newcommand \callcset[2] {\left\{#1 ~\middle|~ #2 \right\}}
+#+LaTeX_HEADER: \newcommand \pol {\pi}
+#+LaTeX_HEADER: \newcommand \Pols {\Pi}
+#+LaTeX_HEADER: \newcommand \mdp {\mu}
+#+LaTeX_HEADER: \newcommand \MDPs {\mathcal{M}}
+#+LaTeX_HEADER: \newcommand \bel {\beta}
+#+LaTeX_HEADER: \newcommand \Bels {\mathcal{B}}
+#+LaTeX_HEADER: \newcommand \Unif {\textrm{Unif}}
+#+LaTeX_HEADER: \newcommand \Ber {\textrm{Bernoulli}}
+#+LaTeX_HEADER: \newcommand \Mult {\textrm{Mult}}
+#+LaTeX_HEADER: \newcommand \Beta {\textrm{Beta}}
+#+LaTeX_HEADER: \newcommand \Dir {\textrm{Dir}}
+#+LaTeX_HEADER: \newcommand \Normal {\textrm{Normal}}
+#+LaTeX_HEADER: \newcommand \Simplex {\mathbb{\Delta}}
+#+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
+#+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
+#+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
+#+LaTeX_HEADER: \newcommand{\indep}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+#+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
+#+LaTeX_HEADER: \usetikzlibrary{arrows.meta, positioning, quotes}
+#+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
+#+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
+#+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \tikzstyle{con}=[rectangle,draw=white,fill=gray,inner sep=0mm, minimum size=6mm]
+#+LaTeX_CLASS_OPTIONS: [smaller]
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+TAGS: activity advanced definition exercise homework project example theory code
+
+#+OPTIONS:   H:3
+* Logical inference
+*** Logic and inference
+#+TOC: headlines [currentsection]
+*** Set theory
+- First, consider some universal set $\Omega$.
+- A set $A$ is a collection of points $x$ in $\Omega$.
+- $\{x \in \Omega : f(x)\}$: the set of points in $\Omega$ with the property that $f(x)$ is true.
+
+**** Unary operators
+- $\neg A =  \{x \in \Omega : x \notin A\}$.
+**** Binary operators
+- $A \cup B$ if $\{x \in \Omega : x \in A \vee x \in B\}$ - (c.f. $A \vee B$)
+- $A \cap B$ if $\{x \in \Omega : x \in A \wedge x \in B\}$ - (c.f. $A \wedge B$)
+**** Binary relations
+- $A \subset B$ if $x \in A \Rightarrow x \in B$ - (c.f. $A \implies B$)
+- $A = B$ if $x \in A \Leftrightarrow x \in B$ - (c.f. $A \Leftrightarrow B$)
+
+*** The inference problem
+
+- Given statements $A_1, \ldots, A_n$ we know to be true (i.e. a knowledge base), is another statement $B$ true?
+[[file:figures/logical-inference.pdf][Inference]]
+
+The following statements are equivalent:
+- $A \implies B$ iff $(A \cap \neg B) = \emptyset$.
+- $A \implies B$ iff $A \subset B$.
+
+In addition
+- If $(A \Rightarrow B ) \wedge A$ then $B$.
+- If $(A \wedge B)$ then $A$.
+* Probability background
+#+TOC: headlines [currentsection]
+** Probability facts
+*** Events as sets
+**** The universe and random outcomes
+- The $\Omega$ contains all events that can happen.
+- When something happens, we observe an  element $\omega \in \Omega$.
+**** Events in the universe
+- An event is true if $\omega \in A$, and false if $\omega \notin A$.
+- The negative event $\neg A = \Omega \setminus A$ is the set
+- The possible events are a collection of subsets $\Sigma$ of $\Omega$ so that
+(i) $\Omega \in \Sigma$, (ii) $A, B \in \Sigma \Rightarrow A \cup B in \Sigma$ (iii) $A \in \Sigma \Rightarrow \neg A \in \Sigma$
+**** Example: Traffic violation
+- A car is moving with speed $\omega \in [0,\infty)$ in front of the speed camera.
+- $A_0 = [0,50]$: below the speed limit
+- $A_1 = (50,60]$: low fine
+- $A_2 = (60,\infty]$: high fine
+- $A_3 = (100, \infty)$: Suspension of license
+- All combinations of the above events are interesting.
+*** Probability fundamentals
+
+**** Probability measure $P$
+Probability can be seen as an area-like function assigning a likelihood to sets.
+- $P : \Sigma \to [0,1]$  gives the likelihood $P(A)$ of an event $A \in \Sigma$.
+- $P(\Omega) = 1$
+- For $A, B \subset \Omega$, if $A \cap B = \emptyset$ then $P(A \cup B) = P(A) + P(B)$.
+**** Marginalisation
+If $A_1, \ldots, A_n \subset \Omega$ are a partition of $\Omega$
+\[
+P(B) = \sum_{i = 1}^n P(B \cap A_i).
+\]
+
+** Conditional probability and independence
+*** Conditional probability
+**** Conditional probability
+    :PROPERTIES:
+    :BEAMER_env: definition
+    :END:
+The conditional probability of an event $A$ given an event $B$ is defined as 
+\[
+P(A | B) \defn \frac{P(A \cap B)}{P(B)}
+\]
+The above definition requires $P(B)$ to exist and be positive.
+
+**** Conditional probabilities as a collection of probabilities
+More generally, we can define conditional probabilities as simply a
+collection of probability distributions:
+\[
+\{P_\param(A) : \theta \in \Param\},
+\]
+where $\Param$ is indexing possible values of $\theta$.
+-  $\theta$ is sometimes called the *model* or *parameter*
+
+*** The theorem of Bayes
+**** Bayes's theorem
+    :PROPERTIES:
+    :BEAMER_env: theorem
+    :END:
+\[
+P(A | B) = \frac{P(B | A)}{P(B)} 
+\]
+#+BEAMER: \pause
+
+**** The general case
+If $A_1, \ldots, A_n$ are a partition of $\Omega$, meaning that they
+are mutually exclusive events (i.e. $A_i \cap A_j = \emptyset$ for $i
+\neq j$) such that one of them must be true (i.e. $\bigcup_{i=1}^n A_i =
+\Omega$), then
+\[
+P(B) = \sum_{i=1}^n P(B | A_i) P(A_i)
+\]
+and 
+\[
+P(A_j | B) = \frac{P(B | A_j)}{\sum_{i=1}^n P(B | A_i) P(A_i)}
+\]
+
+*** Independence
+**** Independent events $A \indep B$
+$A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
+**** Conditional independence $A \indep B \mid C$
+ $A, B$ are *conditionally independent* given $C$ iff $P(A \cap B | C) = P(A | C) P(B | C)$.
+** Random variables, expectation and variance
+*** Random variables
+A random variable $f : \Omega \to \Reals$ is a real-value function measurable with respect to the underlying probability measure $P$, and we write $f \sim P$.
+**** The distribution of $f$
+The probability that $f$ lies in some subset $A \subset \Reals$ is
+\[
+P_f(A) \defn P(\{\omega \in \Omega : f(\omega) \in A\}).
+\]
+**** Independence
+Two RVs $f,g$ are independent in the same way that events are independent:
+\[
+P(f \in A \wedge g \in B) = P(f \in A) P(g \in B) = P_f(A) P_g(B).
+\]
+In that sense, $f \sim P_f$ and $g \sim P_g$.
+
+*** Expectation
+For any real-valued random variable $f: \Omega \to \Reals$, the expectation with respect to a probability measure $P$ is
+\[
+\E_P(f) = \sum_{\omega \in \Omega} f(\omega) P(\omega).
+\]
+When $\Omega$ is continuous, we can use a density $p$
+\[
+\E_P(f) = \int_{\Omega} f(\omega) p(\omega) d\omega.
+\]
+**** Linearity of expectations
+For any RVs $x, y$:
+\[
+\E_P(x + y) = \E_P(x) + \E_P(y)
+\]
+*** Correlation and independence
+**** Independence
+If $x,y$ are independent RVs then $\E_P(xy) = \E(x)\E(y)$.
+**** Correlation
+If $x,y$ are *not* correlated then $\E_P(xy) = \E(x)\E(y)$.
+**** IID (Independent and Identically Distributed) random variables
+A sequence $x_t$ of r.v.s is IID if $x_t \sim P$
+so that
+\[
+(x_1, \ldots, x_t, \ldots, x_T) \sim P^T
+\]
+i.e. a \(T\)-length sample is drawn from the product distribution $P^T = P \times P \times \cdots \times P$.
+*** Conditional expectation
+The conditional expectation of a random variable $f: \Omega \to \Reals$, with respect to a probability measure $P$ conditioned on some event $B$ is simply
+\[
+\E_P(f | B) = \sum_{\omega \in \Omega} f(\omega) P(\omega | B).
+\]
+Conditional expectations are similar to conditional probabilities.
+*** Conditional probabilities of RVs
+Similarly to the notation over sets,
+\[
+P(A \cap B) = P(A \mid B) P(B),
+\]
+when dealing with RVs, it is common to use the notation
+\[
+P(x, y) = P(x | y) P(y)
+\]
+This equation works for all possible values of $x, y$ e.g.
+\[
+P(x = 1, y = 0) = P(x = 1 | y = 0) P(y = 0)
+\]
+which then denotes the probability msas of each
+
+* Probabilistic inference
+** Statistical Decision Theory
+*** Expected utility
+**** Actions, outcomes and utility
+In this setting, we obtain random outcomes that depend on our actions.
+- Actions $a \in A$
+- Outcomes $\omega \in \Omega$.
+- Probability of outcomes $P(\omega \mid a)$
+- Utility $U : \Omega \to \Reals$
+**** Expected utility
+The expected utility of an action is:
+\[
+\E_P[U \mid a] = \sum_{\omega \in \Omega} U(\omega) P(\omega \mid a).
+\]
+
+**** The expected utility hypothesis
+We prefer $a$ to $a'$ if and only if
+\[
+\E_P[U \mid a] \geq \E_P[U \mid a']
+\]
+**** De Finetti's theorem
+Beliefs violating probability axioms lead to a loss in utility.
+
+*** Example: Betting
+- In this example, probabilities reflect actual randomness
+*** Example: Route selection
+- In this example, probabilities reflect subjective beliefs
+*** Example: Estimation
+- In this example, probabilities are calculated starting from subjective beliefs
+** Posterior distributions and model estimation
+*** Bayes's theorem
+**** As a conditional measure
+\[
+P(A \mid B)
+= 
+\frac{P(B \mid A) P(A)}{P(B)}
+= 
+\frac{P(B \mid A) P(A)}{P(B \mid A) P(A) + P(B \mid \neg A) P(\neg A)}
+\]
+
+**** As a causal explanation
+\[
+\Pr(\textrm{cause} \mid \textrm{effect})
+= 
+\frac{\Pr(\textrm{effect} \mid \textrm{cause}) \Pr(\textrm{cause})}{\Pr(\textrm{effect})}
+\]
+**** As model inference
+- Prior $\bel(\param)$
+- Model class $\{P_\param(\bel) : \param \in \Params\}$
+- Data $x$
+\[
+\bel(\param \mid x)
+= 
+\frac{P_\param(x) \bel(\param)}{\Pr_\bel(x)}
+= 
+\frac{P_\param(x) \bel(x)}{\sum_{\param' \in \Params} P_{\param'}(x) \bel(\param')}
+\]
+
+
+
+*** Example: The $k$-meteorologists problem
+
+
+*** Example: Naive Bayes models

@@ -1,4 +1,4 @@
-#+TITLE: Uninformed search
+#+TITLE: Informed search
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
@@ -57,7 +57,12 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
+<<<<<<< HEAD
 * Shortest path algorithms
+=======
+
+* The Shortest Path Problem
+>>>>>>> 1ffa81582947465183a2f1ae9ee8424ba602a628
 ** The shortest path problem
 *** The shortest path problem
 #+ATTR_BEAMER: :overlay <+->
@@ -75,13 +80,13 @@
 - If the path/policy does not reach a goal, the cost is infinite.
 - We can maximise rewards instead of minimising costs.
 
-
+  
 *** Formalising the shortest path problem
-The cost from state $x$ of a policy that reaches a goal is
+The cost from state $s$ of a policy that reaches a goal in $Y$ is
 \[
 C^\pi(s) \defn \sum_{i=1}^\infty c[s_{t}, \pi(s_t)], \qquad s_{t+1} = \tau[s_t, \pi(s_t)], \quad s_{1} = s
 \]
-where for every $s \in Y$,  $c(s, a) = 0$ and $\tau(s,a) = s$ for all actions.
+where for every $y \in Y$,  $y(s, a) = 0$ and $\tau(y,a) = y$ for all actions.
 - We can calculate this recursively (from the goal state)
 \begin{align}
 C^\pi(s)
@@ -96,7 +101,7 @@ C^*(s)
 = \min_a \left\{c[s, a] + C^*[\tau(s, a)]\right\}.
 \end{align}
 
-*** The shortest path algorithm: backward search
+*** Dijkstra's shortest path algorithm: backward search
 **** Shortest path algorithm
 \begin{algorithmic}
 \STATE Input: Goal states $Y$, starting state $x$.
@@ -144,6 +149,158 @@ C^\pi(s), \qquad \forall \pi.
 \end{align*}
 For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s)$, so $C(s) \leq C^*(s)$. Finally,
 \[
-C^*(s) \leq C^{\pi}(s) = C(s) \geq C^*(s),
+C^*(s) \geq C^{\pi}(s) = C(s) \geq C^*(s),
 \]
 since $C^{\pi}(s) = C(s)$ for the policy returned by the algorithm.
+** Heuristic Search
+*** Partial graphs
+- Why do we need search?
+- We do not want to calculate on the whole graph
+- We use *search* to find the shortest path more efficiently (perhaps).
+- We denote the total cost of some path $x_1, \ldots, x_t$ as:
+\[
+C(x_1, \ldots, x_t)
+\]
+- The remaining cost from $x_t$ to the goal using some policy $\pi$ as
+\[
+C^\pi(x_t)
+\]
+
+*** Generic search
+We define heuristic search in the context of shortest-path problems.
+
+We now consider a general method for searching a node in the frontier.
+
+\begin{algorithmic}
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $f : N \to \Reals$: evaluation function.
+\STATE \textbf{input} $x$ : Start node
+\STATE \textbf{function} \texttt{Heuristic Search}($G, x, h$)
+\STATE $S' = \emptyset$ : Nodes searched.
+\STATE $F = \{x\}$. Initialise the frontier
+\STATE $c_x = 0$. Initialise the cost of node $x$
+\WHILE {$F \neq \emptyset$}
+\STATE $n = \argmin_{i \in F} f(i)$. Select "best" node.
+\STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
+\IF {$n \notin S'$}
+\STATE $B = \child(n) \setminus S'$. Get the set of unsearched children of $n$.
+\STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
+\STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
+\STATE $F = F \cup B$. Add $n$'s children to the frontier.
+\ENDIF
+\ENDWHILE
+\end{algorithmic}
+
+*** $A^*$ search
+We now consider a general method for searching a node in the frontier.
+
+\begin{algorithmic}
+\STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
+\STATE \textbf{input} $h : N \to \Reals$: heuristic function.
+\STATE \textbf{input} $x$ : Start node
+\STATE \textbf{function} \texttt{A-Star}($G, x, h$)
+\STATE $S' = \emptyset$ : Nodes searched.
+\STATE $F = \{x\}$. Initialise the frontier
+\STATE $c_x = 0$. Initialise the cost of node $x$
+\WHILE {$F \neq \emptyset$}
+\STATE $n = \argmin_{i \in F} c_i + h(i)$. Select minimum cost + heuristic node.
+\STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
+\IF {$n \notin S'$}
+\STATE $B = \child(n) \setminus S'$. Get the set of unsearched children of $n$.
+\STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
+\STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
+\STATE $F = F \cup B$. Add $n$'s children to the frontier.
+\ENDIF
+\ENDWHILE
+\end{algorithmic}
+
+- You can see that $h = 0$ corresponds to minimum-cost search.
+*** Admissible heuristics
+- If $h$ is arbitrary, then the search can fail.
+- We need $h$ to be admissible. In particular,
+\[
+C^*(n) \geq h(n).
+\]
+*** Admissibility of $A^*$
+**** Theorem
+$A^*$ returns an optimal solution if
+- The graph has a bounded branching factor.
+- All costs are greater that $\epsilon > 0$
+- The heuristic is admissible, i.e. $0 \leq h(n) \leq C^*(n)$ for all $n \in N$.
+**** Proof
+- *Existence*. There is a finite number of paths that will be explored, as the longest possible path to a goal is $C^*(0)/\epsilon$ and the branching factor is bounded.
+- *Optimality*. The proof is by contradiction. Let as assume that $A^*$ finds some $\pi \neq \pi^*$ so that $C(\pi) > C(\pi^*)$. That means that at some node $n$ on the path there is an action $a^*$ on the optimal policy, but we keep expanding the path $x_1, x_2, \ldots$ of $\pi$. However, since $C(\pi) > C(\pi^*)$ there must be some $t$ such that $C(n, x_1, \ldots, x_t) > C^{\pi^*}(n)$. But then, to expand $\pi$ requires that $C(n, x_1, \ldots, x_t) + h(x') < h(x) \leq C^{\pi^*}(n)$.
+
+** Upper and lower bounds algorithms
+*** Calculating Upper and Lower Bounds
+Starting from a set of leaf nodes $S_0$
+**** Upper bound  $U(s) \geq C^*(s)$ for $s \in S_0$
+Setting $U(0) \geq C^*(0)$ and recursing:
+\[
+U(s) = \min_{a \in A_s} c(s,a) + U[\tau(s,a)]
+\]
+By induction, we can prove that this is an upper bound on $C^*$:
+\[
+U(s) = \min_{a \in A_s} c(s,a) + U[\tau(s,a)]
+\geq \min_{a \in A_s} c(s,a) + C^*[\tau(s,a)]
+= C^*(s). 
+\]
+
+**** Lower bound  $L(s) \leq C^*(s)$ for $s \in S_0$
+\[
+L(s) = \min_{a \in A_s} c(s,a) + L[\tau(s,a)]
+\]
+Similarly, we can prove that it is a lower bound:
+\[
+L(s) = \min_{a \in A_s} c(s,a) + L[\tau(s,a)]
+\leq \min_{a \in A_s} c(s,a) + C^*[\tau(s,a)]
+= C^*(s)
+\]
+*** Branch and bound
+The algorithm is rather simple to describe in words.
+- [1] Set $s = 0$.
+- [1.1] Select action $a^*$ minimising $c(s,a) + L(\tau(s,a))$.
+- [1.2] Discard subtrees $(s,a)$ for which $c(s,a) + L(\tau(s,a)) \geq c(s,a^*) + L(\tau(s,a^*))$.
+- [1.3] Proceed to $s = \tau(s,a)$ and go to 1.1. unless we are at a leaf.
+- [2] Expand the leaf node, and generate new leaf nodes with corresponding upper and lower bounds.
+- [3] Calculate $L, S$ for the corresponding subtree.
+- [4] Go to 1.
+
+* General weight shortest path
+** General weight shortest path
+*** General weight shortest path
+- In this problem, actions can have positive or negative costs.
+- Negative edges generate problems if we have cycles
+- However, the basic algorithmic idea is again Dynamic Programming
+**** Bellman-Ford Algorithm
+In state-action notation, the algorithm is simply
+- $C_0(0) = 0$, $C_i(0) = \infty$ for all $i \neq 0$.
+- For $k \in 1, \ldots, |S|$:
+\[
+C_{k}(s) = \min_a c(s,a) + C_{k-1}(\tau(s,a))
+\]
+
+*** Bellman-Ford Algorithm
+
+\begin{algorithmic}
+\STATE $C(0) = 0$. $C(i) = \infty$, for $i \neq 0$.
+\FOR {$i \in 1, \ldots, |N| - 1$}
+\FOR {all edges $(i,j)$}
+\IF {$C(i) + c(i,j) < C(j)$}
+\STATE $c(j) = C(i) + c(i,j)$
+\ENDIF
+\ENDFOR
+\ENDFOR
+\FOR {all edges $(i,j)$}
+\IF {$C(i) + c(i,j) < C(j)$}
+\STATE \textbf{error} "Negative cycle"
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+
+- Succinctly, the algorithm is just like Dijkstra, but it ensures it goes at most $|N| - 1$ times through all vertices, and has a sanity check as no more updates should be possible at the end.
+- Instead of keeping a track of explored nodes, it uses the fact that $C$ is initialised to infinity.
+
+
+
+

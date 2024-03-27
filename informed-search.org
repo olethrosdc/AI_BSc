@@ -57,12 +57,7 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
-<<<<<<< HEAD
-* Shortest path algorithms
-=======
-
 * The Shortest Path Problem
->>>>>>> 1ffa81582947465183a2f1ae9ee8424ba602a628
 ** The shortest path problem
 *** The shortest path problem
 #+ATTR_BEAMER: :overlay <+->

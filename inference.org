@@ -59,6 +59,7 @@
 
 #+OPTIONS:   H:3
 * Logical inference
+  #+TOC: headlines [currentsection]
 ** Set theory and logic
 *** Set theory
 - First, consider some universal set $\Omega$.
@@ -78,7 +79,6 @@
 *** The inference problem
 
 - Given statements $A_1, \ldots, A_n$ we know to be true (i.e. a knowledge base), is another statement $B$ true?
-[[file:figures/logical-inference.pdf][Inference]]
 
 The following statements are equivalent:
 - $A \implies B$ iff $(A \cap \neg B) = \emptyset$.
@@ -87,9 +87,11 @@ The following statements are equivalent:
 In addition
 - If $(A \Rightarrow B ) \wedge A$ then $B$.
 - If $(A \wedge B)$ then $A$.
-  
+*** Illustration  
+[[./figures/logical-inference.pdf]]
+
 * Probability background
-#+TOC: headlines [currentsection]
+  #+TOC: headlines [currentsection]
 ** Probability facts
 *** Events as sets
 **** The universe and random outcomes
@@ -136,7 +138,7 @@ The above definition requires $P(B)$ to exist and be positive.
 More generally, we can define conditional probabilities as simply a
 collection of probability distributions:
 \[
-\{P_\param(A) : \theta \in \Param\},
+\{P_\param : \theta \in \Param\},
 \]
 where $\Param$ is indexing possible values of $\theta$.
 -  $\theta$ is sometimes called the *model* or *parameter*
@@ -147,7 +149,7 @@ where $\Param$ is indexing possible values of $\theta$.
     :BEAMER_env: theorem
     :END:
 \[
-P(A | B) = \frac{P(B | A)}{P(B)} 
+P(A | B) = \frac{P(B | A) P(A)}{P(B)} 
 \]
 #+BEAMER: \pause
 
@@ -169,6 +171,111 @@ P(A_j | B) = \frac{P(B | A_j)}{\sum_{i=1}^n P(B | A_i) P(A_i)}
 $A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
 **** Conditional independence $A \indep B \mid C$
  $A, B$ are *conditionally independent* given $C$ iff $P(A \cap B | C) = P(A | C) P(B | C)$.
+** Posterior distributions and model estimation
+*** Bayes's theorem
+**** As a conditional measure
+\[
+P(A \mid B)
+= 
+\frac{P(B \mid A) P(A)}{P(B)}
+= 
+\frac{P(B \mid A) P(A)}{P(B \mid A) P(A) + P(B \mid \neg A) P(\neg A)}
+\]
+
+**** As a causal explanation
+\[
+\Pr(\textrm{cause} \mid \textrm{effect})
+= 
+\frac{\Pr(\textrm{effect} \mid \textrm{cause}) \Pr(\textrm{cause})}{\Pr(\textrm{effect})}
+\]
+**** As model inference
+- Prior $\bel(\param)$
+- Model class $\{P_\param(\bel) : \param \in \Param\}$
+- Data $x$
+\[
+\bel(\param \mid x)
+= 
+\frac{P_\param(x) \bel(\param)}{\Pr_\bel(x)}
+= 
+\frac{P_\param(x) \bel(x)}{\sum_{\param' \in \Param} P_{\param'}(x) \bel(\param')}
+\]
+
+*** Example: Naive Bayes models
+Sometimes we observe multiple effects that have a common cause, but which are otherwise independent:
+\[
+\Pr(\textrm{effect}_1, \ldots \textrm{effect}_n \mid \textrm{cause})
+=
+\prod_{i=1}^n \Pr(\textrm{effect}_i \mid \textrm{cause})
+\]
+**** Naive Bayes model
+- Observations $(\bx_t, y_t)_{t=1}^T$ with $\bx_t = (x_{t,1}, \ldots, x_{t,n})$.
+- Probability *models* $P_\mdp(y \mid \bx) = \prod_{i=1}^n P_\mdp(y \mid x_i)$.
+*** Example: Wumpus world
+**** World 2
+:PROPERTIES:
+:BEAMER_col: 0.3
+:END:
+  \begin{tikzpicture}[scale=0.8]
+        \draw[help lines] (0,0) grid (3,2);
+        \node at (1.5,0.5) (agent) {A};
+        \node at (1.5,1.5) (wumpus) {H};
+        \node at (2.5,0.5) (hole) {H};
+  \end{tikzpicture}
+**** World 1
+:PROPERTIES:
+:BEAMER_col: 0.3
+:END:
+  \begin{tikzpicture}[scale=0.8]
+        \draw[help lines] (0,0) grid (3,2);
+        \node at (1.5,0.5) (agent) {A};
+        \node at (1.5,1.5) (wumpus) {H};
+        \node at (2.5,0.5) (hole) {H};
+  \end{tikzpicture}
+**** World 1
+:PROPERTIES:
+:BEAMER_col: 0.3
+:END:
+  \begin{tikzpicture}[scale=0.8]
+        \draw[help lines] (0,0) grid (3,2);
+        \node at (1.5,0.5) (agent) {A};
+        \node at (1.5,1.5) (wumpus) {H};
+        \node at (2.5,0.5) (hole) {H};
+  \end{tikzpicture}
+**** Details
+
+- Location: $s_t \in S$
+- Contents: $c : S \to 2^{\{W, G, H\}}$, where the powerset is 
+$\{\emptyset, \{W\}, \{G\}, \{H\}, \{W, G\}, \{W, H\}, \{G, H\}, \{W, G, H\}\}$.
+- $P(x_t = breeze \mid z_t \in N(s_t)) = 0.5$
+If we feel a breeze, then what is the probability that there is a hole in a given location?
+\[
+P(x_t = 
+\]
+*** Example: The k-meteorologists problem
+- A set of stations $\MDPs$, with $\mdp \in \MDPs$ making weather predictions:
+  \[
+  P_\mdp(x_{t+1} \mid x_1, \ldots, x_{t})
+  \]
+- A *prior probability* $P(\mdp)$ on the stations.
+- The *marginal* probability
+\[
+P(x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_1, \ldots, x_t) P(\mdp)
+\]
+- The *posterior* probability
+\begin{align*}
+P(\mdp \mid x_1, \ldots, x_t)
+&= \frac{P_\mdp(x_1, \ldots, x_t) P(\mdp)}{P(x_1, \ldots, x_t)}
+= \frac{\prod_{i=1}^t P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp)}{P(x_1, \ldots, x_t)}\\
+&= \frac{P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
+\end{align*}
+- The *marginal posterior* probability
+\[
+P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_{t+1} \mid x_1, \ldots, x_t) P(\mdp \mid x_1, \ldots, x_t)
+\]
+
+
+* Statistical Decision Theory
+  #+TOC: headlines [currentsection]
 ** Random variables, expectation and variance
 *** Random variables
 A random variable $f : \Omega \to \Reals$ is a real-value function measurable with respect to the underlying probability measure $P$, and we write $f \sim P$.
@@ -231,8 +338,8 @@ P(x = 1, y = 0) = P(x = 1 | y = 0) P(y = 0)
 \]
 which then denotes the probability msas of each
 
-* Probabilistic inference
 ** Statistical Decision Theory
+
 *** Expected utility
 **** Actions, outcomes and utility
 In this setting, we obtain random outcomes that depend on our actions.
@@ -255,78 +362,32 @@ We prefer $a$ to $a'$ if and only if
 Beliefs violating probability axioms lead to a loss in utility.
 
 *** Example: Betting
-- In this example, probabilities reflect actual randomness
+ In this example, probabilities reflect actual randomness
+
+|------------+---------------------+------------+---------------|
+| Choice     | Win Probability $p$ | Payout $w$ | Expected gain |
+|------------+---------------------+------------+---------------|
+| Don't play | 0                   |          0 |             0 |
+| Black      | 18/37               |          2 |               |
+| Red        | 18/37               |          2 |               |
+| 0          | 1/37                |         36 |               |
+| 1          | 1/37                |         36 |               |
+|------------+---------------------+------------+--------------- |
+
+#+ATTR_LATEX: width=\textwidth
+[[./figures/roulette.jpg]]
+What are the expected gains for these bets?
 *** Example: Route selection
 - In this example, probabilities reflect subjective beliefs
+
+|--------------+-----------+-----------------+--------------+---------------|
+| Choice       | Best time | Chance of delay | Delay amount | Expected time |
+|--------------+-----------+-----------------+--------------+---------------|
+| Train        |        80 | 5%              |            5 |               |
+| Car, route A |        60 | 50%             |           30 |               |
+| Car, route B |        70 | 10%             |           10 |               |
+|--------------+-----------+-----------------+--------------+---------------|
+
 *** Example: Estimation
 - In this example, probabilities are calculated starting from subjective beliefs
-** Posterior distributions and model estimation
-*** Bayes's theorem
-**** As a conditional measure
-\[
-P(A \mid B)
-= 
-\frac{P(B \mid A) P(A)}{P(B)}
-= 
-\frac{P(B \mid A) P(A)}{P(B \mid A) P(A) + P(B \mid \neg A) P(\neg A)}
-\]
 
-**** As a causal explanation
-\[
-\Pr(\textrm{cause} \mid \textrm{effect})
-= 
-\frac{\Pr(\textrm{effect} \mid \textrm{cause}) \Pr(\textrm{cause})}{\Pr(\textrm{effect})}
-\]
-**** As model inference
-- Prior $\bel(\param)$
-- Model class $\{P_\param(\bel) : \param \in \Param\}$
-- Data $x$
-\[
-\bel(\param \mid x)
-= 
-\frac{P_\param(x) \bel(\param)}{\Pr_\bel(x)}
-= 
-\frac{P_\param(x) \bel(x)}{\sum_{\param' \in \Param} P_{\param'}(x) \bel(\param')}
-\]
-
-*** Example: Naive Bayes models
-Sometimes we observe multiple effects that have a common cause, but which are otherwise independent:
-\[
-\Pr(\textrm{effect}_1, \ldots \textrm{effect}_n \mid \textrm{cause})
-=
-\prod_{i=1}^n \Pr(\textrm{effect}_i \mid \textrm{cause})
-\]
-**** Naive Bayes model
-- Observations $(\bx_t, y_t)_{t=1}^T$ with $\bx_t = (x_{t,1}, \ldots, x_{t,n})$.
-- Probability *models* $P_\mdp(y \mid \bx) = \prod_{i=1}^n P_\mdp(y \mid x_i)$.
-**** Application to Wumpus world
-  \begin{tikzpicture}
-        \draw[help lines] (0,0) grid (3,3);
-        \node at (0.5,0.5) (agent) {A};
-        \node at (1.5,2.5) (wumpus) {W};
-        \node at (2.5,1.5) (hole) {O};
-  \end{tikzpicture}
-  $P(x = stench \mid wumpus) = 0.5$
-*** Example: The k-meteorologists problem
-- A set of stations $\MDPs$, with $\mdp \in \MDPs$ making weather predictions:
-  \[
-  P_\mdp(x_{t+1} \mid x_1, \ldots, x_{t})
-  \]
-- A *prior probability* $P(\mdp)$ on the stations.
-- The *marginal* probability
-\[
-P(x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_1, \ldots, x_t) P(\mdp)
-\]
-- The *posterior* probability
-\begin{align*}
-P(\mdp \mid x_1, \ldots, x_t)
-&= \frac{P_\mdp(x_1, \ldots, x_t) P(\mdp)}{P(x_1, \ldots, x_t)}
-= \frac{\prod_{i=1}^t P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp)}{P(x_1, \ldots, x_t)}\\
-&= \frac{P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
-\end{align*}
-- The *marginal posterior* probability
-\[
-P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_{t+1} \mid x_1, \ldots, x_t) P(\mdp \mid x_1, \ldots, x_t)
-\]
-
-  

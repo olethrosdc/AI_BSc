@@ -210,6 +210,41 @@ Sometimes we observe multiple effects that have a common cause, but which are ot
 **** Naive Bayes model
 - Observations $(\bx_t, y_t)_{t=1}^T$ with $\bx_t = (x_{t,1}, \ldots, x_{t,n})$.
 - Probability *models* $P_\mdp(y \mid \bx) = \prod_{i=1}^n P_\mdp(y \mid x_i)$.
+*** Conditional independence
+
+For any set of events $A_1, A_2, A_3, \ldots$, we can write their co-occurence probability as
+$\prod_i P(A_i  \mid \cap A_1 \cap A_2 \cap \cdots \cap A_{i-1})$. However,
+we can use a *Bayesian network* to define conditional independence structures.
+**** Bayesian Network
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+    \begin{tikzpicture}
+      \node[RV] at (0,0) (A1) {$A_1$};
+      \node[RV] at (0,1) (A2) {$A_2$};
+      \node[RV] at (1,0.5) (B) {$B$};
+      \node[RV] at (2,0) (C1) {$C_1$};
+      \node[RV] at (2,1) (C2) {$C_2$};
+      \draw[->] (A1) to (B);
+      \draw[->] (A2) to (B);
+      \draw[->] (B) to (C1);
+      \draw[->] (B) to (C2);
+    \end{tikzpicture}
+**** Network rule
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+If $A$ is a parent of $B$ and $C$ is a child of $B$, and there are *no other paths* from $A$ to $C$ then the following conditional independence holds:
+\[
+P(C \mid B, A) = P(C \mid B)
+\]
+i.e. $C$ is conditionally independent of $A$ given $B$. 
+**** Conditional probability tables
+We can now write the distribution of the above example as
+\[
+P( B, C_1, C_2) = 
+P(A_1) P(A_2) P(B | A_1 \cap A_2) P(C_1 | B) P(C_2 | B).
+\]
 *** Example: Wumpus world
 **** World 2
 :PROPERTIES:
@@ -278,12 +313,13 @@ P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_{t+1} \mid x_1
   #+TOC: headlines [currentsection]
 ** Random variables, expectation and variance
 *** Random variables
-A random variable $f : \Omega \to \Reals$ is a real-value function measurable with respect to the underlying probability measure $P$, and we write $f \sim P$.
+A random variable $f : \Omega \to \Reals$ is a real-value function measurable with respect to the underlying probability measure $P$.
 **** The distribution of $f$
 The probability that $f$ lies in some subset $A \subset \Reals$ is
 \[
-P_f(A) \defn P(\{\omega \in \Omega : f(\omega) \in A\}).
+P_f(A) \defn P(\{\omega \in \Omega : f(\omega) \in A\}),
 \]
+and we write $f \sim P_f$.
 **** Independence
 Two RVs $f,g$ are independent in the same way that events are independent:
 \[
@@ -305,9 +341,13 @@ For any RVs $x, y$:
 \[
 \E_P(x + y) = \E_P(x) + \E_P(y)
 \]
-*** Correlation and independence
+*** Multiple variables
+**** The joint distribution $P(x,y)$
+For two (or more) RVs $x : \Omega \to \Reals$, and $y : \Omega \to
+ \Reals$, this is a *shorthand* for the distribution of $(x(\omega),
+ y(\omega))$ when $\omega \sim P$.
 **** Independence
-If $x,y$ are independent RVs then $\E_P(xy) = \E(x)\E(y)$.
+If $x,y$ are independent RVs then $P(x,y) = P_x(x) P_y(y)$.
 **** Correlation
 If $x,y$ are *not* correlated then $\E_P(xy) = \E(x)\E(y)$.
 **** IID (Independent and Identically Distributed) random variables

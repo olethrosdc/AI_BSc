@@ -6,6 +6,7 @@
 #+LaTeX_HEADER: \usepackage{amsmath}
 #+LaTeX_HEADER: \usepackage{amssymb}
 #+LaTeX_HEADER: \usepackage{isomath}
+#+LaTeX_HEADER: \usepackage{tikzsymbols}
 #+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
 #+LaTeX_HEADER: \newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
 #+LaTeX_HEADER: \newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
@@ -246,46 +247,50 @@ P( B, C_1, C_2) =
 P(A_1) P(A_2) P(B | A_1 \cap A_2) P(C_1 | B) P(C_2 | B).
 \]
 *** Example: Wumpus world
+**** World 1
+:PROPERTIES:
+:BEAMER_col: 0.25
+:END:
+  \begin{tikzpicture}[scale=0.8]
+        \draw[help lines] (0,0) grid (3,2);
+        \node at (1.5,0.5) (agent) {\Strichmaxerl};
+  \end{tikzpicture}
 **** World 2
 :PROPERTIES:
-:BEAMER_col: 0.3
+:BEAMER_col: 0.25
 :END:
   \begin{tikzpicture}[scale=0.8]
         \draw[help lines] (0,0) grid (3,2);
-        \node at (1.5,0.5) (agent) {A};
-        \node at (1.5,1.5) (wumpus) {H};
-        \node at (2.5,0.5) (hole) {H};
+        \node at (1.5,0.5) (agent) {\Strichmaxerl};
+        \node at (1.5,1.5) (wumpus) {O};
   \end{tikzpicture}
-**** World 1
+**** World 3
 :PROPERTIES:
-:BEAMER_col: 0.3
+:BEAMER_col: 0.25
 :END:
   \begin{tikzpicture}[scale=0.8]
         \draw[help lines] (0,0) grid (3,2);
-        \node at (1.5,0.5) (agent) {A};
-        \node at (1.5,1.5) (wumpus) {H};
-        \node at (2.5,0.5) (hole) {H};
+        \node at (1.5,0.5) (agent) {\Strichmaxerl};
+        \node at (2.5,0.5) (hole) {O};
   \end{tikzpicture}
-**** World 1
+**** World 4
 :PROPERTIES:
-:BEAMER_col: 0.3
+:BEAMER_col: 0.25
 :END:
   \begin{tikzpicture}[scale=0.8]
         \draw[help lines] (0,0) grid (3,2);
-        \node at (1.5,0.5) (agent) {A};
-        \node at (1.5,1.5) (wumpus) {H};
-        \node at (2.5,0.5) (hole) {H};
+        \node at (1.5,0.5) (agent) {\Strichmaxerl};
+        \node at (1.5,1.5) (wumpus) {O};
+        \node at (2.5,0.5) (hole) {O};
   \end{tikzpicture}
 **** Details
+- Probability of each world $A_i$ being true: 1/4
+- Probability of each hole generating a breeze: $P(B_1 | A_2 \cup A_4) = P(B_2 | A_3 \cup A_4)$ with $B_1, B_2$ conditionally independent given $A$.
+**** Questions
+- What is the probability of feeling a breeze $B = B_1 \cup B_2$ in each world? 
+- What is the probability of a hole above if you *feel* a breeze?
+- What is the probability of a hole above f you *don't* feel a breeze?
 
-- Location: $s_t \in S$
-- Contents: $c : S \to 2^{\{W, G, H\}}$, where the powerset is 
-$\{\emptyset, \{W\}, \{G\}, \{H\}, \{W, G\}, \{W, H\}, \{G, H\}, \{W, G, H\}\}$.
-- $P(x_t = breeze \mid z_t \in N(s_t)) = 0.5$
-If we feel a breeze, then what is the probability that there is a hole in a given location?
-\[
-P(x_t = 
-\]
 *** Example: The k-meteorologists problem
 - A set of stations $\MDPs$, with $\mdp \in \MDPs$ making weather predictions:
   \[

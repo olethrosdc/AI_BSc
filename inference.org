@@ -316,6 +316,50 @@ P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_{t+1} \mid x_1
 
 * Statistical Decision Theory
   #+TOC: headlines [currentsection]
+** Elementary Decision Theory
+*** Preferences
+**** Types of rewards                                               :example:
+- For e.g. a student: Tickets to concerts.
+- For e.g. an investor: A basket of stocks, bonds and currency.
+- For everybody: Money.
+
+**** Preferences among rewards
+For any rewards $x, y \in R$, we either
+- (a) Prefer $x$ at least as much as $y$ and write $x \preceq^* y$.
+- (b) Prefer $x$ not more than $y$ and write $x \succeq^* y$.
+- (c) Prefer $x$ about the same as $y$ and write $x \eqsim^* y$.
+- (d) Similarly define $\succ^*$ and $\prec^*$
+  
+*** Utility and Cost
+**** Utility function
+To make it easy, assign a utility $U(x)$ to every reward through a
+utility function $U : R \to \Reals$.
+
+**** Utility-derived preferences
+We prefer items with higher utility, i.e.
+- (a) $U(x) \geq U(y)$ $\Leftrightarrow$ $x \succeq^* y$
+- (b) $U(x) \leq U(y)$ $\Leftrightarrow$ $y \succeq^* x$
+
+**** Cost
+     It is sometimes more convenient to define a cost function $C: R \to \Reals$ so that we prefer items with lower cost, i.e.
+- $C(x) \geq C(y)$ $\Leftrightarrow$ $y \succeq^* x$
+
+*** Random outcomes
+**** Choosing among rewards
+-[A] Bet 10 CHF on black
+-[B] Bet 10 CHF on 0
+-[C] Bet nothing
+What is the reward here?
+
+**** Choosing among trips
+-[A] Taking the car to Zurich (50' without delays, 80' with delays)
+-[B] Taking the train to Zurich (60' without delays)
+What is the reward here? 
+
+**** Random rewards
+- Each gamble gives us different rewards with different probabilities.
+- These rewards are then *random*
+- For simplicity, we assign a real-valued *utility* to outcomes. This is a *random variable*
 ** Random variables, expectation and variance
 *** Random variables
 A random variable $f : \Omega \to \Reals$ is a real-value function measurable with respect to the underlying probability measure $P$.
@@ -324,13 +368,17 @@ The probability that $f$ lies in some subset $A \subset \Reals$ is
 \[
 P_f(A) \defn P(\{\omega \in \Omega : f(\omega) \in A\}),
 \]
-and we write $f \sim P_f$.
+and we write $f \sim P_f$. 
+**** Shorthands for RV
+- For RVs $f : \Omega \to \Reals$, we can write $P(f \in A)$ to mean $P_f(A)$.
+- For RVs $f : \Omega \to X$, where $X$ is a finite set e.g. $\{1, 2, \ldots, n\}$, we can write $P(f = x)$ for any $x \in X$.
 **** Independence
 Two RVs $f,g$ are independent in the same way that events are independent:
 \[
 P(f \in A \wedge g \in B) = P(f \in A) P(g \in B) = P_f(A) P_g(B).
 \]
 In that sense, $f \sim P_f$ and $g \sim P_g$.
+
 
 *** Expectation
 For any real-valued random variable $f: \Omega \to \Reals$, the expectation with respect to a probability measure $P$ is
@@ -350,7 +398,7 @@ For any RVs $x, y$:
 **** The joint distribution $P(x,y)$
 For two (or more) RVs $x : \Omega \to \Reals$, and $y : \Omega \to
  \Reals$, this is a *shorthand* for the distribution of $(x(\omega),
- y(\omega))$ when $\omega \sim P$.
+ y(\omega))$ when $\omega \sim P$. We can also use $P(x = i, y = j)$ for the probability that the two variables assume the values $i, j$ respectively.
 **** Independence
 If $x,y$ are independent RVs then $P(x,y) = P_x(x) P_y(y)$.
 **** Correlation

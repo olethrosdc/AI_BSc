@@ -483,4 +483,30 @@ What are the expected gains for these bets?
 
 *** Example: Estimation
 - In this example, probabilities are calculated starting from subjective beliefs
+**** Mean-Square Estimation
+If we want to guess $\hat{\mdp}$, and we knew that $\mdp \sim P$, then the guess
+\[
+\hat{\mdp} = \E_P(\mdp) = \argmin_{\hat{\mdp}} \E_P [(\mdp - \hat{\mdp})^2]
+\]
 
+*** Example: The k-meteorologists problem
+- A set of stations $\MDPs$, with $\mdp \in \MDPs$ making weather predictions:
+  \[
+  P_\mdp(x_{t+1} \mid x_1, \ldots, x_{t})
+  \]
+- A *prior probability* $P(\mdp)$ on the stations.
+- The *marginal* probability
+\[
+P(x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_1, \ldots, x_t) P(\mdp)
+\]
+- The *posterior* probability
+\begin{align*}
+P(\mdp \mid x_1, \ldots, x_t)
+&= \frac{P_\mdp(x_1, \ldots, x_t) P(\mdp)}{P(x_1, \ldots, x_t)}
+= \frac{\prod_{i=1}^t P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp)}{P(x_1, \ldots, x_t)}\\
+&= \frac{P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
+\end{align*}
+- The *marginal posterior* probability
+\[
+P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_{t+1} \mid x_1, \ldots, x_t) P(\mdp \mid x_1, \ldots, x_t)
+\]

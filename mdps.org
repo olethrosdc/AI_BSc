@@ -1,6 +1,8 @@
-#+TITLE: Inference
+#+TITLE: Markov Decision Processes
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
+#+startup: beamer
+#+LaTeX_CLASS: beamer
 #+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
 #+LaTeX_HEADER: \usepackage{tikz}
 #+LaTeX_HEADER: \usepackage{amsmath}
@@ -57,9 +59,83 @@
 #+LaTeX_CLASS_OPTIONS: [smaller]
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
-
 #+OPTIONS:   H:3
-* Markov process
-* Markov decision process
+* Markov decision processes
+#+TOC: headlines [currentsection]
+** The Markov process
+*** Markov processes
+[[./figures/Snakes_and_Ladders.jpeg]]
+*** Markov Process
+A sequence of random variables 
+$s_1, s_2, \ldots, s_t$ is a *Markov process* if the nest variable $s_{t+1}$ only depends on the current value $s_t$
+\[
+P(s_{t+1} \mid s_{t}, \ldots, s_1) = P(s_{t+1} \mid s_{t}) \qquad \forall t
+\]
+#+BEAMER: \pause
+- The variable $s_t \in S$ is the current *state* of the process.
+- For finite $S$, the matrix $p_{i,j} \defn P(s_t = j \mid s_{t-1} = i)$ is called the *transition matrix*.
+#+BEAMER: \pause
+**** Bayesian network
+It is sometimes called  *Markov chain* because of the structure formed by the RVs:
+\begin{tikzpicture}
+  \node[RV] at (0,0) (stp) {$s_{t-1}$};
+  \node[RV] at (2,0) (st) {$s_t$};
+  \node[RV] at (4,0) (stn) {$s_{t+1}$};
+  \draw[->] (stp) -- (st);
+  \draw[->] (st) -- (stn);
+\end{tikzpicture}
+#+BEAMER: \pause
+**** Snakes and ladders
+- What is the state?
+- What is the transition matrix?
+
+*** Markov Decision Process
+**** Variables                                                        :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.4
+     :END:
+- The *state* $s_t \in S$.
+- The *action* $a_t \in A$.
+- The *reward* $r_t \in \Reals$.
+#+BEAMER: \pause
+**** Bayesian network                                                 :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.6
+     :END:
+\begin{tikzpicture}
+  \node[RV] at (0,0) (stp) {$s_{t-1}$};
+  \node[RV] at (2,0) (st) {$s_t$};
+  \node[RV] at (4,0) (stn) {$s_{t+1}$};
+  \node[select] at (0,2) (atp) {$a_{t-1}$};
+  \node[select] at (2,2) (at) {$a_t$};
+  \node[RV] at (2,1) (rtp) {$r_{t}$};
+  \node[RV] at (4,1) (rt) {$r_{t+1}$};
+  \draw[->] (atp) -- (st);
+  \draw[->] (atp) -- (rtp);
+  \draw[->] (stp) -- (rtp);
+  \draw[->] (at) -- (rt);
+  \draw[->] (st) -- (rt);
+  \draw[->] (at) -- (stn);
+  \draw[->] (stp) -- (st);
+  \draw[->] (st) -- (stn);
+\end{tikzpicture}
+
+**** Markov Decision Process :B_definition:
+     :PROPERTIES:
+     :BEAMER_env: definition
+     :END:
+A Markov decision process $\mdp$ on $(S, A)$ has the property that for any sequence of actions $a_1, \ldots$
+\begin{align*}
+P_\mdp(s_{t+1} \mid s_t, a_t, r_{t}, s_{t-1}, a_{t-1}, \ldots) = P_\mdp(s_{t+1} \mid s_t, a_t)
+\\
+P_\mdp(r_{t+1} \mid s_t, a_t, r_{t}, s_{t-1}, a_{t-1}, \ldots) = P_\mdp(r_{t+1} \mid s_t, a_t)
+\end{align*}
+The goal in a *finite-horizon* MDP is to maximise the $T$-horizon utility:
+\[
+U = \sum_{t=1}^T r_t
+\]
 * Backwards induction
+
+** Utility and value functions
+*** Utility and cost
 

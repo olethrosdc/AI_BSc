@@ -313,7 +313,6 @@ P(\mdp \mid x_1, \ldots, x_t)
 P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_{t+1} \mid x_1, \ldots, x_t) P(\mdp \mid x_1, \ldots, x_t)
 \]
 
-
 * Statistical Decision Theory
   #+TOC: headlines [currentsection]
 ** Elementary Decision Theory

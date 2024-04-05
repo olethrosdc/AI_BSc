@@ -134,8 +134,71 @@ The goal in a *finite-horizon* MDP is to maximise the $T$-horizon utility:
 \[
 U = \sum_{t=1}^T r_t
 \]
+*** Policies in Markov decision processes
+
+**** Variables                                                        :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.4
+     :END:
+- The *policy* $\pol$
+- The *state* $s_t \in S$.
+- The *action* $a_t \in A$.
+- The *reward* $r_t \in \Reals$.
+#+BEAMER: \pause
+**** Bayesian network                                                 :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.6
+     :END:
+\begin{tikzpicture}
+  \node[select] at (2,3) (pol) {$\pol$};
+  \node[RV] at (0,0) (stp) {$s_{t-1}$};
+  \node[RV] at (2,0) (st) {$s_t$};
+  \node[RV] at (4,0) (stn) {$s_{t+1}$};
+  \node[RV] at (0,2) (atp) {$a_{t-1}$};
+  \node[RV] at (2,2) (at) {$a_t$};
+  \node[RV] at (2,1) (rtp) {$r_{t}$};
+  \node[RV] at (4,1) (rt) {$r_{t+1}$};
+  \draw[->] (pol) -- (atp);
+  \draw[->] (pol) -- (at);
+  \draw[->] (atp) -- (st);
+  \draw[->] (st) -- (at);
+  \draw[->] (stp) -- (atp);
+  \draw[->] (atp) -- (rtp);
+  \draw[->] (stp) -- (rtp);
+  \draw[->] (at) -- (rt);
+  \draw[->] (st) -- (rt);
+  \draw[->] (at) -- (stn);
+  \draw[->] (stp) -- (st);
+  \draw[->] (st) -- (stn);
+\end{tikzpicture}
+
+**** Markov Policy                                             :B_definition:
+     :PROPERTIES:
+     :BEAMER_env: definition
+     :END:
+A Markov policy takes an action $a$ at time $t$ with probability 
+\[
+\pol(a_t = a \mid s_t = s)
+\]
+**** The expected utility of a policy
+\[
+\E_\pol[U] = \sum_{t=1}^T \E_\pol[r_t]
+\]
+ 
 * Backwards induction
 
 ** Utility and value functions
-*** Utility and cost
+
+*** The expected utility recursion
+- The utility from step $t$ is $U_t \defn \sum_{k=t}^T r_k$
+- The value function $V^\pol_t(s) \defn \E_\pol(U_t \mid s_t = s)$.
+\begin{align*}
+V^\pol_t(s) 
+&= \E_\pol(U_t \mid s_t)\\
+&= \E_\pol\left[\sum_{t=1}^T r_t \middle| s_t\right]\\
+&= \E_\pol[r_t \mid s_t] + \E_\pol\left[\sum_{k=t+2}^T r_k \middle| s_t  \right]\\
+&= \E_\pol[r_t \mid s_t] + \E_\pol\left[U_{t+1}| s_t = s \right]\\
+&= \E_\pol[r_t \mid s_t] + \sum_{s_{t+1} \in S} \Pr_\pol(s_{t+1} \mid s_t) \E_\pol\left[U_{t+1}| s_{t+1} \right]\\
+&= \E_\pol[r_t \mid s_t] + \sum_{s_{t+1} \in S} \sum_a \pol(a \mid s_t) P_\mdp(j \mid s_t, a) V^\pol_t(s_{t+1}).
+\end{align*}
 

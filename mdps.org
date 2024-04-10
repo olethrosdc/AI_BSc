@@ -108,8 +108,8 @@ It is sometimes called  *Markov chain* because of the structure formed by the RV
   \node[RV] at (4,0) (stn) {$s_{t+1}$};
   \node[select] at (0,2) (atp) {$a_{t-1}$};
   \node[select] at (2,2) (at) {$a_t$};
-  \node[RV] at (2,1) (rtp) {$r_{t}$};
-  \node[RV] at (4,1) (rt) {$r_{t+1}$};
+  \node[utility] at (2,1) (rtp) {$r_{t}$};
+  \node[utility] at (4,1) (rt) {$r_{t+1}$};
   \draw[->] (atp) -- (st);
   \draw[->] (atp) -- (rtp);
   \draw[->] (stp) -- (rtp);
@@ -156,13 +156,13 @@ U = \sum_{t=1}^T r_t
   \node[RV] at (4,0) (stn) {$s_{t+1}$};
   \node[RV] at (0,2) (atp) {$a_{t-1}$};
   \node[RV] at (2,2) (at) {$a_t$};
-  \node[RV] at (2,1) (rtp) {$r_{t}$};
-  \node[RV] at (4,1) (rt) {$r_{t+1}$};
+  \node[utility] at (2,1) (rtp) {$r_{t}$};
+  \node[utility] at (4,1) (rt) {$r_{t+1}$};
   \draw[->] (pol) -- (atp);
   \draw[->] (pol) -- (at);
   \draw[->] (atp) -- (st);
-  \draw[->] (st) -- (at);
-  \draw[->] (stp) -- (atp);
+  \draw[->] (st) to [bend right = 45] (at);
+  \draw[->] (stp) to [bend right = 45] (atp);
   \draw[->] (atp) -- (rtp);
   \draw[->] (stp) -- (rtp);
   \draw[->] (at) -- (rt);

@@ -130,7 +130,7 @@ P_\mdp(s_{t+1} \mid s_t, a_t, r_{t}, s_{t-1}, a_{t-1}, \ldots) = P_\mdp(s_{t+1} 
 \\
 P_\mdp(r_{t+1} \mid s_t, a_t, r_{t}, s_{t-1}, a_{t-1}, \ldots) = P_\mdp(r_{t+1} \mid s_t, a_t)
 \end{align*}
-The goal in a *finite-horizon* MDP is to maximise the $T$-horizon utility:
+The goal in a *finite-horizon* MDP is to maximise the \(T\)-horizon utility:
 \[
 U = \sum_{t=1}^T r_t
 \]
@@ -189,16 +189,68 @@ A Markov policy takes an action $a$ at time $t$ with probability
 
 ** Utility and value functions
 
-*** The expected utility recursion
+*** Value function
 - The utility from step $t$ is $U_t \defn \sum_{k=t}^T r_k$
-- The value function $V^\pol_t(s) \defn \E_\pol(U_t \mid s_t = s)$.
+**** The state value function
+This is the expected utility obtained by following a *policy $\pol$* starting from some *state $s$*.
+\[
+V^\pol_t(s) \defn \E_\pol(U_t \mid s_t = s)
+\]
+**** The state-action value function
+This is the expected utility obtained by following a policy $\pol$ starting from some state $s$ and *playing action $a$*
+\[
+Q^\pol_t(s, a) \defn \E_\pol(U_t \mid s_t = s, a_t = a)
+\]
+**** The optimal value function
+There is some policy $\pol^*$ satisfying
 \begin{align*}
-V^\pol_t(s) 
+V^*(s) &\defn V^{\pol^*}(s) \geq V^\pol(s) \qquad \forall \pol, s
+\\
+Q^*(s, a) &\defn Q^{\pol^*}(s, a) \geq Q^\pol(s, a) \qquad \forall \pol, s, a
+\end{align*}
+
+
+*** The expected utility recursion
+Value functions satisfy the following recursion
+\begin{align*}
+V^\pol_t(s_t) 
 &= \E_\pol(U_t \mid s_t)\\
 &= \E_\pol\left[\sum_{t=1}^T r_t \middle| s_t\right]\\
 &= \E_\pol[r_t \mid s_t] + \E_\pol\left[\sum_{k=t+2}^T r_k \middle| s_t  \right]\\
-&= \E_\pol[r_t \mid s_t] + \E_\pol\left[U_{t+1}| s_t = s \right]\\
+&= \E_\pol[r_t \mid s_t] + \E_\pol\left[U_{t+1}| s_t \right]\\
 &= \E_\pol[r_t \mid s_t] + \sum_{s_{t+1} \in S} \Pr_\pol(s_{t+1} \mid s_t) \E_\pol\left[U_{t+1}| s_{t+1} \right]\\
-&= \E_\pol[r_t \mid s_t] + \sum_{s_{t+1} \in S} \sum_a \pol(a \mid s_t) P_\mdp(j \mid s_t, a) V^\pol_t(s_{t+1}).
+&= \E_\pol[r_t \mid s_t] +  \sum_a \pol(a \mid s_t) \sum_{s_{t+1} \in S} P_\mdp(s_{t+1} \mid s_t, a) V^\pol_{t+1}(s_{t+1}).
 \end{align*}
+**** Exercise
+Prove that 
+\[
+Q^\pol_t(s, a) = r(s, a) + \sum_{s' \in S} P_\mdp(s' \mid s, a) \sum_{a' \in A} Q^\pol_{t+1}(s', a') \pol(a_{t+1} = a' \mid s_{t+1} = s')
+\]
+
+*** Backwards induction
+**** On the state value function
+To find the value function of the optimal policy, we can perform the following recursion, after setting $V^*_T(s) = \max_a r(s,a)$ for all $s$.
+\[
+V^*_t(s) 
+=
+\max_a r(s,a)  + \sum_{s' \in S} P_\mdp(s' \mid s, a) V^*_{t+1}(s'),
+\]
+where the optimal action at $s, t$ is $\argmax_a r(s,a)  + \sum_{s' \in S} P_\mdp(s' \mid s, a) V^*_{t+1}(s')$.
+**** On the state-action value function
+Alternatively, we can write this in terms of the Q-value function, where we set
+$Q^*_T(s,a) = r(s,a)$ and then recurse:
+\[
+Q^*_t(s, a) 
+=
+ r(s,a)  + \sum_{s' \in S} P_\mdp(s' \mid s, a) \max_{a'} Q^*_{t+1} Q(s', a').
+\]
+Here the optimal action at step $t$ is just $\argmax_a Q^*_t(s,a)$.
+
+* Examples
+** Toy examples
+*** Grid world
+*** Chain
+*** Wumpus world
+** Applications
+*** CPU schedulding
 

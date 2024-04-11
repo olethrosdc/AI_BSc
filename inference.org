@@ -361,7 +361,7 @@ What is the reward here?
 - For simplicity, we assign a real-valued *utility* to outcomes. This is a *random variable*
 ** Random variables, expectation and variance
 *** Random variables
-A random variable $f : \Omega \to \Reals$ is a real-value function measurable with respect to the underlying probability measure $P$.
+A random variable $f : \Omega \to \Reals$ is a real-valued *function*, with $\omega \sim P$.
 **** The distribution of $f$
 The probability that $f$ lies in some subset $A \subset \Reals$ is
 \[
@@ -450,8 +450,15 @@ We prefer $a$ to $a'$ if and only if
 \[
 \E_P[U \mid a] \geq \E_P[U \mid a']
 \]
-**** De Finetti's theorem
-Beliefs violating probability axioms lead to a loss in utility.
+
+*** The St-Petersburg Paradox
+**** The game
+If you give me $x$ CHF, then I promise to
+(a) Throw a fair coin until it comes heads.
+(b) If it does so after $T$ throws, then I will give you $2^T$ CHF.
+**** The question
+- How much $x$ are you willing to pay to play?
+- Given that the expected amount of money is infinite, why are you only willing to pay a small $x$?
 
 *** Example: Betting
  In this example, probabilities reflect actual randomness

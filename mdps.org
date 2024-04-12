@@ -186,6 +186,7 @@ A Markov policy takes an action $a$ at time $t$ with probability
 \]
  
 * Backwards induction
+#+TOC: headlines [currentsection]
 
 ** Utility and value functions
 
@@ -247,10 +248,119 @@ Q^*_t(s, a)
 Here the optimal action at step $t$ is just $\argmax_a Q^*_t(s,a)$.
 
 * Examples
+#+TOC: headlines [currentsection]
+
 ** Toy examples
-*** Grid world
 *** Chain
+\begin{tikzpicture}
+  \node[RV] at (0,0) (1) {$\epsilon$};
+  \node[RV] at (1,0) (2) {$0$};
+  \node[RV] at (2,0) (3) {$0$};
+  \node[RV] at (3,0) (4) {$0$};
+  \node[RV] at (4,0) (5) {$1$};
+  \draw[blue, ->] (1) -- (2);
+  \draw[blue, ->] (2) -- (3);	 
+  \draw[blue, ->] (3) -- (4);
+  \draw[blue, ->] (4) -- (5);
+  \draw[red,->] (2) to [bend right=45] (1);	
+  \draw[red,->] (3) to [bend right=45] (1);	
+  \draw[red,->] (4) to [bend right=45] (1);	
+  \draw[red,->] (5) to [bend right=45] (1);	
+  \draw[red,->] (1) to [loop above] (1);	
+  \draw[blue,->] (5) to [loop above] (5);	
+\end{tikzpicture}
+
+In this MDP, there are 5 states, and the transition probabilities are:
+\[
+P(s_{t+1} = \min\{5, i + 1\} \mid s_t = i, a = 1) = 1 - \delta,
+\qquad P(s_{t+1} = 1 \mid s_t = i, a = 1) =  \delta.
+\]
+For the alternative action $a = 0$, the probabilities are reversed
+\[
+P(s_{t+1} = \min\{5, i + 1\} \mid s_t = i, a = 1) = \delta,
+\qquad P(s_{t+1} = 1 \mid s_t = i, a = 1) = 1-  \delta.
+\]
+Further, the reward at state $s = 1$ is $\epsilon < 1$ and the reward at state $s = 5$ is $1$.
+
+
 *** Wumpus world
-** Applications
-*** CPU schedulding
+- State: $s_t = (x_t, y_t, d_t, w_t)$, the x-y location of the agent, the direction, and the amount of arrows left.
+- Actions: $a \in \{L, R, M, S\}$ for left, right, move and shoot.
+- Rewards are given for killing the Wumpus, dying, or finding the treasure.
+**** Deterministic/Stochastic Wumpus
+- An action/observation is always the same/is random
+**** Observable/Unobservable Wumpus
+- We know where the holes, the treasure and the Wumpus is/they are unknown
+**** Static/Dynamic/Strategic/ Wumpus
+- The Wumpus is stationary/moves according to a fixed policy/has goals to achieve
+*** Deterministic, Observable Wumpus
+
+This is the simplest setting. It is a deterministic planning problem.
+For this, you can
+1. Define a way to describe the Wumpus world
+2. Find a policy for solving the Wumpus world as given. This policy is going to be deterministic and Markov. 
+
+Of course, the optimal policy for each *instance* of the Wumpus problem is going to be different.
+
+I recommend summarising the Wumpus problem in two parts:
+(a) A matrix $G$ where
+$G[x,y]$ is a number indicating what is contained in this location,
+(b) $x_t, y_t, d_t, w_t$ being the agent-relevant variables.
+
+You can either use any logical planning algorithm, or an MDP algorithm with deterministic transitions for this problem.
+
+*** Stochastic, Observable Wumpus
+
+To make the environment stochastic, we can add the following extensions
+
+(a) The Wumpus moves according to some stochastic policy. For example, the Wumpus could randomly move in a direction, so that on average it moves away from us.
+(b) Our actions do not always work (e.g. we may turn in the wrong direction)
+(c) We do not always die when we encounter a hole or the Wumpus.
+
+For this, you can
+1. Define a way to describe the Wumpus world
+2. Find a policy for solving the Wumpus world as given. This policy is going to be deterministic and Markov. 
+
+Of course, the optimal policy for each *instance* of the Wumpus problem is going to be different.
+
+I recommend summarising the Wumpus problem in two parts:
+(a) A matrix $G$ where
+$G[x,y]$ is a number indicating what is contained in this location,
+(b) $x_t, y_t, d_t, w_t$ being the agent-relevant variables.
+
+You can either use any logical planning algorithm, or an MDP algorithm with deterministic transitions for this problem.
+
+
+*** Deterministic, Unobservable Wumpus
+
+This setting is significantly harder to work with. Now we have observations whenever we are near a hole or the Wumpus.
+
+You can either:
+(a) Use a logical description of the world, and a SAT algorithm.
+(b) Use a probabilistic description with all probabilities being 0 or 1, and an MDP algorithm.
+
+In either case, a simple idea is to summarise the knowledge of the Wumpus problem as a matrix $G$ where $G[x,y]$ indicates one of:
+- Empty.
+- Hole.
+- Wumpus.
+- Treasure.
+- Breeze Observed.
+- Stink Smelled.
+- Unknown.
+
+For simplicity, you can always start with the setting where you know you are dealing with one of a *small number* of possible worlds.
+
+*** Static, Stochastic-Observation, Unobservable Wumpus
+
+Here we assume the Wumpus does not move, and observations are stochastic: sometimes we feel a breeze, sometimes not. We assume we know the probability of a breeze.
+
+The first problem is to summarise what we know about the Wumpus problem.
+Now we can have an entry $G[x,y]$ in the matrix which is a *vector of probabilities* for the possible contents of the co-ordinate:
+(Empty, Hole, Wumpus, Treasure)
+
+For simplicity, you can always start with the setting where you know you are dealing with one of a *small number* of possible worlds. Then you only need to deal with the probability of each world being the right one.
+
+
+
+
 

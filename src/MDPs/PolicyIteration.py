@@ -25,7 +25,7 @@ def policy_evaluation_dp(mdp, gamma, policy, depth):
         for s in range(mdp.n_states):
             for a in range(mdp.n_actions):
                 P = mdp.get_transition_probabilities(s, a)
-                Q[s,a] = mdp.get_reward(s, a) + gamma * np.dot(P, V_old)
+                Q[s,a] = mdp.get_reward(s, a) +  np.dot(P, V_old)
             V[s] = np.max(Q[s,:])
     return V
 

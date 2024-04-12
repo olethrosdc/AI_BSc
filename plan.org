@@ -627,3 +627,18 @@ Linear programming is a constrained minimisation problem where the objective and
 \end{align*}
 We can have
 
+* Project plan
+  :LOGBOOK:
+  CLOCK: [2024-04-11 Do 11:36]--[2024-04-11 Do 11:36] =>  0:00
+  :END:
+1. Define a deterministic, fully observable Wumpus world
+2. Find optimal policies for any instance of this world. 
+3. Consider a randomised version of the Wumpus world, where
+3.1. Your moves are not deterministic 
+3.2. The monster moves in a way relative to your position
+4. Advanced versions
+Only one of then can be done in practice
+4.1. Partially-observable wumpus (where the positions are unknown) (logic-based)
+4.2. Same, but with randomised observations. (probability-based)
+4.3. Adversarial Wumpus (where the monster also solves its own optimisation problem)
+

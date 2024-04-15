@@ -1,5 +1,10 @@
 import numpy as np
 
+class RewardDistribution(Enum):
+    deterministic = 0
+    bernoulli = 1
+    gaussian = 2
+    
 ## This a discrete MDP with a finite number of states and actions
 class DiscreteMDP:
     ## initalise a random MDP with
@@ -11,6 +16,7 @@ class DiscreteMDP:
     def __init__(self, n_states, n_actions, P = None, R = None):
         self.n_states = n_states # the number of states of the MDP
         self.n_actions = n_actions # the number of actions of the MDP
+        self.reward_distribution = deterministic
         if (P is None):
             self.P = np.zeros([n_states, n_actions, n_states]) # the transition probability matrix of the MDP so that P[s,a,s'] is the probabiltiy of going to s' from (s,a)
             for s in range(self.n_states):
@@ -46,6 +52,32 @@ class DiscreteMDP:
     def get_reward(self, state, action):
         return self.R[state, action]
 
+    ## Help
+    def reset(self):
+        self.current_state = 0
+        
+    def step(self, action):
+        done = False
+        match (self.reward_distribution):
+            case deterministic:
+                reward = self.R[self.state, action]
+            case bernoulli:
+                reward = np.random.binomial(1, self.r_dist[self.state])
+            ca
+        move = action
+    ## swap the move with a delta probability
+    if (np.random.uniform()<self.delta):
+        move = 1 - action
+    if (move==0):
+      self.state = 0
+    else:
+      self.state += 1
+      if (self.state > self.n_states  - 1):
+        self.state = self.n_states - 1
+    return self.state, reward, done, {}
 
+
+        
+        
         
         

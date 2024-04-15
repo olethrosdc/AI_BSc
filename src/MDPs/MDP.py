@@ -58,13 +58,11 @@ class DiscreteMDP:
         
     def step(self, action):
         done = False
-        match (self.reward_distribution):
-            case deterministic:
-                reward = self.R[self.state, action]
-            case bernoulli:
-                reward = np.random.binomial(1, self.r_dist[self.state])
-            ca
-        move = action
+        if (reward_distribution==deterministic):
+            reward = self.R[self.state, action]
+        elif (reward_distribution==bernoulli):
+            reward = np.random.binomial(1, self.r_dist[self.state])
+
     ## swap the move with a delta probability
     if (np.random.uniform()<self.delta):
         move = 1 - action

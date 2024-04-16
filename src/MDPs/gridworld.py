@@ -1,105 +1,136 @@
 from MDP import DiscreteMDP
-## This defines the Chain environment
-class GridWorld(MDP):
-  class Cell(Enum):
-    EMPTY = 0
-    WALL = 1
-    HOLE = 2
-    GOAL = 3
+from enum import Enum
+import numpy as np
 
-  class Move(Enum):
-    UP = 0
-    DOWN = 1
-    LEFT = 2
-    RIGHT = 3
+## This defines the Chain environment
+class GridWorld(DiscreteMDP):
+
 
   def get_state(self, x, y):
     return x + y*self.width
   
-  def __init__(self, randomness, width, height, holes):
+  def __init__(self, width, height, randomness):
     self.state = 0
     self.width = width
     self.height = height
     n_states = width * height + 1
     n_actions = 4
     self.maze = np.zeros([width, height])
-
+    self.EMPTY = 0
+    self.WALL = 1
+    self.HOLE = 2
+    self.GOAL = 3
+    self.UP = 0
+    self.DOWN = 1
+    self.LEFT = 2
+    self.RIGHT = 3
+    
     for x in range(width):
       for y in range(height):
         if (np.random.uniform()<.2):
-          self.maze[x, y] = Cell.WALL
+          self.maze[x, y] = self.WALL
 
 
     hole_x = hole_y = 0
     while (hole_x == 0 and hole_y == 0):
       hole_x = np.random.choice(width)
       hole_y = np.random.choice(width)
-    self.maze[hole_x, hole_y] = Cell.HOLE
+    self.maze[hole_x, hole_y] = self.HOLE
     
     goal_x = goal_y = 0
     while (goal_x == 0 and goal_y == 0):
       goal_x = np.random.choice(width)
       goal_y = np.random.choice(width)
-    self.maze[goal_x, goal_y] = Cell.GOAL
+    self.maze[goal_x, goal_y] = self.GOAL
 
 
-    P = np.zeros(n_states, n_actions, n_states)
-    R = np.zeros(n_states, n_actions)
+    P = np.zeros([n_states, n_actions, n_states])
+    R = np.zeros([n_states, n_actions])
 
     for x in range(width):
       for y in range(height):
-        s = get_state(x, y)
+        s = self.get_state(x, y)
 
-        xr = min(max(0, x+1), self.width)
-        yr = min(max(0, y), self.height)
-        if (self.maze[x2, y2] == Cell.WALL):
+        xr = min(max(0, x+1), self.width - 1)
+        yr = min(max(0, y), self.height - 1)
+        if (self.maze[xr, yr] == self.WALL):
           xr = x
           yr = y
         
-        xl = min(max(0, x-1), self.width)
-        yl = min(max(0, y), self.height)
-        if (self.maze[x2, y2] == Cell.WALL):
+        xl = min(max(0, x-1), self.width  - 1)
+        yl = min(max(0, y), self.height - 1)
+        if (self.maze[xl, yl] == self.WALL):
           xl = x
           yl = y
           
-        xu = min(max(0, x), self.width)
-        yu = min(max(0, y+1), self.height)
-        if (self.maze[x2, y2] == Cell.WALL):
+        xu = min(max(0, x), self.width - 1)
+        yu = min(max(0, y+1), self.height - 1)
+        if (self.maze[xu, yu] == self.WALL):
           xu = x
           yu = y
           
-        xd = min(max(0, x), self.width)
-        yd = min(max(0, y+1), self.height)
-        if (self.maze[x2, y2] == Cell.WALL):
+        xd = min(max(0, x), self.width - 1)
+        yd = min(max(0, y+1), self.height - 1)
+        if (self.maze[xd, yd] == self.WALL):
           xd = x
           yd = y        
 
           
-        sr = get_state(xr, yr)
-        sl = get_state(xl, yl)
-        su = get_state(xu, yu)
-        sd = get_state(xd, yd)
+        sr = self.get_state(xr, yr)
+        sl = self.get_state(xl, yl)
+        su = self.get_state(xu, yu)
+        sd = self.get_state(xd, yd)
+
+        P[s, self.RIGHT, sr] = 1 - randomness
+        P[s, self.LEFT, sl] = 1 - randomness
+        P[s, self.UP, su] = 1 - randomness
+        P[s, self.DOWN, sd] = 1 - randomness
+
+        P[s, self.RIGHT, s] += randomness/4
+        P[s, self.RIGHT, sl] += randomness/4
+        P[s, self.RIGHT, su] += randomness/4
+        P[s, self.RIGHT, sd] += randomness/4
+
+        P[s, self.LEFT, s] += randomness/4
+        P[s, self.LEFT, sr] += randomness/4
+        P[s, self.LEFT, su] += randomness/4
+        P[s, self.LEFT, sd] += randomness/4
+
+        P[s, self.UP, s] += randomness/4
+        P[s, self.UP, sr] += randomness/4
+        P[s, self.UP, sl] += randomness/4
+        P[s, self.UP, sd] += randomness/4
+
+        P[s, self.DOWN, s] += randomness/4
+        P[s, self.DOWN, sr] += randomness/4
+        P[s, self.DOWN, sl] += randomness/4
+        P[s, self.DOWN, su] += randomness/4
+
+
+        
     ## The terminal state
     for a in range(n_actions):
-      P[n_states-1, a, n_states-1] = 1
-      R[n_states-1, a] = 0
+      P[n_states - 1, a, :] = 0
+      P[n_states - 1, a, n_states - 1] = 1
+      R[n_states - 1, a] = 0
 
-
-    # the hole get you to the terminal state with -100
-    s = get_state(hole_x, hole_y)
+      
+    # the hole gets you to the terminal state with -100
+    s = self.get_state(hole_x, hole_y)
     for a in range(n_actions):
+      P[s, a, :] = 0
       P[s, a, n_states - 1] = 1
       R[s,a] = -100
       
-    s = get_state(goal_x, goal_y)
+
     # the goal gets you to the terminal state with + 10
-    s = get_state(hole_x, hole_y)
+    s = self.get_state(goal_x, goal_y)
     for a in range(n_actions):
+      P[s, a, :] = 0
       P[s, a, n_states - 1] = 1
       R[s,a] = 10
 
-
-    DiscreteMDP.__init__(n_states, n_actions, P, R)
+    super().__init__(n_states, n_actions, P, R)
     
   def step(self, action):
     assert self.action_space.contains(action)
@@ -122,6 +153,7 @@ class GridWorld(MDP):
 
 def main():
     print("Testing")
+    environment = GridWorld(4, 4, 0.1)
     
 
 if __name__ == "__main__":

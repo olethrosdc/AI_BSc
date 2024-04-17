@@ -1,13 +1,11 @@
-import MDP
-import mdp_examples
 import numpy as np
 
 ## Implements dynamic programming for deterministic environments
 ## $V_{n+1}(s) = \max_a [r(s, a) + V_{n}(\tau(s,a))$
-def dynamic_programming(model, n_iterations:
-    policy = np.zeros([model.n_states], dtype=int)
-    V = np.zeros([model.n_states])
-
+## 
+def dynamic_programming(model, n_iterations):
+    policy = np.zeros(model.n_states, dtype=int)
+    V = np.zeros(model.n_states)
     Q = np.zeros([model.n_states, model.n_actions])
 
                         

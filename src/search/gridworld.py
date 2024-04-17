@@ -1,9 +1,9 @@
-from MDP import DiscreteMDP
+from DecisionDiagram import DiscreteDeterministicDecisionDiagram
 from enum import Enum
 import numpy as np
 
 ## This defines the Chain environment
-class GridWorld(DiscreteMDP):
+class GridWorld(DiscreteDeterministicDecisionDiagram):
 
 
     def get_state(self, x, y):
@@ -81,56 +81,32 @@ class GridWorld(DiscreteMDP):
                 su = self.get_state(xu, yu)
                 sd = self.get_state(xd, yd)
 
-                P[s, self.RIGHT, sr] = 1 - randomness
-                P[s, self.LEFT, sl] = 1 - randomness
-                P[s, self.UP, su] = 1 - randomness
-                P[s, self.DOWN, sd] = 1 - randomness
-
-                P[s, self.RIGHT, s] += randomness/4
-                P[s, self.RIGHT, sl] += randomness/4
-                P[s, self.RIGHT, su] += randomness/4
-                P[s, self.RIGHT, sd] += randomness/4
-
-                P[s, self.LEFT, s] += randomness/4
-                P[s, self.LEFT, sr] += randomness/4
-                P[s, self.LEFT, su] += randomness/4
-                P[s, self.LEFT, sd] += randomness/4
-
-                P[s, self.UP, s] += randomness/4
-                P[s, self.UP, sr] += randomness/4
-                P[s, self.UP, sl] += randomness/4
-                P[s, self.UP, sd] += randomness/4
-
-                P[s, self.DOWN, s] += randomness/4
-                P[s, self.DOWN, sr] += randomness/4
-                P[s, self.DOWN, sl] += randomness/4
-                P[s, self.DOWN, su] += randomness/4
+                P[s, self.UP] = su
+                P[s, self.DOWN] = sd
+                P[s, self.LEFT] = sl
+                P[s, self.RIGHT] = sr
 
 
         ## The terminal state
         for a in range(n_actions):
-            P[n_states - 1, a, :] = 0
-            P[n_states - 1, a, n_states - 1] = 1
+            P[n_states - 1, a] =  n_states - 1] 
             R[n_states - 1, a] = 0
 
             
         # the hole gets you to the terminal state with -100
         s = self.get_state(hole_x, hole_y)
         for a in range(n_actions):
-            P[s, a, :] = 0
-            P[s, a, n_states - 1] = 1
+            P[s, a] = n_states - 1
             R[s,a] = -100
             
 
         # the goal gets you to the terminal state with + 1
         s = self.get_state(goal_x, goal_y)
         for a in range(n_actions):
-            P[s, a, :] = 0
-            P[s, a, n_states - 1] = 1
+            P[s, a] =  n_states - 1
             R[s,a] = 1
 
         super().__init__(n_states, n_actions, P, R)
-        self.terminal_state = n_states - 1
         
 
     def reset(self):
@@ -164,9 +140,9 @@ def main():
     environment = GridWorld(width, height, 0)
     environment.render()
 
-    from ValueIteration import value_iteration
+    from DynamicProgramming import dynamic_programming
     print("Calculating optimal policy")
-    policy, V, Q = value_iteration(environment, 100, 1)
+    policy, V, Q = dynamic_programming(environment, 100)
 
     print("Policy, ", policy)
     policy_string="^v<>"

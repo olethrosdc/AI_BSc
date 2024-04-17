@@ -2,7 +2,9 @@ import MDP
 import mdp_examples
 import numpy as np
 
-## Define algorithm
+## Implements dynamic programming for stochastic environments.
+## An optional discount factor can be used.
+## $V_{n+1}(s) = \max_a [r(s, a) + \gamma \sum_{s'} P(s' | s, a) V_{n}(s')$
 def value_iteration(mdp, n_iterations, gamma = 1, V = None):
     policy = np.zeros([mdp.n_states], dtype=int)
     assert(gamma > 0)

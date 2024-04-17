@@ -19,6 +19,7 @@ class DiscreteMDP:
         self.n_states = n_states # the number of states of the MDP
         self.n_actions = n_actions # the number of actions of the MDP
         self.reward_distribution = self.DETERMINISTIC
+        self.terminal_state = - 1
         if (P is None):
             self.P = np.zeros([n_states, n_actions, n_states]) # the transition probability matrix of the MDP so that P[s,a,s'] is the probabiltiy of going to s' from (s,a)
             for s in range(self.n_states):
@@ -71,6 +72,8 @@ class DiscreteMDP:
             reward = np.random.binomial(1, self.R[self.state, action])
         P = get_transition_probabilities(self.state, action)
         self.state = np.random.choice(self.n_states, P)
+        if self.state == self.terminal_state:
+            done = True
         return self.state, reward, done, {}
 
 

@@ -187,6 +187,7 @@ def main():
             print(V[environment.get_state(x,y)], end=" ")
         print("")
 
+        
 
 import sys
 if __name__ == '__main__':

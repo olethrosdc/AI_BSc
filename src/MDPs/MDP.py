@@ -43,7 +43,9 @@ class DiscreteMDP:
                 for s2 in range(self.n_states):
                     assert(self.P[s,a,s2] >= 0)
                     assert(self.P[s,a,s2] <= 1)
-                
+
+        self.reset()
+        
     # get the probability of next state j given current state s, action a, i.e. P(j|s,a)
     def get_transition_probability(self, state, action, next_state):
         return self.P[state, action, next_state]
@@ -59,7 +61,7 @@ class DiscreteMDP:
 
     ## Help
     def reset(self):
-        self.current_state = 0
+        self.state = 0
         
     def step(self, action):
         done = False

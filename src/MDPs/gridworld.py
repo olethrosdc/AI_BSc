@@ -45,7 +45,7 @@ class GridWorld(DiscreteMDP):
 
 
         P = np.zeros([n_states, n_actions, n_states])
-        R = np.zeros([n_states, n_actions])
+        R = -np.ones([n_states, n_actions]) # initialise all rewards to -1
 
         for x in range(width):
             for y in range(height):
@@ -122,12 +122,12 @@ class GridWorld(DiscreteMDP):
             R[s,a] = -100
             
 
-        # the goal gets you to the terminal state with + 10
+        # the goal gets you to the terminal state with + 1
         s = self.get_state(goal_x, goal_y)
         for a in range(n_actions):
             P[s, a, :] = 0
             P[s, a, n_states - 1] = 1
-            R[s,a] = 10
+            R[s,a] = 1
 
         super().__init__(n_states, n_actions, P, R)
         
@@ -162,7 +162,7 @@ class GridWorld(DiscreteMDP):
 
 # test
 
-def main() -> int:
+def main():
     print("Testing")
     height = 4
     width = 4

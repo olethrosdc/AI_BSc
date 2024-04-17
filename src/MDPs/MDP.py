@@ -38,7 +38,7 @@ class DiscreteMDP:
         # check transitions
         for s in range(self.n_states):
             for a in range(self.n_actions):
-                print(s,a, ":", self.P[s,a,:], " = ", sum(self.P[s,a,:]))
+                #print(s,a, ":", self.P[s,a,:], " = ", sum(self.P[s,a,:]))
                 assert(abs(np.sum(self.P[s,a,:])-1) <= 1e-3)
                 for s2 in range(self.n_states):
                     assert(self.P[s,a,s2] >= 0)

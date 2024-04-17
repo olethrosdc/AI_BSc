@@ -107,7 +107,6 @@ class GridWorld(DiscreteMDP):
         P[s, self.DOWN, su] += randomness/4
 
 
-        
     ## The terminal state
     for a in range(n_actions):
       P[n_states - 1, a, :] = 0

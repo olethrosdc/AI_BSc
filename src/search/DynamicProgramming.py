@@ -13,7 +13,8 @@ def dynamic_programming(model, n_iterations):
         V_old = V.copy()
         for s in range(model.n_states):
             for a in range(model.n_actions):
-                Q[s, a] = model.get_reward(s, a) + V_old[model.get_next_state(s,a)]
+                s2 = model.get_next_state(s,a)
+                Q[s, a] = model.get_reward(s, a) + V_old[s2]
             V[s] = max(Q[s,:])
             policy[s] = np.argmax(Q[s,:])
     return policy, V, Q

@@ -44,7 +44,7 @@ class GridWorld(DiscreteDeterministicDecisionDiagram):
         self.maze[goal_x, goal_y] = self.GOAL
 
 
-        P = np.zeros([n_states, n_actions, n_states])
+        P = np.zeros([n_states, n_actions], dtype=int)
         R = -np.ones([n_states, n_actions]) # initialise all rewards to -1
 
         for x in range(width):
@@ -89,7 +89,7 @@ class GridWorld(DiscreteDeterministicDecisionDiagram):
 
         ## The terminal state
         for a in range(n_actions):
-            P[n_states - 1, a] =  n_states - 1] 
+            P[n_states - 1, a] =  n_states - 1
             R[n_states - 1, a] = 0
 
             

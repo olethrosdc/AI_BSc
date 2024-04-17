@@ -4,7 +4,7 @@ import numpy as np
 
 ## Define algorithm
 def value_iteration(mdp, n_iterations, gamma = 1, V = None):
-    policy = np.zeros([mdp.n_states])
+    policy = np.zeros([mdp.n_states], dtype=int)
     assert(gamma > 0)
     assert(gamma <= 1)
     if (V is None):

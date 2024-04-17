@@ -64,7 +64,7 @@ class GridWorld(DiscreteMDP):
                     yl = y
                     
                 xu = min(max(0, x), self.width - 1)
-                yu = min(max(0, y+1), self.height - 1)
+                yu = min(max(0, y-1), self.height - 1)
                 if (self.maze[xu, yu] == self.WALL):
                     xu = x
                     yu = y
@@ -173,9 +173,18 @@ def main():
     print("Calculating optimal policy")
     policy, V, Q = value_iteration(environment, 100, 1)
 
+    print("Policy, ", policy)
+    policy_string="^v<>"
     for y in range(height):
         for x in range(width):
-            print(V[environment.get_state(x,y)], " ", end="")
+            s = environment.get_state(x,y)
+            print(policy_string[policy[s]], end="")
+        print("")
+
+    print("Values")
+    for y in range(height):
+        for x in range(width):
+            print(V[environment.get_state(x,y)], end=" ")
         print("")
 
 

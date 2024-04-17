@@ -130,6 +130,7 @@ class GridWorld(DiscreteMDP):
             R[s,a] = 1
 
         super().__init__(n_states, n_actions, P, R)
+        self.terminal_state = n_states - 1
         
     def step(self, action):
         assert self.action_space.contains(action)

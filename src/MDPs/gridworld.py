@@ -9,7 +9,7 @@ class GridWorld(DiscreteMDP):
     def get_state(self, x, y):
         return x + y*self.width
     
-    def __init__(self, width, height, randomness):
+    def __init__(self, width, height, density, randomness):
         self.state = 0
         self.width = width
         self.height = height
@@ -27,7 +27,7 @@ class GridWorld(DiscreteMDP):
         
         for x in range(width):
             for y in range(height):
-                if (np.random.uniform()<.2):
+                if (np.random.uniform()<density):
                     self.maze[x, y] = self.WALL
 
 
@@ -161,7 +161,7 @@ def main():
     print("Testing")
     height = 4
     width = 4
-    environment = GridWorld(width, height, 0)
+    environment = GridWorld(width, height, 0.2, 0)
     environment.render()
 
     from ValueIteration import value_iteration

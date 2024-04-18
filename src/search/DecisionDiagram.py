@@ -12,6 +12,7 @@ class DiscreteDeterministicDecisionDiagram:
     ## Optional arguments:
     ## P: the state-action-state transition map
     ## R: The state-action reward matrix so that R[s,a] is the reward for taking action a in state s.
+    
     def __init__(self, n_states, n_actions, P = None, R = None):
         self.n_states = n_states # the number of states of the MDP
         self.n_actions = n_actions # the number of actions of the MDP
@@ -30,6 +31,7 @@ class DiscreteDeterministicDecisionDiagram:
                     self.R[s,a] = np.round(np.random.uniform(), decimals=1)
         else:
             self.R = R
+        self.terminal_state = - 1
         self.reset()
                 
     # get the probability of next state j given current state s, action a, i.e. P(j|s,a)
@@ -44,18 +46,15 @@ class DiscreteDeterministicDecisionDiagram:
     ## Help
     def reset(self):
         self.state = 0
+
         
     def step(self, action):
         done = False
-        if (self.reward_distribution == self.DETERMINISTIC):
-            reward = self.R[self.state, action]
-        elif (self.reward_distribution == self.BERNOULLI):
-            reward = np.random.binomial(1, self.R[self.state, action])
-        P = get_transition_probabilities(self.state, action)
-        self.state = np.random.choice(self.n_states, P)
+        reward = self.R[self.state, action]
+        self.state = eslf.get_next_state(state, action)
+        if self.state == self.terminal_state:
+            done = True
         return self.state, reward, done, {}
-
-
         
         
         

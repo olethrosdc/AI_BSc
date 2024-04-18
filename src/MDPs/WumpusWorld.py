@@ -8,6 +8,7 @@ class ObsWumpusWorld(DiscreteMDP):
         return x + y*self.width + wx*self.width*self.height + wy*self.width*self.width*self.height
     
     def __init__(self, width, height, density=0.3, randomness=0.2, r_step=-1, r_goal=1, r_hole=-10, r_wumpus=-10):
+        
         self.state = 0
         self.width = width
         self.height = height
@@ -23,6 +24,14 @@ class ObsWumpusWorld(DiscreteMDP):
         self.DOWN = 1
         self.LEFT = 2
         self.RIGHT = 3
+        
+        print("Generating Fully Observable Wumpus World with the following characteristics")
+        print(n_states, "states")
+        print(r_step, "step reward")
+        print(r_hole, "hole reward")
+        print(r_goal, "goal reward")
+        print(r_wumpus, "wumpus reward")
+        print(randomness, "randomness")
         
         for x in range(width):
             for y in range(height):
@@ -91,8 +100,6 @@ class ObsWumpusWorld(DiscreteMDP):
             P[n_states - 1, a, n_states - 1] = 1
             R[n_states - 1, a] = 0
 
-        print("local")        
-        print(P)
         super().__init__(n_states, n_actions, P, R)
         self.terminal_state = n_states - 1
         

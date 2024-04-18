@@ -18,9 +18,7 @@ def value_iteration(mdp, n_iterations, gamma = 1, V = None):
         V_old = V.copy()
         for s in range(mdp.n_states):
             for a in range(mdp.n_actions):
-                Q[s, a] = mdp.get_reward(s, a)
-                for j in range(mdp.n_states):
-                    Q[s,a] += gamma * mdp.get_transition_probability(s,a,j) * V_old[j]
+                Q[s, a] = mdp.get_reward(s, a) + gamma * np.dot(mdp.get_transition_probabilities(s,a), V_old)
             V[s] = max(Q[s,:])
             policy[s] = np.argmax(Q[s,:])
     return policy, V, Q

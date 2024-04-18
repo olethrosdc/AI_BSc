@@ -61,7 +61,7 @@ class ObsWumpusWorld(DiscreteMDP):
 
         for x in range(width):
             for y in range(height):
-                s = self.get_state(x, y)
+                s = self.get_state(x, y, self.wumpus_x, self.wumpus_y)
 
                 xr = min(max(0, x+1), self.width - 1)
                 yr = min(max(0, y), self.height - 1)
@@ -88,10 +88,10 @@ class ObsWumpusWorld(DiscreteMDP):
                     yd = y                
 
                     
-                sr = self.get_state(xr, yr)
-                sl = self.get_state(xl, yl)
-                su = self.get_state(xu, yu)
-                sd = self.get_state(xd, yd)
+                sr = self.get_state(xr, yr, self.wumpus_x, self.wumpus_y)
+                sl = self.get_state(xl, yl, self.wumpus_x, self.wumpus_y)
+                su = self.get_state(xu, yu, self.wumpus_x, self.wumpus_y)
+                sd = self.get_state(xd, yd, self.wumpus_x, self.wumpus_y)
 
                 P[s, self.RIGHT, sr] = 1 - randomness
                 P[s, self.LEFT, sl] = 1 - randomness
@@ -127,7 +127,7 @@ class ObsWumpusWorld(DiscreteMDP):
 
             
         # the hole gets you to the terminal state with -100
-        s = self.get_state(hole_x, hole_y)
+        s = self.get_state(hole_x, hole_y, self.wumpus_x, self.wumpus_y)
         for a in range(n_actions):
             P[s, a, :] = 0
             P[s, a, n_states - 1] = 1
@@ -135,12 +135,20 @@ class ObsWumpusWorld(DiscreteMDP):
             
 
         # the goal gets you to the terminal state with + 1
-        s = self.get_state(goal_x, goal_y)
+        s = self.get_state(goal_x, goal_y, self.wumpus_x, self.wumpus_y)
         for a in range(n_actions):
             P[s, a, :] = 0
             P[s, a, n_states - 1] = 1
             R[s,a] = r_goal
+            
+        # the wumpus gets you to the terminal state with + 1
+        s = self.get_state(self.wumpus_x, self.wumpus_y, self.wumpus_x, self.wumpus_y)
+        for a in range(n_actions):
+            P[s, a, :] = 0
+            P[s, a, n_states - 1] = 1
+            R[s,a] = r_hole
 
+        
         super().__init__(n_states, n_actions, P, R)
         self.terminal_state = n_states - 1
         

@@ -3,9 +3,10 @@ from enum import Enum
 import numpy as np
 
 ## This defines the Gridworld environment
-class GridWorld(DiscreteMDP):
-    def get_state(self, x, y):
+class ObsWumpusWorld(DiscreteMDP):
+    def get_state(self, x, y, wx, wy):
         return x + y*self.width
+        + wx*self.width*self.height + wy*self.width*self.width*self.height
     
     def __init__(self, width, height, density=0.3, randomness=0.2, r_step=-1, r_goal=1, r_hole=-10, r_wumpus=-10):
         self.state = 0
@@ -18,6 +19,7 @@ class GridWorld(DiscreteMDP):
         self.WALL = 1
         self.HOLE = 2
         self.GOAL = 3
+        self.WUMPUS = 4
         self.UP = 0
         self.DOWN = 1
         self.LEFT = 2
@@ -30,17 +32,29 @@ class GridWorld(DiscreteMDP):
 
 
         hole_x = hole_y = 0
-        while (hole_x == 0 and hole_y == 0):
+        while (1):
+            hole_y = np.random.choice(height)
             hole_x = np.random.choice(width)
-            hole_y = np.random.choice(width)
-        self.maze[hole_x, hole_y] = self.HOLE
-        
+            if (self.maze[hole_x, hole_y]==self.EMPTY):
+                self.maze[hole_x, hole_y] = self.HOLE
+                break
+                
         goal_x = goal_y = 0
-        while (goal_x == 0 and goal_y == 0):
+        while (1):
+            goal_y = np.random.choice(height)
             goal_x = np.random.choice(width)
-            goal_y = np.random.choice(width)
-        self.maze[goal_x, goal_y] = self.GOAL
+            if (self.maze[goal_x, goal_y]==self.EMPTY):
+                self.maze[goal_x, goal_y] = self.GOAL
+                break
 
+        while (1):
+            self.wumpus_y = np.random.choice(height)
+            self.wumpus_x = np.random.choice(width)
+            if (self.maze[self.wumpus_x, self.wumpus_y]==self.EMPTY):
+                self.maze[self.wumpus_x, self.wumpus_y] = self.WUMPUS
+                break
+
+        
         # Here $P[s,a,j] = \Pr(s_{t+1} = j | s_t = s, a_t = a]$
         P = np.zeros([n_states, n_actions, n_states])
         R = r_step + np.zeros([n_states, n_actions]) # initialise all rewards to -1
@@ -148,6 +162,8 @@ class GridWorld(DiscreteMDP):
                     print("O", end="")
                 elif self.maze[x,y]==self.GOAL:
                     print("X", end="")
+                elif self.maze[x,y]==self.WUMPUS:
+                    print("%", end="")
                 else:
                     print("!", end="")
             print("")

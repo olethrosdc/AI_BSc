@@ -5,14 +5,13 @@ import numpy as np
 ## This defines the Gridworld environment
 class ObsWumpusWorld(DiscreteMDP):
     def get_state(self, x, y, wx, wy):
-        return x + y*self.width
-        + wx*self.width*self.height + wy*self.width*self.width*self.height
+        return x + y*self.width + wx*self.width*self.height + wy*self.width*self.width*self.height
     
     def __init__(self, width, height, density=0.3, randomness=0.2, r_step=-1, r_goal=1, r_hole=-10, r_wumpus=-10):
         self.state = 0
         self.width = width
         self.height = height
-        n_states = width * height + 1
+        n_states = (width * height)**2 + 1
         n_actions = 4
         self.maze = np.zeros([width, height])
         self.EMPTY = 0
@@ -59,65 +58,32 @@ class ObsWumpusWorld(DiscreteMDP):
         P = np.zeros([n_states, n_actions, n_states])
         R = r_step + np.zeros([n_states, n_actions]) # initialise all rewards to -1
 
-        for x in range(width):
-            for y in range(height):
-                s = self.get_state(x, y, self.wumpus_x, self.wumpus_y)
-
-                xr = min(max(0, x+1), self.width - 1)
-                yr = min(max(0, y), self.height - 1)
-                if (self.maze[xr, yr] == self.WALL):
-                    xr = x
-                    yr = y
-                
-                xl = min(max(0, x-1), self.width    - 1)
-                yl = min(max(0, y), self.height - 1)
-                if (self.maze[xl, yl] == self.WALL):
-                    xl = x
-                    yl = y
+        for self.wumpus_x in range(width):
+            for self.wumpus_y in range(height):
+                for x in range(width):
+                    for y in range(height):                      
+                        self.local_transitions(P, R, x, y, randomness)
+                # the hole gets you to the terminal state with -100
+                s = self.get_state(hole_x, hole_y, self.wumpus_x, self.wumpus_y)
+                for a in range(n_actions):
+                    P[s, a, :] = 0
+                    P[s, a, n_states - 1] = 1
+                    R[s,a] = r_hole
                     
-                xu = min(max(0, x), self.width - 1)
-                yu = min(max(0, y-1), self.height - 1)
-                if (self.maze[xu, yu] == self.WALL):
-                    xu = x
-                    yu = y
+        
+                # the goal gets you to the terminal state with + 1
+                s = self.get_state(goal_x, goal_y, self.wumpus_x, self.wumpus_y)
+                for a in range(n_actions):
+                    P[s, a, :] = 0
+                    P[s, a, n_states - 1] = 1
+                    R[s,a] = r_goal
                     
-                xd = min(max(0, x), self.width - 1)
-                yd = min(max(0, y+1), self.height - 1)
-                if (self.maze[xd, yd] == self.WALL):
-                    xd = x
-                    yd = y                
-
-                    
-                sr = self.get_state(xr, yr, self.wumpus_x, self.wumpus_y)
-                sl = self.get_state(xl, yl, self.wumpus_x, self.wumpus_y)
-                su = self.get_state(xu, yu, self.wumpus_x, self.wumpus_y)
-                sd = self.get_state(xd, yd, self.wumpus_x, self.wumpus_y)
-
-                P[s, self.RIGHT, sr] = 1 - randomness
-                P[s, self.LEFT, sl] = 1 - randomness
-                P[s, self.UP, su] = 1 - randomness
-                P[s, self.DOWN, sd] = 1 - randomness
-
-                P[s, self.RIGHT, s] += randomness/4
-                P[s, self.RIGHT, sl] += randomness/4
-                P[s, self.RIGHT, su] += randomness/4
-                P[s, self.RIGHT, sd] += randomness/4
-
-                P[s, self.LEFT, s] += randomness/4
-                P[s, self.LEFT, sr] += randomness/4
-                P[s, self.LEFT, su] += randomness/4
-                P[s, self.LEFT, sd] += randomness/4
-
-                P[s, self.UP, s] += randomness/4
-                P[s, self.UP, sr] += randomness/4
-                P[s, self.UP, sl] += randomness/4
-                P[s, self.UP, sd] += randomness/4
-
-                P[s, self.DOWN, s] += randomness/4
-                P[s, self.DOWN, sr] += randomness/4
-                P[s, self.DOWN, sl] += randomness/4
-                P[s, self.DOWN, su] += randomness/4
-
+                # the wumpus gets you to the terminal state with - 1
+                s = self.get_state(self.wumpus_x, self.wumpus_y, self.wumpus_x, self.wumpus_y)
+                for a in range(n_actions):
+                    P[s, a, :] = 0
+                    P[s, a, n_states - 1] = 1
+                    R[s,a] = r_wumpus
 
         ## The terminal state
         for a in range(n_actions):
@@ -125,33 +91,88 @@ class ObsWumpusWorld(DiscreteMDP):
             P[n_states - 1, a, n_states - 1] = 1
             R[n_states - 1, a] = 0
 
-            
-        # the hole gets you to the terminal state with -100
-        s = self.get_state(hole_x, hole_y, self.wumpus_x, self.wumpus_y)
-        for a in range(n_actions):
-            P[s, a, :] = 0
-            P[s, a, n_states - 1] = 1
-            R[s,a] = r_hole
-            
-
-        # the goal gets you to the terminal state with + 1
-        s = self.get_state(goal_x, goal_y, self.wumpus_x, self.wumpus_y)
-        for a in range(n_actions):
-            P[s, a, :] = 0
-            P[s, a, n_states - 1] = 1
-            R[s,a] = r_goal
-            
-        # the wumpus gets you to the terminal state with + 1
-        s = self.get_state(self.wumpus_x, self.wumpus_y, self.wumpus_x, self.wumpus_y)
-        for a in range(n_actions):
-            P[s, a, :] = 0
-            P[s, a, n_states - 1] = 1
-            R[s,a] = r_hole
-
-        
+        print("local")        
+        print(P)
         super().__init__(n_states, n_actions, P, R)
         self.terminal_state = n_states - 1
         
+
+    def local_transitions(self, P, R, x, y, randomness):
+        s = self.get_state(x, y, self.wumpus_x, self.wumpus_y)
+
+        xr = min(max(0, x+1), self.width - 1)
+        yr = min(max(0, y), self.height - 1)
+        if (self.maze[xr, yr] == self.WALL):
+            xr = x
+            yr = y
+        
+        xl = min(max(0, x-1), self.width    - 1)
+        yl = min(max(0, y), self.height - 1)
+        if (self.maze[xl, yl] == self.WALL):
+            xl = x
+            yl = y
+            
+        xu = min(max(0, x), self.width - 1)
+        yu = min(max(0, y-1), self.height - 1)
+        if (self.maze[xu, yu] == self.WALL):
+            xu = x
+            yu = y
+            
+        xd = min(max(0, x), self.width - 1)
+        yd = min(max(0, y+1), self.height - 1)
+        if (self.maze[xd, yd] == self.WALL):
+            xd = x
+            yd = y                
+
+        # Make the wumpus move directly towards you
+        w_x = self.wumpus_x
+        w_y = self.wumpus_y
+        d_x = np.abs(x - w_x)
+        d_y = np.abs(y - w_y)
+        if (d_x > d_y):
+            w_x += np.sign(x - w_x)
+        else:
+            w_y += np.sign(y - w_y)
+
+        # The wumpus cannot go through walls, but it can go over holes
+        if (self.maze[w_x, w_y] == self.WALL):
+            w_x = self.wumpus_x
+            w_y = self.wumpus_y
+
+        # These are the resulting states from your movements
+        # if there is no randomness
+        sr = self.get_state(xr, yr, w_x, w_y)
+        sl = self.get_state(xl, yl, w_x, w_y)
+        su = self.get_state(xu, yu, w_x, w_y)
+        sd = self.get_state(xd, yd, w_x, w_y)
+
+        # you go to these states with probability 1 - p
+        P[s, self.RIGHT, sr] = 1 - randomness
+        P[s, self.LEFT, sl] = 1 - randomness
+        P[s, self.UP, su] = 1 - randomness
+        P[s, self.DOWN, sd] = 1 - randomness
+
+        # otherwise you go to one of the neighbouring states
+        P[s, self.RIGHT, s] += randomness/4
+        P[s, self.RIGHT, sl] += randomness/4
+        P[s, self.RIGHT, su] += randomness/4
+        P[s, self.RIGHT, sd] += randomness/4
+
+        P[s, self.LEFT, s] += randomness/4
+        P[s, self.LEFT, sr] += randomness/4
+        P[s, self.LEFT, su] += randomness/4
+        P[s, self.LEFT, sd] += randomness/4
+
+        P[s, self.UP, s] += randomness/4
+        P[s, self.UP, sr] += randomness/4
+        P[s, self.UP, sl] += randomness/4
+        P[s, self.UP, sd] += randomness/4
+
+        P[s, self.DOWN, s] += randomness/4
+        P[s, self.DOWN, sr] += randomness/4
+        P[s, self.DOWN, sl] += randomness/4
+        P[s, self.DOWN, su] += randomness/4
+
 
     def reset(self):
         self.state = 0

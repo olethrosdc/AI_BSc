@@ -9,7 +9,7 @@ class GridWorld(DiscreteMDP):
     def get_state(self, x, y):
         return x + y*self.width
     
-    def __init__(self, width, height, density, randomness):
+    def __init__(self, width, height, density=0.3, randomness=0.2, r_step=-1, r_goal=1, r_hole=-10, r_wumpus=-10):
         self.state = 0
         self.width = width
         self.height = height
@@ -43,9 +43,9 @@ class GridWorld(DiscreteMDP):
             goal_y = np.random.choice(width)
         self.maze[goal_x, goal_y] = self.GOAL
 
-
+        # Here $P[s,a,j] = \Pr(s_{t+1} = j | s_t = s, a_t = a]$
         P = np.zeros([n_states, n_actions, n_states])
-        R = -np.ones([n_states, n_actions]) # initialise all rewards to -1
+        R = r_step + np.zeros([n_states, n_actions]) # initialise all rewards to -1
 
         for x in range(width):
             for y in range(height):
@@ -119,7 +119,7 @@ class GridWorld(DiscreteMDP):
         for a in range(n_actions):
             P[s, a, :] = 0
             P[s, a, n_states - 1] = 1
-            R[s,a] = -100
+            R[s,a] = r_hole
             
 
         # the goal gets you to the terminal state with + 1
@@ -127,7 +127,7 @@ class GridWorld(DiscreteMDP):
         for a in range(n_actions):
             P[s, a, :] = 0
             P[s, a, n_states - 1] = 1
-            R[s,a] = 1
+            R[s,a] = r_goal
 
         super().__init__(n_states, n_actions, P, R)
         self.terminal_state = n_states - 1

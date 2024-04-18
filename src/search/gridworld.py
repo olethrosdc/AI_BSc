@@ -9,7 +9,7 @@ class GridWorld(DiscreteDeterministicDecisionDiagram):
     def get_state(self, x, y):
         return x + y*self.width
     
-    def __init__(self, width, height):
+    def __init__(self, width, height, r_step, r_goal, r_hole):
         self.state = 0
         self.width = width
         self.height = height
@@ -45,7 +45,7 @@ class GridWorld(DiscreteDeterministicDecisionDiagram):
 
 
         P = np.zeros([n_states, n_actions], dtype=int)
-        R = -np.ones([n_states, n_actions]) # initialise all rewards to -1
+        R = r_step + np.zeros([n_states, n_actions]) # initialise all step rewards 
 
         for x in range(width):
             for y in range(height):
@@ -97,14 +97,14 @@ class GridWorld(DiscreteDeterministicDecisionDiagram):
         s = self.get_state(hole_x, hole_y)
         for a in range(n_actions):
             P[s, a] = n_states - 1
-            R[s,a] = -10
+            R[s,a] = r_hole
             
 
         # the goal gets you to the terminal state with r=+ 1
         s = self.get_state(goal_x, goal_y)
         for a in range(n_actions):
             P[s, a] =  n_states - 1
-            R[s,a] = 1
+            R[s,a] = r_goal
 
         super().__init__(n_states, n_actions, P, R)
         

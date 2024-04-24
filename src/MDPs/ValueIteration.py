@@ -6,7 +6,7 @@ import numpy as np
 def value_iteration(mdp, n_iterations, gamma, V = None):
     policy = np.zeros([mdp.n_states])
     assert(gamma > 0)
-    assert(gamma < 1)
+    assert(gamma <= 1)
     if (V is None):
         V = np.zeros([mdp.n_states])
         

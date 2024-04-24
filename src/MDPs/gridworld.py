@@ -1,6 +1,8 @@
 from MDP import DiscreteMDP
 from enum import Enum
 import numpy as np
+from ValueIteration import value_iteration
+
 
 ## This defines the Chain environment
 class GridWorld(DiscreteMDP):
@@ -146,15 +148,35 @@ class GridWorld(DiscreteMDP):
     return 0
 
   def render(self):
-    pass
+    for y in range(self.height):
+      for x in range(self.width):
+        if (self.maze[x, y] == self.WALL):
+          print("#", end="")
+        elif (self.maze[x,y] == self.GOAL):
+          print("X", end="")
+        elif (self.maze[x,y] == self.HOLE):
+          print("O", end="")
+        else:
+          print(".", end="")
+      print("")
 
 
 # test
 
-def main():
-    print("Testing")
-    environment = GridWorld(4, 4, 0.1)
+print("Testing")
+maze = GridWorld(4, 4, 0.1)
+policy, V, Q = value_iteration(maze, 100, 1)
+maze.render()
+
+for y in range(maze.height):
+  for x in range(maze.width):
+    s = maze.get_state(x, y)
+    print(V[s], end=" ")
+  print("")
+    
+    
     
 
-if __name__ == "__main__":
-    main()
+
+
+

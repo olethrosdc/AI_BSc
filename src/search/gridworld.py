@@ -1,15 +1,15 @@
-from MDP import DiscreteMDP
+from DecisionDiagram import DiscreteDeterministicDecisionDiagram
 from enum import Enum
 import numpy as np
-from ValueIteration import value_iteration
+
+## This defines the Chain environment
+class GridWorld(DiscreteDeterministicDecisionDiagram):
 
 
-## This defines the Gridworld environment
-class GridWorld(DiscreteMDP):
     def get_state(self, x, y):
         return x + y*self.width
     
-    def __init__(self, width, height, density=0.3, randomness=0.2, r_step=-1, r_goal=1, r_hole=-10, r_wumpus=-10):
+    def __init__(self, width, height, r_step, r_goal, r_hole):
         self.state = 0
         self.width = width
         self.height = height
@@ -27,7 +27,7 @@ class GridWorld(DiscreteMDP):
         
         for x in range(width):
             for y in range(height):
-                if (np.random.uniform()<density):
+                if (np.random.uniform()<.2):
                     self.maze[x, y] = self.WALL
 
 
@@ -43,9 +43,9 @@ class GridWorld(DiscreteMDP):
             goal_y = np.random.choice(width)
         self.maze[goal_x, goal_y] = self.GOAL
 
-        # Here $P[s,a,j] = \Pr(s_{t+1} = j | s_t = s, a_t = a]$
-        P = np.zeros([n_states, n_actions, n_states])
-        R = r_step + np.zeros([n_states, n_actions]) # initialise all rewards to -1
+
+        P = np.zeros([n_states, n_actions], dtype=int)
+        R = r_step + np.zeros([n_states, n_actions]) # initialise all step rewards 
 
         for x in range(width):
             for y in range(height):
@@ -81,70 +81,32 @@ class GridWorld(DiscreteMDP):
                 su = self.get_state(xu, yu)
                 sd = self.get_state(xd, yd)
 
-                P[s, self.RIGHT, sr] = 1 - randomness
-                P[s, self.LEFT, sl] = 1 - randomness
-                P[s, self.UP, su] = 1 - randomness
-                P[s, self.DOWN, sd] = 1 - randomness
-
-                P[s, self.RIGHT, s] += randomness/4
-                P[s, self.RIGHT, sl] += randomness/4
-                P[s, self.RIGHT, su] += randomness/4
-                P[s, self.RIGHT, sd] += randomness/4
-
-                P[s, self.LEFT, s] += randomness/4
-                P[s, self.LEFT, sr] += randomness/4
-                P[s, self.LEFT, su] += randomness/4
-                P[s, self.LEFT, sd] += randomness/4
-
-                P[s, self.UP, s] += randomness/4
-                P[s, self.UP, sr] += randomness/4
-                P[s, self.UP, sl] += randomness/4
-                P[s, self.UP, sd] += randomness/4
-
-                P[s, self.DOWN, s] += randomness/4
-                P[s, self.DOWN, sr] += randomness/4
-                P[s, self.DOWN, sl] += randomness/4
-                P[s, self.DOWN, su] += randomness/4
+                P[s, self.UP] = su
+                P[s, self.DOWN] = sd
+                P[s, self.LEFT] = sl
+                P[s, self.RIGHT] = sr
 
 
         ## The terminal state
         for a in range(n_actions):
-            P[n_states - 1, a, :] = 0
-            P[n_states - 1, a, n_states - 1] = 1
+            P[n_states - 1, a] =  n_states - 1
             R[n_states - 1, a] = 0
 
             
-        # the hole gets you to the terminal state with -100
+        # the hole gets you to the terminal state with r=-10
         s = self.get_state(hole_x, hole_y)
         for a in range(n_actions):
-            P[s, a, :] = 0
-            P[s, a, n_states - 1] = 1
+            P[s, a] = n_states - 1
             R[s,a] = r_hole
-
-        # the goal gets you to the terminal state with + 1
-        s = self.get_state(goal_x, goal_y)
-        for a in range(n_actions):
-            P[s, a, :] = 0
-            P[s, a, n_states - 1] = 1
-            R[s,a] = r_goal
             
 
-  def render(self):
-    for y in range(self.height):
-      for x in range(self.width):
-        if (self.maze[x, y] == self.WALL):
-          print("#", end="")
-        elif (self.maze[x,y] == self.GOAL):
-          print("X", end="")
-        elif (self.maze[x,y] == self.HOLE):
-          print("O", end="")
-        else:
-          print(".", end="")
-      print("")
-
+        # the goal gets you to the terminal state with r=+ 1
+        s = self.get_state(goal_x, goal_y)
+        for a in range(n_actions):
+            P[s, a] =  n_states - 1
+            R[s,a] = r_goal
 
         super().__init__(n_states, n_actions, P, R)
-        self.terminal_state = n_states - 1
         
 
     def reset(self):
@@ -171,17 +133,16 @@ class GridWorld(DiscreteMDP):
 
 # test
 
-
 def main():
     print("Testing")
     height = 4
     width = 4
-    environment = GridWorld(width, height, 0.2, 0)
+    environment = GridWorld(width, height, 0)
     environment.render()
 
-    from ValueIteration import value_iteration
+    from DynamicProgramming import dynamic_programming
     print("Calculating optimal policy")
-    policy, V, Q = value_iteration(environment, 100, 1)
+    policy, V, Q = dynamic_programming(environment, 100)
 
     print("Policy, ", policy)
     policy_string="^v<>"
@@ -202,4 +163,3 @@ def main():
 import sys
 if __name__ == '__main__':
     sys.exit(main())
-

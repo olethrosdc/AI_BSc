@@ -274,7 +274,7 @@ Each player chooses an action randomly, independently of one another:
 \pol(a, b) = \pol_1(a) \pol_2(b)
 \]
 $\pol_i$ is called a *mixed* strategy.
-*** Optimal strategies for zero-sum gamesx
+*** Optimal strategies for zero-sum games
 **** The value of a game
 The expected value of the game for the first player is
 \[
@@ -305,3 +305,8 @@ Linear programming is a constrained minimisation problem where the objective and
 \[
 \max\{v | (V \pi)_j \geq v \forall j, \sum_j \pi_{1,j} = 1, \pi_{1,j} \geq 0\}
 \]
+
+* Two-player general sum games
+** Normal-form games
+*** Normal-form games
+

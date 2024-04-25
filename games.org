@@ -1,0 +1,307 @@
+#+TITLE: Multi-Agent Systems
+#+AUTHOR: Christos Dimitrakakis
+#+EMAIL:christos.dimitrakakis@unine.ch
+#+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
+#+LaTeX_HEADER: \usepackage{tikz}
+#+LaTeX_HEADER: \usepackage{amsmath}
+#+LaTeX_HEADER: \usepackage{amssymb}
+#+LaTeX_HEADER: \usepackage{isomath}
+#+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
+#+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmax}{arg\,max}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmin}{arg\,min}
+#+LaTeX_HEADER: \DeclareMathOperator*{\sgn}{sgn}
+#+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
+#+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
+#+LaTeX_HEADER: \newcommand \Param {\Theta}
+#+LaTeX_HEADER: \newcommand \param {\theta}
+#+LaTeX_HEADER: \newcommand \vparam {\vectorsym{\theta}}
+#+LaTeX_HEADER: \newcommand \mparam {\matrixsym{\Theta}}
+#+LaTeX_HEADER: \newcommand \bW {\matrixsym{W}}
+#+LaTeX_HEADER: \newcommand \bw {\vectorsym{w}}
+#+LaTeX_HEADER: \newcommand \wi {\vectorsym{w}_i}
+#+LaTeX_HEADER: \newcommand \wij {w_{i,j}}
+#+LaTeX_HEADER: \newcommand \bA {\matrixsym{A}}
+#+LaTeX_HEADER: \newcommand \bR {\matrixsym{R}}
+#+LaTeX_HEADER: \newcommand \bp {\vectorsym{\pi}}
+#+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
+#+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
+#+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
+#+LaTeX_HEADER: \newcommand \cset[2] {\left\{#1 ~\middle|~ #2 \right\}}
+#+LaTeX_HEADER: \newcommand \pol {\pi}
+#+LaTeX_HEADER: \newcommand \Pols {\Pi}
+#+LaTeX_HEADER: \newcommand \mdp {\mu}
+#+LaTeX_HEADER: \newcommand \MDPs {\mathcal{M}}
+#+LaTeX_HEADER: \newcommand \bel {\beta}
+#+LaTeX_HEADER: \newcommand \Bels {\mathcal{B}}
+#+LaTeX_HEADER: \newcommand \Unif {\textrm{Unif}}
+#+LaTeX_HEADER: \newcommand \Ber {\textrm{Bernoulli}}
+#+LaTeX_HEADER: \newcommand \Mult {\textrm{Mult}}
+#+LaTeX_HEADER: \newcommand \Beta {\textrm{Beta}}
+#+LaTeX_HEADER: \newcommand \Dir {\textrm{Dir}}
+#+LaTeX_HEADER: \newcommand \Normal {\textrm{Normal}}
+#+LaTeX_HEADER: \newcommand \Simplex {\mathbb{\Delta}}
+#+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
+#+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
+#+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
+#+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
+#+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
+#+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
+#+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_CLASS_OPTIONS: [smaller]
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+TAGS: activity advanced definition exercise homework project example theory code
+#+OPTIONS:   H:3
+
+* Multi-Agent Systems
+** Introduction
+*** Multi-agent decision making
+- *Two* versus $n$-player games
+- *Co-operative* games
+- *Zero-sum* games
+- General-sum games
+- *Stochastic* games
+- Partial information games
+
+*** Rock/Paper/Scissors
+- Number of players: 2
+- Zero-sum
+- Deterministic
+- Simultaneous move
+
+*** Chess/Go/Checkers/Othello
+- Number of players: 2
+- Zero-sum
+- Deterministic, 
+- Alternating, Full information
+
+*** Backgammon
+- Number of players: 2
+- Zero-sum
+- Stochastic
+- Alernating, Full information
+
+*** Poker/Blackjack
+- Number of players: $n$
+- Zero-sum
+- Stochastic
+- Alternating, Partial information
+
+*** Doom/Quake/CoD
+- Number of players: $n$
+- Zero-sum
+- Stochastic
+- Simultaneous, Partial information
+
+*** Auctions
+- Number of players: $n$
+- General sum
+- Deterministic
+- Simultaneous move
+
+** Humans and AI
+*** Human preferences
+- These are typically unknown
+- They might not be expressible in mathematical form
+- Nevertheless, we make the utility assumption
+*** AI preferences
+- These are typically known
+*** Human-AI examples
+** Game representations
+*** Normal form
+
+In the table below, we see how much reward each player obtains for every combination of actions
+| $\rho_1, \rho_2$ | b = 0 | b = 1 |
+|------------------+-------+-------|
+| /                | <     | <     |
+| a = 0            | 2, 1  | 4, 0  |
+|------------------+-------+-------|
+| a = 1            | 1, 0  | 3, 1  |
+
+In the normal-form setting, we assume that each player is playing without seeing the move of the other player. This is the *simultaneous* move setting
+
+However, we can also look at *commitment* or *Stackleberg* games, where one player plays before the other.
+
+*** Simultaneous moves
+
+
+| $\rho_1, \rho_2$ | b = 0 | b = 1 |
+|------------------+-------+-------|
+| /                | <     | <     |
+| a = 0            | 2, 1  | 4, 0  |
+|------------------+-------+-------|
+| a = 1            | 1, 0  | 3, 1  |
+
+- $a = 0$ is a *strictly dominant* strategy. Given any $b$, it is strictly better to play $a = 0$, i.e.
+\[
+\rho_1(0, b) > \rho_1(1, b)
+\]
+- How much reward can $a$ obtain?
+- Does $b$ have a dominant strategy?
+- Does this take into account what $b$ likes?
+
+*** Commitment
+
+Let us see what happens when one player *commits* to a move
+| $\rho_1, \rho_2$ | b = 0 | b = 1 |
+|------------------+-------+-------|
+| /                | <     | <     |
+| a = 0            | 2, 1  | 4, 0  |
+|------------------+-------+-------|
+| a = 1            | 1, 0  | 3, 1  |
+
+**** Player $a$ is first
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :BEAMER_env: block
+    :END:
+- What should $b$ play?
+- What is $a$'s best move?
+
+\begin{tikzpicture}[level 1/.style={sibling distance=8em},
+   level 2/.style={sibling distance=4em},
+   level 3/.style={sibling distance=2em}]
+   \node[select]{$a$}
+   child {node[select] {$b$}
+     child {node[RV] {2,1} edge from parent node[left] {0}}	
+     child {node[RV] {4,0} edge from parent node[right] {1}}
+     edge from parent
+     node[left] {0}
+   }     	    
+   child {node[select] {$b$}
+     child {node[RV] {1,0} edge from parent node[left] {0}}	
+     child {node[RV] {3,1} edge from parent node[right] {1}}
+     edge from parent
+     node[right] {1}
+   }     	    
+\end{tikzpicture}
+
+
+
+**** Player $b$ is first
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :BEAMER_env: block
+    :END:
+- What should $a$ play in each case?
+\begin{tikzpicture}[level 1/.style={sibling distance=8em},
+   level 2/.style={sibling distance=4em},
+   level 3/.style={sibling distance=2em}]
+   \node[select]{$b$}
+   child {node[select] {$a$}
+     child {node[RV] {2,1} edge from parent node[left] {0}}	
+     child {node[RV] {1,0} edge from parent node[right] {1}}
+     edge from parent
+     node[left] {0}
+   }     	    
+   child {node[select] {$a$}
+     child {node[RV] {1,0} edge from parent node[left] {0}}	
+     child {node[RV] {3,1} edge from parent node[right] {1}}
+     edge from parent
+     node[right] {1}
+   }     	    
+\end{tikzpicture}
+
+
+* Team games
+** Team games
+*** Fully collaborative games
+In team games, $\rho_i = \rho_j$ for all players $i,j$.
+
+* Two-Player zero-sum Games
+*** One-shot alternating move 2-player games
+- Player 1 plays $a$
+- Player 2 plays $b$
+- Player 1 obtains $\rho_1(a, b)$
+- Player 2 obtains $\rho_2(a, b)$
+
+
+*** Extensive-form alternating-move games
+- At time $t$:
+- The state is $s_t$, players receive rewards $\rho(s_t), -\rho(s_t)$
+- Player chooses action $a_t$, which is revealed.
+- The state changes to $s_{t+1}$, and is revealed.
+- Players receive reward $\rho(s_{t+1}), -\rho(s_{t+1})$
+- Player chooses action $b_{t+1}$.
+- The state changes to $s_{t+2}$.
+- Player $a$ receives $\rho(s_t)$ and $b$ receives $-\rho(s_t)$.
+The utility for player $a$ is 
+\[
+U^{1} = \sum_t \rho(s_t),
+\]
+while for $b$ it is
+\[
+U^{2} = -\sum_t \rho(s_t)
+\]
+*** Backwards induction for Alternating Zero Sum Games
+Let *$\pi_1$* and *$\pi_2$* be the policies of *each* player and *$\pi$* the *joint* policy.
+**** The value function of a policy $\pi = (\pi_1, \pi_2)$
+For the utility of player 1, we get:
+\begin{align}
+V^{1,\pol}_t(s) 
+&\defn \E_\pi [U^{1}_t \mid s_t = s]
+= \rho(s) + \E[U^{1}_{t+1} \mid s_t = s]\\
+&= \rho(s) + \sum_a \pol(a \mid s) \sum_{j} V^{1,\pi}_{t+1}(j) P(j\mid s, a)\\
+V^{1,\pol}_{t+1}(j) 
+&= \rho(j) + \sum_b \pol(b \mid j)  \sum_{j} V^{1,\pi}_{t+2}(j) P(k \mid j, b)
+\end{align}
+
+We can define the optimal value function analogously to MDPs, but 
+player 2 is minimising 
+\begin{align}
+V^{1,*}_t(s) 
+&= \max_{\pi_1} \min_{\pi_2} \E_\pi [U^{+}_t \mid s_t = s]\\
+&= \rho(s) + \max_a \sum_{j} V^{1,*}_{t+1}(j) P(j\mid s, a)\\
+V^{1,*}_{t+1}(j) 
+&= \rho(j) + \min_b  \sum_{j} V^{1,*}_{t+1}(j) P(k \mid j, b)
+\end{align}
+The above recursion can be used to calculate the minimax value function.
+
+*** Normal-form simultaneous-move zero-sum games
+(Also called *minimax* games)
+- Player $a$ chooses action $a$ in secret.
+- Player $b$ chooses action $b$ in secret.
+- Players observe both actions
+- Player $a$ receives $\rho(a,b)$, and $b$ receives $-\rho(a,b)$. 
+
+**** Mixed strategies
+Each player chooses an action randomly, independently of one another:
+\[
+\pol(a, b) = \pol_1(a) \pol_2(b)
+\]
+$\pol_i$ is called a *mixed* strategy.
+*** Optimal strategies for zero-sum gamesx
+**** The value of a game
+The expected value of the game for the first player is
+\[
+V(\pol_1, \pol_2) \defn \sum_{a,b} \pol_1(a) \rho(a, b) \pol_2(b) = \bp_1^\top \bR \bp_2,
+\]
+where $\bp_i$ is the vector form representation of $i$'s strategy.
+**** The value of the game
+Any zero-sum game has at least one solution $\pol^*$ over mixed strategies so that
+\[
+U(\pol^*_1, \pol^*_2)
+= \max_{\pol_1} \min_{\pol_2} U(\pol_1, \pol_2)
+= \min_{\pol_2} \max_{\pol_1}  U(\pol_1, \pol_2)
+\]
+The problem can be solved through *linear programming*
+
+The idea is to set find a policy corresponding to the greatest lower bound (or lowest upper bound) on the value.
+
+*** The linear programming problem
+Linear programming is a constrained minimisation problem where the objective and the constraints are both linear.
+\begin{align*}
+\min_x~ & \theta^\top x\\
+\textrm{s.t.~} & c^\top x \geq 0.
+\end{align*}
+
+
+*** Formulating it as a linear problem
+**** Primal 
+\[
+\max\{v | (V \pi)_j \geq v \forall j, \sum_j \pi_{1,j} = 1, \pi_{1,j} \geq 0\}
+\]

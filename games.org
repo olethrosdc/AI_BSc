@@ -115,7 +115,7 @@
 *** Normal form
 
 In the table below, we see how much reward each player obtains for every combination of actions
-| $\rho_1, \rho_2$ | b = 0 | b = 1 |
+| $\rho^1, \rho^2$ | b = 0 | b = 1 |
 |------------------+-------+-------|
 | /                | <     | <     |
 | a = 0            | 2, 1  | 4, 0  |
@@ -129,7 +129,7 @@ However, we can also look at *commitment* or *Stackleberg* games, where one play
 *** Simultaneous moves
 
 
-| $\rho_1, \rho_2$ | b = 0 | b = 1 |
+| $\rho^1, \rho^2$ | b = 0 | b = 1 |
 |------------------+-------+-------|
 | /                | <     | <     |
 | a = 0            | 2, 1  | 4, 0  |
@@ -138,7 +138,7 @@ However, we can also look at *commitment* or *Stackleberg* games, where one play
 
 - $a = 0$ is a *strictly dominant* strategy. Given any $b$, it is strictly better to play $a = 0$, i.e.
 \[
-\rho_1(0, b) > \rho_1(1, b)
+\rho^1(0, b) > \rho^1(1, b)
 \]
 - How much reward can $a$ obtain?
 - Does $b$ have a dominant strategy?
@@ -147,7 +147,7 @@ However, we can also look at *commitment* or *Stackleberg* games, where one play
 *** Commitment
 
 Let us see what happens when one player *commits* to a move
-| $\rho_1, \rho_2$ | b = 0 | b = 1 |
+| $\rho^1, \rho^2$ | b = 0 | b = 1 |
 |------------------+-------+-------|
 | /                | <     | <     |
 | a = 0            | 2, 1  | 4, 0  |
@@ -171,13 +171,13 @@ Let us see what happens when one player *commits* to a move
      child {node[RV] {4,0} edge from parent node[right] {1}}
      edge from parent
      node[left] {0}
-   }     	    
+   };     	    
    child {node[select] {$b$}
      child {node[RV] {1,0} edge from parent node[left] {0}}	
      child {node[RV] {3,1} edge from parent node[right] {1}}
      edge from parent
      node[right] {1}
-   }     	    
+   };     	    
 \end{tikzpicture}
 
 
@@ -197,30 +197,30 @@ Let us see what happens when one player *commits* to a move
      child {node[RV] {1,0} edge from parent node[right] {1}}
      edge from parent
      node[left] {0}
-   }     	    
+   };     	    
    child {node[select] {$a$}
      child {node[RV] {1,0} edge from parent node[left] {0}}	
      child {node[RV] {3,1} edge from parent node[right] {1}}
      edge from parent
      node[right] {1}
-   }     	    
+   };    	    
 \end{tikzpicture}
 
 
 * Team games
 ** Team games
 *** Fully collaborative games
-In team games, $\rho_i = \rho_j$ for all players $i,j$.
+In team games, $\rho^i = \rho^j$ for all players $i,j$.
 
 * Two-Player zero-sum Games
 *** One-shot alternating move 2-player games
 - Player 1 plays $a$
 - Player 2 plays $b$
-- Player 1 obtains $\rho_1(a, b)$
-- Player 2 obtains $\rho_2(a, b)$
+- Player 1 obtains $\rho^1(a, b)$
+- Player 2 obtains $\rho^2(a, b)$
 
 
-*** Extensive-form alternating-move games
+*** Extensive-form alternating-move zero sum games
 - At time $t$:
 - The state is $s_t$, players receive rewards $\rho(s_t), -\rho(s_t)$
 - Player chooses action $a_t$, which is revealed.
@@ -306,7 +306,40 @@ Linear programming is a constrained minimisation problem where the objective and
 \max\{v | (V \pi)_j \geq v \forall j, \sum_j \pi_{1,j} = 1, \pi_{1,j} \geq 0\}
 \]
 
-* Two-player general sum games
+* General sum games
 ** Normal-form games
-*** Normal-form games
+*** Normal-form general sum games
+Ech player
+** Extensive-form games
+*** Extensive-form general sum games
+- At time $t$:
+- The state is $s_t$, players receive rewards $\rho^i(s_t)$.
+- Player $i = I(s_t)$ chooses an action.
+- The state changes to $s_{t+1}$, and is revealed.
+The utility for each player is
+\[
+U^{i} = \sum_t \rho^i(s_t)
+\]
+
+*** Backwards induction for Alternating General Sum Games
+Let *$\pi_i$* be the policy of the \(i\)-th player and *$\pi$* the *joint* policy.
+**** The value function of a policy $\pi = (\pi_i)_{i=1}^n$
+For any player $i$, we can define their value at time $t$ as:
+\begin{align}
+V^{i,\pol}_t(s) 
+&\defn \E_\pi [U^{i}_t \mid s_t = s]\\
+&= \rho^i(s) + \sum_{a \in A} \pol_{I(s)}(a \mid s) \sum_{j} V^{1,\pi}_{t+1}(j) P(j\mid s, a)
+\end{align}
+
+**** Optimal policies
+For *perfect information* games, we can use this recursion:
+\begin{align}
+a^*_t(s) &= 
+ \argmax_{a \in A} 
+ \sum_{j} V^{I(s),*}_{t+1}(j)P(j\mid s, a)\\
+V^{i,*}_t &=  \rho^i(s) +  \sum_{j} V^{i,\pi}_{t+1}(j) P(j\mid s, a^*_t(s)) &&\forall i
+\end{align}
+This ensures that we update the values of *all players* at each step.
+
+
 

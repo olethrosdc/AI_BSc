@@ -309,7 +309,39 @@ Linear programming is a constrained minimisation problem where the objective and
 * General sum games
 ** Normal-form games
 *** Normal-form general sum games
-Ech player
+Each player moves at the same time
+*** Example: Chicken
+| $\rho^1, \rho^2$ | turn  | dare |
+|------------------+-------+----------|
+| /                | <     | <        |
+| turn             | 0, 0  | -5, -1   |
+|------------------+-------+----------|
+| dare             | 1, -5 | -10, -10 |
+
+*** Example: Prisoner's dilemma
+| $\rho^1, \rho^2$ | cooperate | defect   |
+|------------------+-----------+----------|
+| /                | <         | <        |
+| cooperate        | 0, 0      | -5, -1   |
+|------------------+-----------+----------|
+| defect           | 1, -5     | -10, -10 |
+
+
+
+*** Example: penalty shot
+| $\rho^1, \rho^2$ | kick left | kick right |
+|------------------+-----------+------------|
+| /                | <         | <          |
+| dive left        | 1, -1     | -1, 1      |
+|------------------+-----------+------------|
+| dive right       | -1 1      | 1, -1      |
+
+
+*** 
+*** Nash equilibria
+
+*** Computing Nash equlibria
+
 ** Extensive-form games
 *** Extensive-form general sum games
 - At time $t$:

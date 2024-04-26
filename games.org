@@ -171,7 +171,7 @@ Let us see what happens when one player *commits* to a move
      child {node[RV] {4,0} edge from parent node[right] {1}}
      edge from parent
      node[left] {0}
-   };     	    
+   }    	    
    child {node[select] {$b$}
      child {node[RV] {1,0} edge from parent node[left] {0}}	
      child {node[RV] {3,1} edge from parent node[right] {1}}
@@ -197,7 +197,7 @@ Let us see what happens when one player *commits* to a move
      child {node[RV] {1,0} edge from parent node[right] {1}}
      edge from parent
      node[left] {0}
-   };     	    
+   }     	    
    child {node[select] {$a$}
      child {node[RV] {1,0} edge from parent node[left] {0}}	
      child {node[RV] {3,1} edge from parent node[right] {1}}

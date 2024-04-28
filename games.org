@@ -122,12 +122,13 @@ In the table below, we see how much reward each player obtains for every combina
 |------------------+-------+-------|
 | a = 1            | 1, 0  | 3, 1  |
 
-In the normal-form setting, we assume that each player is playing without seeing the move of the other player. This is the *simultaneous* move setting
-
-However, we can also look at *commitment* or *Stackleberg* games, where one player plays before the other.
-
-*** Simultaneous moves
-
+**** Simultaneous moves
+We assume that each player is playing without seeing the move of the other player. 
+**** Commitment
+However, we can also look at *commitment* or *Stackleberg* games, where one player either /commits/ to playing a move, or plays before the other player.
+**** Information structure
+For other types of move sequencing, we have to encode the information structure of a game as a graph.
+*** Basic concepts in normal form games
 
 | $\rho^1, \rho^2$ | b = 0 | b = 1 |
 |------------------+-------+-------|
@@ -136,13 +137,17 @@ However, we can also look at *commitment* or *Stackleberg* games, where one play
 |------------------+-------+-------|
 | a = 1            | 1, 0  | 3, 1  |
 
-- $a = 0$ is a *strictly dominant* strategy. Given any $b$, it is strictly better to play $a = 0$, i.e.
-\[
-\rho^1(0, b) > \rho^1(1, b)
-\]
+**** Domination and best response
+- $b = 1$ is a *best response* to $a = 1$, i.e. $\rho^2(1,1) > \rho^2(1,0)$
+  \]
+- $a = 0$ is a *strictly dominant* strategy. Given any $b$, it is strictly better to play $a = 0$, i.e. $\rho^1(0, b) > \rho^1(1, b)$.
+- If a pair $(a,b)$ is /not dominated/, then it is *Pareto*-efficient.
+  
+**** Questions
 - How much reward can $a$ obtain?
 - Does $b$ have a dominant strategy?
 - Does this take into account what $b$ likes?
+
 
 *** Commitment
 
@@ -292,19 +297,30 @@ The problem can be solved through *linear programming*
 
 The idea is to set find a policy corresponding to the greatest lower bound (or lowest upper bound) on the value.
 
-*** The linear programming problem
-Linear programming is a constrained minimisation problem where the objective and the constraints are both linear.
+*** Linear programming solution for ZSG
+****  linear programming problem
+This is an optimisation problem with linear objective and constraints. In *canonical form* it is written as:
 \begin{align*}
-\min_x~ & \theta^\top x\\
+\min_x~ & \theta^\top x,&
 \textrm{s.t.~} & c^\top x \geq 0.
 \end{align*}
 
+**** Primal formulation
+Find the higest lower bound for player 1
+\begin{align*}
+\max_v~&v,& 
+\textrm{s.t.~} &(\bR \bp_2)_j \geq v ~ \forall j, ~\sum_j \pi_{2}(j) = 1, \pi_{2}(j) \geq 0
+\end{align*}
 
-*** Formulating it as a linear problem
-**** Primal 
-\[
-\max\{v | (V \pi)_j \geq v \forall j, \sum_j \pi_{1,j} = 1, \pi_{1,j} \geq 0\}
-\]
+**** Dual formulation
+Find the lowest upper bound for player 2
+\begin{align*}
+\min_v~&v,& 
+\textrm{s.t.~} &(\bp_1^\top \bR)_j \leq v ~ \forall j, ~\sum_j \pi_{1}(j) = 1, \pi_{1}(j) \geq 0
+\end{align*}
+
+
+
 
 * General sum games
 ** Normal-form games
@@ -341,6 +357,7 @@ Each player moves at the same time
 *** Nash equilibria
 
 *** Computing Nash equlibria
+[[./figures/Pareto.pdf]]
 
 ** Extensive-form games
 *** Extensive-form general sum games

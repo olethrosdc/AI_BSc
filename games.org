@@ -353,11 +353,12 @@ Each player moves at the same time
 | dive right       | -1 1      | 1, -1      |
 
 
-*** 
-*** Nash equilibria
-
-*** Computing Nash equlibria
+*** Pareto-Optimality
 [[./figures/Pareto.pdf]]
+*** Nash equilibria
+*** Computing Nash equlibria
+
+
 
 ** Extensive-form games
 *** Extensive-form general sum games

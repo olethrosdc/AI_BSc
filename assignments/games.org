@@ -80,4 +80,6 @@ $\rho_i(a) \geq \rho_i(a, -i)$.
 
 * Exercise 4
 
+Consider the following alternating minimax game, i.e. where each player moves in term.
+At the first stage, P1 moves, then P2 moves, and then the game ends.
 

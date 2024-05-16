@@ -162,7 +162,7 @@ Artificial Intelligence: a Modern Approach, 4th Edition
 - $\E$: expectation
 - $\pol \in \Pols$: policies, or algorithms.
 - $\mdp \in \MDPs$: models
-- $\param \in \Params$: parameters (i.e. models parameterised by vectors in $\Reals^d$)
+- $\param \in \Param$: parameters (i.e. models parameterised by vectors in $\Reals^d$)
 - $u$: utility
 - $c$: cost / constraints
 - $s  \in S$: state
@@ -272,7 +272,7 @@ Detailed grading
 | 4.18 | Markov decision processes                                         |
 | 4.25 | Markov games                                                      |
 | 5.02 | Simultaneous games                                                |
-| 5.16 | Prediction with expert advice                                     |
+| 5.16 | Gradient methods                                                  |
 | 5.23 | Fairness and privacy                                              |
 | 5.30 | Project presentations                                             |
 |------+-------------------------------------------------------------------|

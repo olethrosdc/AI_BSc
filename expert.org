@@ -56,10 +56,29 @@
 #+OPTIONS:   H:2
 
 * Online learning
-** Online learning
+** Prediction with expert advice
 *** Setting
 - For $t = 1, \ldots, T$
 - Agent selects $\pi_t \in \Simplex^K$
 - Nature selects $r_t \in [0,1]^K$
 - Agent obtains utility  \[\E[r \mid \pi_t] = \sum_a \pi_t(a) r_{t,a}\]
-** Follow the leader
+*** Example: prediction with expert advice
+- At step $t$
+- Each expert $i$ gives a suggestion $s_{t,i}$
+- The agent chooses $\pi_t$
+- An outcome $y_t$ is revealed
+- Each expert's obtains $r_{t,i} = \rho(s_{t,i}, y_t)$
+- The agent obtains $r_t = \rho(\pi_t, y_t)$
+** Weighted average prediction
+*** Expert advice
+The following weighted average strategy:
+\[
+\pi_t =
+\frac{\sum_{i=1}^N \exp(\eta_{t-1} R_{t-1, i} s_{t,i}) s_{t,i}}
+{\sum_{i=1}^N \exp(\eta_{t-1} R_{t-1, i} s_{t,i})}
+\]
+*** Randomised prediction
+Regret
+\[
+x
+\]

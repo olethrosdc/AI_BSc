@@ -272,9 +272,9 @@ Detailed grading
 | 4.18 | Markov decision processes                                         |
 | 4.25 | Markov games                                                      |
 | 5.02 | Simultaneous games                                                |
-| 5.16 | Gradient methods                                                  |
-| 5.23 | Fairness and privacy                                              |
-| 5.30 | Project presentations                                             |
+| 5.16 | Project discussion                                                |
+| 5.23 | Mock exam                                                         |
+| 5.30 | Project discussion                                                |
 |------+-------------------------------------------------------------------|
 
 

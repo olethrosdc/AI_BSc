@@ -1,0 +1,122 @@
+
+* General
+
+1. The problem is partially observable because the robot only has obstacle sensors and does not necessarily know its exact location, or how much dirt there is on the floor.
+2. The state is the robot's battery status, the amount of dirt it has, its position, the amount of dirt on the floor, and the location of any obstacles. 
+3. The problem is not a simple search problem because the state is not observed. However, there are no other agents acting while the robot is cleaning. It is thus a partially observable MDP. 
+4. A small reward obtained for whenever the amount of dirt it has collected increased and a negative reward for whenever the battery is low and it is not at the charging station.
+
+
+* Search
+
+(A) Specific algorithms.
+
+1. Starting from 0, it finds 1, then 2, then 3, then 4 for a total of 5.
+2. It opens 0->1, 0->3, 1->2 then 3->4. So it finds 0->3->4 for 6.
+3. 0->3, 3->4 for a total of 6.
+
+(B) The optimal path.
+
+This is 0->1->2->4 for a total of 7
+
+To find the optimal path, we must not let the algorithms stop after the first path to the goal has been found. Indeed, we must continue search all paths, until we are sure that no remaining path could be better than the ones found so far. 
+
+* Logic
+
+Since these are necessary conditions, $Y$ is true only if $A \wedge S \wedge N$ is true. We can then write
+\[
+Y \Rightarrow S \wedge A \wedge N.
+\]
+An alternative way to write this formula is 
+\[
+\neg S \vee \neg A \vee \neg N \Rightarrow \neg Y
+\]
+
+We can verify that both these statements are always true.
+
+* Probability
+
+From Bayes's theorem, we have:
+\[
+P(B | A) = P(A | B) P(B) / P(A)
+\]
+\[
+P(A) = P(A | B) P(B) + P(A | \neg B) P(\neg B)
+\]
+Let
+- $A$: a positive test
+- $B$: the sample contained DNA from the defendant.
+
+We only know $P(A  | \neg B) = 10^{-6}$, the probability that we have a positive test if the sample contained DNA from the defendant.
+
+We also need the probability $P(B)$, and $P(A | B)$. We can assume that $P(A | B) = 1$, but $P(B)$ is unknown. Let $p = P(B)$. Then
+\[
+P(B | A) = p / (p + 10^{-6}(1-p)).
+\]
+The problem is that, if the defendant was simply picked randomly from a population of say, 1 million people, then $p = 10^{-6}$.
+
+* Expected utility theory
+
+
+#+NAME: No downside
+|--------+--------+-------+--------|
+| Action | -1 CHF | 1 CHF | 10 CHF |
+|--------+--------+-------+--------|
+| A      |    90% |    9% |     1% |
+| B      |    10% |   90% |     0% |
+|--------+--------+-------+--------|
+
+\[
+\E[U | A] = \sum_\omega P(\omega \mid A) U(\omega)
+\]
+So 
+\[
+\E[U | A] = 0.9 U(-1) + 0.09 U(1) + 0.1 U(10)
+\]
+while
+\[
+\E[U | B] = 0.1 U(-1) + 0.9 U(1)
+\]
+
+For case 1:
+\[
+\E[U | A] = - 0.9 + 0.09 + 1 = 0.19
+\]
+while
+\[
+\E[U | B] = - 0.1 + 0.9 = 0.8
+\]
+so we prefer B.
+
+For case 2:
+\[
+\E[U | A] = 0.9 2^{-1} + 0.09 \times 2 + 0.1 \times 2^{10} = 0.45 + 0.18 + 102.4
+\]
+while
+\[
+\E[U | B] = 0.1 2^{-1} + 0.9 \times 2 =  0.05 + 0.45
+\]
+So we prefer A
+
+
+* Markov decision processes
+
+The top action has value 1+ 0.6, and the bottom 0.8. So we prefer the top one.
+
+* Game theory
+
+If P1 plays first then $b_1$ is a best response to $a_1$ so
+\[
+\rho_2(a_1, b_1) \geq \rho_2(a_1, b)
+\]
+If P2 plays first then $a_2$ is a best response to $b_2$ so
+\[
+\rho_1(a_2, b_2) \geq \rho_1(a, b_2)
+\]
+But since $a_1 = a_2$ and $b_1 = b_2$ then
+\[
+\rho_1(a_1, b_1) \geq \rho_1(a, b_1)
+\]
+So $a_1, b_1$ are a pure Nash equilibrium.
+
+

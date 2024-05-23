@@ -62,15 +62,15 @@ The problem is that, if the defendant was simply picked randomly from a populati
 |--------+--------+-------+--------|
 
 
-$\E[U | A] = \sum_\omega P(\omega \mid A) U(\omega)$
+$E[U | A] = \sum_\omega P(\omega \mid A) U(\omega)$
 
 So 
 
-$\E[U | A] = 0.9 U(-1) + 0.09 U(1) + 0.1 U(10)$
+$E[U | A] = 0.9 U(-1) + 0.09 U(1) + 0.1 U(10)$
 
 while
 
-$\E[U | B] = 0.1 U(-1) + 0.9 U(1)$
+$E[U | B] = 0.1 U(-1) + 0.9 U(1)$
 
 For case 1:
 
@@ -78,15 +78,15 @@ $E[U | A] = - 0.9 + 0.09 + 1 = 0.19$
 
 while
 
-$\E[U | B] = - 0.1 + 0.9 = 0.8$
+$E[U | B] = - 0.1 + 0.9 = 0.8$
 so we prefer B.
 
 For case 2:
 
-$\E[U | A] = 0.9 2^{-1} + 0.09 \times 2 + 0.1 \times 2^{10} = 0.45 + 0.18 + 102.4$
+$E[U | A] = 0.9 2^{-1} + 0.09 \times 2 + 0.1 \times 2^{10} = 0.45 + 0.18 + 102.4$
 
 while
-$\E[U | B] = 0.1 2^{-1} + 0.9 \times 2 =  0.05 + 0.45$
+$E[U | B] = 0.1 2^{-1} + 0.9 \times 2 =  0.05 + 0.45$
 
 So we prefer A
 

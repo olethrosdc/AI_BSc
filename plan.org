@@ -249,7 +249,7 @@ Detailed grading
 5. When dealing with data relating to humans, ethical issues are not discussed.
 6. There is no mention of methods beyond the source material or independent thinking.
 
-*** F (<3)
+*** F (<=3.5)
 
 1. The report does not adequately explain their work.
 2. There is very little discussion and major parts of the analysis are technically incorrect, or there are errors in the implementation.
@@ -258,6 +258,11 @@ Detailed grading
 5. When applicable: Ethical issues are not mentioned.
 6. There is no mention of methods beyond the source material or independent thinking.
 
+
+** Examination and grading
+
+You must have sufficient grade in both the exam and the project for passing. 
+If you get an F in either the exam or the project, the course is failed and you must repeat it.
 
 ** Schedule
 

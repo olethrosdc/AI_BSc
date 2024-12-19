@@ -1,0 +1,49 @@
+\usepackage{algorithm,algorithmic}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{isomath}
+\newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
+\newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
+\newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
+\newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
+\renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\sgn}{sgn}
+\newcommand \defn {\mathrel{\triangleq}}
+\newcommand \Reals {\mathbb{R}}
+\newcommand \Param {\Theta}
+\newcommand \param {\theta}
+\newcommand \vparam {\vectorsym{\theta}}
+\newcommand \mparam {\matrixsym{\Theta}}
+\newcommand \bW {\matrixsym{W}}
+\newcommand \bw {\vectorsym{w}}
+\newcommand \wi {\vectorsym{w}_i}
+\newcommand \wij {w_{i,j}}
+\newcommand \bA {\matrixsym{A}}
+\newcommand \ai {\vectorsym{a}_i}
+\newcommand \aij {a_{i,j}}
+\newcommand \bx {\vectorsym{x}}
+\newcommand \cset[2] {\left\{#1 ~\middle|~ #2 \right\}}
+\newcommand \pol {\pi}
+\newcommand \Pols {\Pi}
+\newcommand \mdp {\mu}
+\newcommand \MDPs {\mathcal{M}}
+\newcommand \bel {\beta}
+\newcommand \Bels {\mathcal{B}}
+\newcommand \Unif {\textrm{Unif}}
+\newcommand \Ber {\textrm{Bernoulli}}
+\newcommand \Mult {\textrm{Mult}}
+\newcommand \Beta {\textrm{Beta}}
+\newcommand \Dir {\textrm{Dir}}
+\newcommand \Normal {\textrm{Normal}}
+\newcommand \Simplex {\mathbb{\Delta}}
+\newcommand \pn {\param^{(n)}}
+\newcommand \pnn {\param^{(n+1)}}
+\newcommand \pnp {\param^{(n-1)}}
+\usetikzlibrary{shapes.geometric}
+\tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
+\tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+\tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
+\tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]

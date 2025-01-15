@@ -1,55 +1,7 @@
 #+TITLE: Artificial Intelligence
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
-#+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
-#+LaTeX_HEADER: \usepackage{tikz}
-#+LaTeX_HEADER: \usepackage{amsmath}
-#+LaTeX_HEADER: \usepackage{amssymb}
-#+LaTeX_HEADER: \usepackage{isomath}
-#+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
-#+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
-#+LaTeX_HEADER: \DeclareMathOperator*{\argmax}{arg\,max}
-#+LaTeX_HEADER: \DeclareMathOperator*{\argmin}{arg\,min}
-#+LaTeX_HEADER: \DeclareMathOperator*{\sgn}{sgn}
-#+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
-#+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
-#+LaTeX_HEADER: \newcommand \Param {\Theta}
-#+LaTeX_HEADER: \newcommand \param {\theta}
-#+LaTeX_HEADER: \newcommand \vparam {\vectorsym{\theta}}
-#+LaTeX_HEADER: \newcommand \mparam {\matrixsym{\Theta}}
-#+LaTeX_HEADER: \newcommand \bW {\matrixsym{W}}
-#+LaTeX_HEADER: \newcommand \bw {\vectorsym{w}}
-#+LaTeX_HEADER: \newcommand \wi {\vectorsym{w}_i}
-#+LaTeX_HEADER: \newcommand \wij {w_{i,j}}
-#+LaTeX_HEADER: \newcommand \bA {\matrixsym{A}}
-#+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
-#+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
-#+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
-#+LaTeX_HEADER: \newcommand \cset[2] {\left\{#1 ~\middle|~ #2 \right\}}
-#+LaTeX_HEADER: \newcommand \pol {\pi}
-#+LaTeX_HEADER: \newcommand \Pols {\Pi}
-#+LaTeX_HEADER: \newcommand \mdp {\mu}
-#+LaTeX_HEADER: \newcommand \MDPs {\mathcal{M}}
-#+LaTeX_HEADER: \newcommand \bel {\beta}
-#+LaTeX_HEADER: \newcommand \Bels {\mathcal{B}}
-#+LaTeX_HEADER: \newcommand \Unif {\textrm{Unif}}
-#+LaTeX_HEADER: \newcommand \Ber {\textrm{Bernoulli}}
-#+LaTeX_HEADER: \newcommand \Mult {\textrm{Mult}}
-#+LaTeX_HEADER: \newcommand \Beta {\textrm{Beta}}
-#+LaTeX_HEADER: \newcommand \Dir {\textrm{Dir}}
-#+LaTeX_HEADER: \newcommand \Normal {\textrm{Normal}}
-#+LaTeX_HEADER: \newcommand \Simplex {\mathbb{\Delta}}
-#+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
-#+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
-#+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
-#+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
-#+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
-#+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
-#+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
-#+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \include{preamble}
 #+LaTeX_CLASS_OPTIONS: [smaller]
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
@@ -80,76 +32,67 @@ slowly progress to the more complex ones.
 - There are some more detailed slides available for each lecture.
 *** Books and schedule
 Artificial Intelligence: Foundations of Computational Agents, 3rd Edition
-Artificial Intelligence: a Modern Approach, 4th Edition
+*Artificial Intelligence: a Modern Approach, 4th Edition*
 
-|--------+-----------------------------+---------------------------------+------------------------------------|
-| Module | Topics                      | AI:FoCA                         | AI: aMA                            |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      1 | - Preferences               | 1. AI and Agents                | 2.1. Agents and environments       |
-|        | - Utility                   | 1.2. Complexity                 | 2.2 Rationality                    |
-|        | - States                    | 1.3. Application domains        | 2.3. Environments                  |
-|        | - Actions                   | 1.4. Knowledge representation   | 2.4. Agents                        |
-|        | - Beliefs                   | 2. Architecture                 | 2.4.1 Programs                     |
-|        | - Fairness                  | 2.1. Control                    | 2.4.2-3 Reflex agents              |
-|        |                             | 2.2. Hierarchical control       | 2.4.4. Goals                       |
-|        |                             | 2.3. Moral machines             | 2.4.5. Utility                     |
-|        |                             |                                 | 2.4.6. Learning                    |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      2 | Depth-First Search          | 3. Search                       | 3.1 Problem-solving                |
-|        | Breadth-First Search        | 3.1. Search in graphs           | 3.2. Examples.                     |
-|        |                             |                                 | 3.3. Best-First search             |
-|        |                             |                                 | 3.4.1. Breadth-first               |
-|        |                             |                                 | 3.4.3. Depth-first search          |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      3 | Heuristic Search            | 3.2. Uninformed search          | 3.5.2. A*                          |
-|        | A* Search                   | 3.3. Heuristic search           | 3.6. Heuristic Functions           |
-|        |                             |                                 |                                    |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      4 | Dynamic Programming         |                                 | 3.4.2 Dijkstra                     |
-|        |                             | 3.4. Dynamic programming        |                                    |
-|        | Branch and bound            | 3.5. Branch and bound           |                                    |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      5 | Constraint programming      | 4. Reasoning with constraints   | 6. CSP                             |
-|        | Logical reasoning           | 4.1. Variables and Constraints  | 7. Logical Agents                  |
-|        |                             | 4.2. CSPs and Search            |                                    |
-|        |                             | 4.6. Local Search               |                                    |
-|        | Deterministic planning      | 4.8. Optimization               |                                    |
-|        |                             |                                 |                                    |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      6 | Uncertainty                 | 9. Reasoning with Uncertainty   | 12.1. Acting under uncertaint      |
-|        | Aleatory/Epistemic          | 9.1. Probability                | 12.2. Basic probability notation   |
-|        | Probability Theory          | 9.2. Independence               | 12.3. Inference                    |
-|        | Bayes Theorem               |                                 | 12.4. Independence                 |
-|        | Probabilistic inference     |                                 | 12.5. Bayes's theorem              |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      7 | Expected Utility Theory     | 12.1 Preferences and Utility    | 16.1. Beliefs and Desires          |
-|        |                             | 12.2 One-off decisions          | 16.2. utility theory               |
-|        |                             |                                 | 16.3. Utility functions            |
-|        |                             |                                 | 16.5. Decision networks            |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      8 | Markov Decision Processes   | 12.3 Sequential Decisions       | 17.1. Sequential decision problems |
-|        | Dynamic Programming         | 12.4 The value of information   | 17.2. Algorithms for MDPs          |
-|        |                             | 12.5 Decision processes         |                                    |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|      9 | Alternating Zero-Sum Games  | 14.1. Multi-agent framework     | 5.1. Game Theory                   |
-|        | Stochastic Zero-Sum Games   | 14.2. Representations of games  | 5.2. Zero-Sum Games                |
-|        | Linear programming          | 14.3. Perfect information games | 5.3. Alpha-Beta Search             |
-|        |                             |                                 | 5.5. Stochastic Games              |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|     10 | Belief networks             | 9.3. Belief Networks            | 13.1. Representing knowledge       |
-|        |                             | 9.4. Probabilistic Inference    | 13.2. Bayesian Networks            |
-|        |                             |                                 | 13.3. Exact inference in BNs       |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|     11 | Supervised learning         |                                 |                                    |
-|        | Learning as inference       |                                 |                                    |
-|        | Learning as optimisation    |                                 |                                    |
-|        | Stochastic gradient descent |                                 |                                    |
-|--------+-----------------------------+---------------------------------+------------------------------------|
-|     12 | Reinforcement learning      |                                 |                                    |
-|        | Bandit problems             |                                 |                                    |
-|        | Q-learning                  |                                 |                                    |
-|        | Stochastic approximation    |                                 |                                    |
-|--------+-----------------------------+---------------------------------+------------------------------------|
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+| Module | Topics                     | AI:FoCA                         | AI: aMA                            |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      1 | - Preferences              | 1. AI and Agents                | 2.1. Agents and environments       |   |
+|        | - Utility                  | 1.2. Complexity                 | 2.2 Rationality                    |   |
+|        | - States                   | 1.3. Application domains        | 2.3. Environments                  |   |
+|        | - Actions                  | 1.4. Knowledge representation   | 2.4. Agents                        |   |
+|        | - Beliefs                  | 2. Architecture                 | 2.4.1 Programs                     |   |
+|        | - Fairness                 | 2.1. Control                    | 2.4.2-3 Reflex agents              |   |
+|        |                            | 2.2. Hierarchical control       | 2.4.4. Goals                       |   |
+|        |                            | 2.3. Moral machines             | 2.4.5. Utility                     |   |
+|        |                            |                                 | 2.4.6. Learning                    |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      2 | Depth-First Search         | 3. Search                       | 3.1 Problem-solving                |   |
+|        | Breadth-First Search       | 3.1. Search in graphs           | 3.2. Examples.                     |   |
+|        |                            |                                 | 3.3. Best-First search             |   |
+|        |                            |                                 | 3.4.1. Breadth-first               |   |
+|        |                            |                                 | 3.4.3. Depth-first search          |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      3 | Heuristic Search           | 3.2. Uninformed search          | 3.5.2. A*                          |   |
+|        | A* Search                  | 3.3. Heuristic search           | 3.6. Heuristic Functions           |   |
+|        |                            |                                 |                                    |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      4 | Dynamic Programming        |                                 | 3.4.2 Dijkstra                     |   |
+|        |                            | 3.4. Dynamic programming        |                                    |   |
+|        | Branch and bound           | 3.5. Branch and bound           |                                    |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      5 | Constraint programming     | 4. Reasoning with constraints   | 6. CSP                             |   |
+|        | Logical reasoning          | 4.1. Variables and Constraints  | 7. Logical Agents                  |   |
+|        |                            | 4.2. CSPs and Search            |                                    |   |
+|        |                            | 4.6. Local Search               |                                    |   |
+|        | Deterministic planning     | 4.8. Optimization               |                                    |   |
+|        |                            |                                 |                                    |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      6 | Uncertainty                | 9. Reasoning with Uncertainty   | 12.1. Acting under uncertaint      |   |
+|        | Aleatory/Epistemic         | 9.1. Probability                | 12.2. Basic probability notation   |   |
+|        | Probability Theory         | 9.2. Independence               | 12.3. Inference                    |   |
+|        | Bayes Theorem              |                                 | 12.4. Independence                 |   |
+|        | Probabilistic inference    |                                 | 12.5. Bayes's theorem              |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      7 | Expected Utility Theory    | 12.1 Preferences and Utility    | 16.1. Beliefs and Desires          |   |
+|        |                            | 12.2 One-off decisions          | 16.2. utility theory               |   |
+|        |                            |                                 | 16.3. Utility functions            |   |
+|        |                            |                                 | 16.5. Decision networks            |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      8 | Markov Decision Processes  | 12.3 Sequential Decisions       | 17.1. Sequential decision problems |   |
+|        | Dynamic Programming        | 12.4 The value of information   | 17.2. Algorithms for MDPs          |   |
+|        |                            | 12.5 Decision processes         |                                    |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|      9 | Alternating Zero-Sum Games | 14.1. Multi-agent framework     | 5.1. Game Theory                   |   |
+|        | Stochastic Zero-Sum Games  | 14.2. Representations of games  | 5.2. Zero-Sum Games                |   |
+|        | Linear programming         | 14.3. Perfect information games | 5.3. Alpha-Beta Search             |   |
+|        |                            |                                 | 5.5. Stochastic Games              |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+|     10 | Belief networks            | 9.3. Belief Networks            | 13.1. Representing knowledge       |   |
+|        |                            | 9.4. Probabilistic Inference    | 13.2. Bayesian Networks            |   |
+|        |                            |                                 | 13.3. Exact inference in BNs       |   |
+|--------+----------------------------+---------------------------------+------------------------------------+---|
+
 
 
 
@@ -285,6 +228,7 @@ If you get an F in either the exam or the project, the course is failed and you 
 
 * single agent problems with certainty
 ** Uninformed search
+|---------------------------+----|
 | Graph definitions         | 10 |
 | Tree example              |  5 |
 | Shortcut example          |  5 |

@@ -54,6 +54,8 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
+#+latex_header: \AtBeginSubsection[]{\begin{frame}<beamer>\tableofcontents[hideothersubsections]\end{frame}}
+
 * Introduction
 
 ** About the course  
@@ -92,7 +94,19 @@ slowly progress to the more complex ones.
 **** Written exam (40% of grade)
 
 ** What is Artificial Intelligence?
+*** A go grandmaster
+[[./figures/FloorGoban.JPG]]
+*** A farmer
+[[./figures/farming.jpg]]
+*** A computer
+[[./figures/computer.jpg]]
+*** A primate
+[[./figures/ape-tool.jpg]]
+*** A scientist
+[[./figures/Curie.jpg]]
+
 *** Intelligence
+    #+BEAMER: \pause
 **** What makes something intelligent?
 - Thoughts?
 - Behaviour?

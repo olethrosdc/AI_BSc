@@ -10,40 +10,6 @@
 
 * Introduction
 
-** About the course  
-*** Aims
-This course will focus on algorithms and models for Artificial
-Intelligence.  We will concentrate mainly on the decision making,
-rather than the learning, side of artificial intelligence. Learning is
-already addressed in statistics courses, as well as the machine
-learning course in the final year.
-
-*** Philosophy
-The philosophy of this course is as follows: 
-- We give example problems.
-- We use theory to explain and generalise from those examples to general problems.
-- We describe algorithms to /solve/ general problems.
-- We implement algorithms to solve the specific examples.
-
-In general, the course will start from the simplest problems and
-slowly progress to the more complex ones.
-
-*** How-to
-
-**** Lectures
-- All the relevant course content is given in-class.
-- The slides only contain a summary.
-- More details in the reference books.
-**** Assignments
-- Assignments are obligatory but not marked.
-- You have a free pass on not handing in two assingments
-**** Projects in teams of 2-3 people (60% of grade)
-1. Problem formulation [Project proposal]
-2. Problem formalisation
-3. Selection of algorithms [Mid-term report]
-4. Method evaluation.
-5. Summarise findings and discuss alternatives to 1-3. [Final report]
-**** Written exam (40% of grade)
 
 ** What is Artificial Intelligence?
 *** A go grandmaster
@@ -64,8 +30,9 @@ slowly progress to the more complex ones.
 - We cannot know if somebody is making intelligent thoughts.
 - Thoughts can only be *inferred* through *interaction*.
 **** Behaviour
-- Fixed: e.g. intelligent washing machines, chatbots (partially)
-- Adaptive: animals, game 
+#+ATTR_BEAMER: :overlay <+->
+- Fixed: Behaves the same in the same situtation.
+- Adaptive: Learns from previous experiences.
 #+BEAMER: \pause
 **** Why do we need artificial intelligence?
 - To do something a human can do (better? worse?)
@@ -111,11 +78,57 @@ Goal: See if humans can live on the moon.
 - Summarising knowledge into a model.
 - Using the knowledge to make decisions.
 
+** About the course  
+*** Schedule
+1. Agents and the environment (1 week)
+2. Search problems (2 weeks)
+3. Dynamic programming (1 week)
+4. Logic and constraints (1 week)
+5. Uncertainty and probability (2 weeks)
+6. Expected utility (1 week)
+7. Markov decision processes (2 weeks)
+8. Introduction to game theory (1 week)
+9. Belief networks (1 week)
+10. Social issues in AI (1 week)
+
+
+*** Philosophy
+The philosophy of this course is as follows: 
+- We give example problems.
+- We use theory to explain and generalise from those examples to general problems.
+- We describe algorithms to /solve/ general problems.
+- We implement algorithms to solve the specific examples.
+
+In general, the course will start from the simplest problems and
+slowly progress to the more complex ones.
+
+*** How-to
+
+**** Lectures
+- All the relevant course content is given in-class.
+- The slides only contain a summary.
+- More details in the reference books.
+**** Assignments
+- Assignments are obligatory but not marked.
+- You have a free pass on not handing in two assingments
+**** Projects in teams of 2-3 people (60% of grade)
+1. Problem formulation [Project proposal]
+2. Problem formalisation
+3. Selection of algorithms [Mid-term report]
+4. Method evaluation.
+5. Summarise findings and discuss alternatives to 1-3. [Final report]
+**** Written exam (40% of grade)
+
 * The agent and the environment
 ** The agent and the environment
 *** Agent-environment interface
 \begin{tikzpicture}
-
+      \node at (0,0) (agent) {Agent};
+      \node at (0,2) (env) {Environment};
+      \draw[->] (agent) edge["$a_t$"] (env);
+      \draw[->] (env) edge["a=0~c=2"] (agent);
+      \draw[->] (0) edge["a=0~c=5"] (3);
+      \draw[->] (2) edge["a=0~c=1"] (3);
 \end{tikzpicture}
 
 *** Variables

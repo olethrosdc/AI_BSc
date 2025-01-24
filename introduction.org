@@ -120,16 +120,12 @@ slowly progress to the more complex ones.
 **** Written exam (40% of grade)
 
 * The agent and the environment
+** Agent and environment
+[[./figures/rat_maze.pdf]]
+** Agent environment interface
+[[./figures/environment_interaction.pdf]]
+
 ** The agent and the environment
-*** Agent-environment interface
-\begin{tikzpicture}
-      \node at (0,0) (agent) {Agent};
-      \node at (0,2) (env) {Environment};
-      \draw[->] (agent) edge["$a_t$"] (env);
-      \draw[->] (env) edge["a=0~c=2"] (agent);
-      \draw[->] (0) edge["a=0~c=5"] (3);
-      \draw[->] (2) edge["a=0~c=1"] (3);
-\end{tikzpicture}
 
 *** Variables
 **** Agent

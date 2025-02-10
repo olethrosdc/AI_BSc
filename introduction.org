@@ -21,7 +21,7 @@
 *** A primate
 [[./figures/ape-tool.jpg]]
 *** A scientist
-./figures/Curie.jpg - fixev
+[[./figures/Curie.jpg]]
 
 *** What makes something intelligent?
     #+BEAMER: \pause
@@ -35,7 +35,8 @@
 - Adaptive: Learns from previous experiences.
 #+BEAMER: \pause
 **** Why do we need artificial intelligence?
-- To do something a human can do (better? worse?)
+#+ATTR_BEAMER: :overlay <+->
+- To do something a human can do (better? worse? cheaper?)
 - To do something a human cannot do?
 - To help humans do something more efficiently?
 
@@ -53,26 +54,29 @@
 - Make a move in chess.
 *** To the moon!
 Goal: See if humans can live on the moon.
+#+BEAMER: \pause
 **** Learning
 - Orbital mechanics: What are the equations of motion?
 - Trajectory following: Where is the spaceship right now?
+#+BEAMER: \pause
 **** Decisions
 - How much should we spend?
 - How much payload/fuel/time?
 - What is a good trajectory for a given payload/fuel?
 - How can the spaceship follow the trajectory?
 - How can the spaceship land on the moon?
-*** The view from statistics  
+*** The view from statistics
+#+BEAMER: \pause
 **** Optimal decisions
 - Problem-dependent
 - Require defining a cost- or utility function
 - The optimal solution has the lowest cost or maximal utility
-
+#+BEAMER: \pause
 **** Optimisation: algorithms for optimal solutions
 - Discrete optimisation.
 - Linear optimisation.
 - Non-linear optimisation.
-
+#+BEAMER: \pause
 **** Statistics and Machine Learning
 - How to learn from data and interactions.
 - Summarising knowledge into a model.
@@ -119,27 +123,33 @@ slowly progress to the more complex ones.
 5. Summarise findings and discuss alternatives to 1-3. [Final report]
 **** Written exam (40% of grade)
 
-* The agent and the environment
-** Agent and environment
+* Intelligent agents
+** The agent-environnment interaction
+*** The agent
 [[./figures/rat_maze.pdf]]
-** Agent environment interface
+- Agents act in an environment
+- Agents' beliefs and desires guide their behaviour.
+*** Agent environment interface
 [[./figures/environment_interaction.pdf]]
+*** Agent
+- Has belief $\bel_t$
+*** Environment
+- State $s_t$
+- Generates observations $x_t$ from $s_t$
 
-** The agent and the environment
-
-*** Variables
-**** Agent
+** Variables
+*** Agent
 - Obtains stimuli/observations $x_t$
 - Generates actions/decisions $a_t$
-**** Environment
+*** Environment
 - Reacts to agent's actions
 - Generates observations
-**** The mind/body interface
+*** The mind/body interface
 - The body can be seen as part of the mind's environment
-**** Policy and history
+*** Policy and history
 - The agent's next action $a_{t+1}$ depends on previous observation's and actions.
 - The policy is implemented through an *algorithm*
-*** Examples
+** Examples
 - Mazes
 - Algebraic manipulation
 - Chess game

@@ -300,7 +300,6 @@ Example worlds:
 4. Driving/racing
 
 
-
 * single agent problems with certainty
 ** Uninformed search
 |---------------------------+----|

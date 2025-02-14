@@ -299,7 +299,7 @@ Example worlds:
 3. Wumpus
 4. Driving/racing
 
-
+   
 * single agent problems with certainty
 ** Uninformed search
 |---------------------------+----|

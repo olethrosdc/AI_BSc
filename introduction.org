@@ -124,6 +124,24 @@ slowly progress to the more complex ones.
 **** Written exam (40% of grade)
 
 * Intelligent agents
+
+*** What is AI?  
+**** Behaviour
+- Human-like?
+- Optimal?
+- Computational/statistical tractablity?
+- Is the mind a machine?
+**** Mathematics
+- Logic
+- Probability
+**** Economics
+- Expected Utility Theory
+**** Neuroscience
+- Mechanisms
+**** Psychology
+- 
+**** Computer Science
+
 ** The agent-environnment interaction
 *** The agent
 [[./figures/rat_maze.pdf]]
@@ -131,6 +149,7 @@ slowly progress to the more complex ones.
 - Agents' beliefs and desires guide their behaviour.
 *** Agent environment interface
 [[./figures/environment_interaction.pdf]]
+
 *** Agent
 - Has belief $\bel_t$
 *** Environment
@@ -275,6 +294,7 @@ Selects actions for each plan selected by the high-level planner
 **** Unknown maze and co-ordinates
 - Agent only observes immediate surroundings.
 - Memory keeps track of maze layout and co-ordinates
+
 
 
 

@@ -26,6 +26,25 @@ The philosophy of this course is as follows:
 In general, the course will start from the simplest problems and
 slowly progress to the more complex ones.
 
+*** Plagiarism, use of automation and external sources
+In this course, the use of automated methods for writing and translating text, such generative AI models, web-based translation and code development tools is allowed under certain conditions.
+
+The general idea for the use of advanced algorithms is the same as when you are using any other external resource, such as verbal advice, online forums, or material from books or websites. 
+
+In all cases, you are /not/ allowed to present anybody's work as your own work. This includes both human and machine generated output. Misrepresentation will be considered misuses in this class.  So, you must cite each and every use of any external tool, reference, or personal help. Here are some examples:
+
+1. Verbal advice: Cite as "A. Student: Personal Communication"
+2. Online forums: Stackoverflow is an example. Cite as "We based this part of the work on URL where we modified the code to ... "
+3. Books or websites: Cite normally, explaining how you used the material.
+4. Automated translation: Specify what you used and where. Note, however, that you can write your reports in French or English.
+5. Advanced coding aids: Specify what you used, including generative-AI. Say where you used it exactly, so we can filter out.
+6. Advanced models for grammar and rewriting: Specify which model you used and for which parts of the text. 
+7. Advanced models for text structuring. You are not encouraged to do that: we can discuss this in class if needed. However, if you do make use of such models, then you must explain how you used them, including a copy of the intermediate output.
+8. You must use a git repository to create your work. This way we can track changes.
+9. If you do not stick to the above advice, then the automated AI-detection tools may provide false positives. 
+
+
+
 *** How to use this notebook
 - This notebook contains a summary of all the foundational material in the course. It is not sufficient for studying for the exam, or as a reference material.
 - For details, use the links to external resources.
@@ -207,25 +226,80 @@ Detailed grading
 You must have sufficient grade in both the exam and the project for passing. 
 If you get an F in either the exam or the project, the course is failed and you must repeat it.
 
-** Schedule
+** Modules
 
-|------+-------------------------------------------------------------------|
-| 2.22 | 1-2 Introduction                                                  |
-| 2.29 | 3.1-3.5 Search, State Spaces, Graphs, Uniformed Search.           |
-| 3.07 | 3.6. Informed Search, Heuristics, A*                              |
-| 3.14 | 4.1-4.2, 4.8 Constrained Search                                   |
-| 3.21 | Exercises and Project Day                                         |
-| 3.28 | 9.1 Probability, Independence, Belief Networks                    |
-| 4.11 | 12.1. Preferences and Utility. 12.2 Probability. Decision making. |
-| 4.18 | Markov decision processes                                         |
-| 4.25 | Markov games                                                      |
-| 5.02 | Simultaneous games                                                |
-| 5.16 | Project discussion                                                |
-| 5.23 | Mock exam                                                         |
-| 5.30 | Project discussion                                                |
-|------+-------------------------------------------------------------------|
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  1 | 1-2 Introduction                                                                                                            |
+|    |                                                                                                                             |
+|    | Agents and Environments                                                                                                     |
+|    | What is intelligence?                                                                                                       |
+|    | Beliefs, Utility, States, Actions, Observations                                                                             |
+|    | Assignment:                                                                                                                 |
+|    | Given a problem, identify belief/utility/state/actions. What is the environment/agent boundary?                             |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  2 | 3.1-3.5 Search, State Spaces, Graphs, Uniformed Search.                                                                     |
+|    | Start and Goal states: Breadth-First, Depth-First search                                                                    |
+|    | Assignment:                                                                                                                 |
+|    | 1. Implement a different type of algorithm for doing the search. How would you order the nodes in your search?              |
+|    | 2. Formalise X as a start-goal search problem. What are the states? What are the goals? What are the actions? Implement it. |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  3 | 3.6. Informed Search, Heuristics, A*                                                                                        |
+|    |                                                                                                                             |
+|    | Cost/utility-based search and shortest path problems.                                                                       |
+|    | Minimum-cost search, A*                                                                                                     |
+|    | Assignment:                                                                                                                 |
+|    | 1. Implement your own heuristics                                                                                            |
+|    | 2. Generalise problem X to the case where you have costs                                                                    |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  4 | 4.1-4.2, 4.8 Logic and Constraints                                                                                          |
+|    |                                                                                                                             |
+|    | Logical framework                                                                                                           |
+|    | Logic and constraint satisfaction                                                                                           |
+|    | Assignment:                                                                                                                 |
+|    | 1. Simple gridworld implementation                                                                                          |
+|    | 2. Basic logical inference                                                                                                  |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+| 55 | 9.1 Probability, Independence, Belief Networks                                                                              |
+|    |                                                                                                                             |
+|    | Conditional probability and independence, Bayes's theorem                                                                   |
+|    | Assignment:                                                                                                                 |
+|    | 1. Give a graphical model for some problem                                                                                  |
+|    | 2. Some simple Bayes' theorem demonstration e.g. covid tests                                                                |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  6 | 12.1. Preferences and Utility. 12.2 Probability. Decision making.                                                           |
+|    |                                                                                                                             |
+|    | Assignment:                                                                                                                 |
+|    | Find optimal choice of some stochastic problems with:                                                                       |
+|    | 1. Discrete action sets                                                                                                     |
+|    | 2. Continuous actions                                                                                                       |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  7 | Markov decision processes                                                                                                   |
+|    |                                                                                                                             |
+|    | Value iteration                                                                                                             |
+|    |                                                                                                                             |
+|    | Assignment: Extend world so that there are randomised dynamics (but full observation) with fixed policies for other agents  |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  8 | Markov games                                                                                                                |
+|    |                                                                                                                             |
+|    | Backwards induction                                                                                                         |
+|    |                                                                                                                             |
+|    | Assignment: Extend world so that the other agent is adversarial                                                             |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  9 | Simultaneous games                                                                                                          |
+|    |                                                                                                                             |
+|    | Linear programming                                                                                                          |
+|    |                                                                                                                             |
+|    | Assignment: Find Nash equilibria                                                                                            |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
 
+Example worlds:
 
+1. Train scheduling
+2. Hiking
+3. Wumpus
+4. Driving/racing
+
+   
 * single agent problems with certainty
 ** Uninformed search
 |---------------------------+----|

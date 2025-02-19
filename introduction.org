@@ -6,7 +6,7 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
-#+latex_header: \AtBeginSubsection[]{\begin{frame}<beamer>\tableofcontents[hideothersubsections]\end{frame}}
+#+latex_header: \AtBeginSection[]{\begin{frame}<beamer>\tableofcontents[hideothersubsections]\end{frame}}
 
 * Introduction
 
@@ -35,7 +35,7 @@
 - Adaptive: Learns from previous experiences.
 #+BEAMER: \pause
 **** Why do we need artificial intelligence?
-#+ATTR_BEAMER: :overlay <+->
+     #+ATTR_BEAMER: :overlay <+->
 - To do something a human can do (better? worse? cheaper?)
 - To do something a human cannot do?
 - To help humans do something more efficiently?
@@ -144,12 +144,13 @@ slowly progress to the more complex ones.
 
 ** The agent-environnment interaction
 *** The agent
+#+ATTR_LATEX: :width 0.7\textwidth
 [[./figures/rat_maze.pdf]]
 - Agents act in an environment
 - Agents' beliefs and desires guide their behaviour.
 *** Agent environment interface
+#+ATTR_LATEX: :width \textwidth
 [[./figures/environment_interaction.pdf]]
-
 *** Agent
 - Has belief $\bel_t$
 *** Environment
@@ -169,13 +170,17 @@ slowly progress to the more complex ones.
 - The agent's next action $a_{t+1}$ depends on previous observation's and actions.
 - The policy is implemented through an *algorithm*
 ** Examples
-- Mazes
-- Algebraic manipulation
-- Chess game
-- Poker game
-- City driving
-- Navigation assistant
-- Space exploration
+*** Mazes
+[[./figures/labyrinth.jpg]]
+
+*** Algebraic manipulation
+[[./figures/rubik.png]]
+*** Chess game
+[[./figures/chess.jpg]]
+*** Poker game
+*** City driving
+*** Navigation assistant
+*** Space exploration
 
 ** Environments
 *** Environment components

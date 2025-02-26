@@ -112,35 +112,30 @@ slowly progress to the more complex ones.
 - All the relevant course content is given in-class.
 - The slides only contain a summary.
 - More details in the reference books.
-**** Assignments
-- Assignments are obligatory but not marked.
-- You have a free pass on not handing in two assingments
-**** Projects in teams of 2-3 people (60% of grade)
-1. Problem formulation [Project proposal]
-2. Problem formalisation
-3. Selection of algorithms [Mid-term report]
-4. Method evaluation.
-5. Summarise findings and discuss alternatives to 1-3. [Final report]
-**** Written exam (40% of grade)
+**** Assignments: (40% of grade)
+- Assignments are obligatory
+- In English or French.
+- Can be individual or group.
+- You *must cite* sources, whether it be books, web pages, other students, or LLMs, e.g.
+**** Written exam (60% of grade)
+- No references allowed in the exam.
+- Important concepts will be repeated/explained in the exam questions.
 
 * Intelligent agents
 
-*** What is AI?  
-**** Behaviour
-- Human-like?
-- Optimal?
-- Computational/statistical tractablity?
-- Is the mind a machine?
-**** Mathematics
+*** The roots of AI
+**** Mathematics: Idealise rational thought
 - Logic
-- Probability
-**** Economics
-- Expected Utility Theory
-**** Neuroscience
-- Mechanisms
-**** Psychology
-- 
-**** Computer Science
+- Statistics
+**** Economics and Game Theory: Formalise human behaviour
+- Utility and Risk
+- Rationality and Social Choice
+**** Cognitive Sciences: Understand human behaviour
+- Neuroscience
+- Behavioural psychology
+**** Computer Science: Building autonomous agents
+- Artificial Intelligence
+- Machine Learning
 
 ** The agent-environnment interaction
 *** The agent
@@ -151,44 +146,47 @@ slowly progress to the more complex ones.
 *** Agent environment interface
 #+ATTR_LATEX: :width \textwidth
 [[./figures/environment_interaction.pdf]]
-*** Agent
-- Has belief $\bel_t$
-*** Environment
-- State $s_t$
-- Generates observations $x_t$ from $s_t$
 
-** Variables
-*** Agent
-- Obtains stimuli/observations $x_t$
-- Generates actions/decisions $a_t$
-*** Environment
-- Reacts to agent's actions
-- Generates observations
-*** The mind/body interface
-- The body can be seen as part of the mind's environment
-*** Policy and history
-- The agent's next action $a_{t+1}$ depends on previous observation's and actions.
-- The policy is implemented through an *algorithm*
+*** Variables
+We interact with the environment at times $t = 1, 2, \ldots$.
+**** Agent
+- $\bel_t$: belief, owned by the agent.
+- $a_t$: actions *generated* by the agent.
+- $\pol$: policy (algorithm) for selecting the next action $a_{t+1}$ somehow.
+**** Environment
+- $s_t$: state, owned by the environment. 
+- $x_t$: observations *generated* by the environment.
+- The next state $s_{t+1}$ depends only *only on $s_t, a_t$*.
+
+**** Interaction
+- The agent reacts to the observations $x_t$ by choosing an action $a_t$.
+- The environment reacts to the action $a_t$ with a new state $s_{t+1}$ and an observation $x_{t+1}$
+
 ** Examples
 *** Mazes
 [[./figures/labyrinth.jpg]]
-
 *** Algebraic manipulation
 [[./figures/rubik.png]]
 *** Chess game
 [[./figures/chess.jpg]]
 *** Poker game
-*** City driving
+[[./figures/poker.jpg]]
+*** Motor Racing
+[[./figures/racing.jpg]]
 *** Navigation assistant
+[[./figures/planner.png]]
 *** Space exploration
-
+[[./figures/mars_rover.jpg]]
 ** Environments
 *** Environment components
 We generally consider dynamic environments, so at time $t$:
 - $s_t$: state of the environment
 - $x_t$: observation of the environment by the agent
 - $a_t$: actions taken by the agent
-**** Example: Mazes
+**** Mazes :B_exampleblock:
+     :PROPERTIES:
+     :BEAMER_env: exampleblock
+     :END:
 - $s_t$: the location of the agent in the maze
 - $x_t$: What the agent observes (exact location, or just surroundings?)
 - $a_t$: Direction in which the agent moves
@@ -221,31 +219,6 @@ The action taken may change over time, depending on what happened in the past:
 - What can we do to make sure that the agent visits every point of the maze?
 
 ** Agent structures
-*** Example: taking an exam
-**** High-level policy
-- Study for exam
-- Prepare exam materials
-- Get to exam on time
-- Write 
-**** Mid-level policy for getting to the exam:
-- Check starting time.
-- Check location.
-- Select transport option
-- Set alarm clock.
-- Go to the exam.
-**** Low-level policy: Go to the exam.
-- Get dressed
-- Pick up things
-- Get transport
-- Go to exam room.
-**** Reactive policy: Go to exam room
-- Navigate to the exam room.
-- Move feet, don't fall down.
-- Look around to avoid obstacles.
-**** Autonomous policy
-- Breathe with lungs.
-- Pump blood with heart.
-
 *** Example: Planning a trip
 There are three train routes from Neuchatel to Luzerne 
 - Neuchatel 6:58-IC-7:57 Olten 8:07-RE-8:55 Luzern (18 CHF)
@@ -253,7 +226,6 @@ There are three train routes from Neuchatel to Luzerne
 - Neuchatel 7:26-IC-8:18 Olten 8:30-IR-9:05 Luzern (26 CHF)
 **** Criteria for choosing
 - Price
-- Train type
 - Crowdedness
 - Length of time
 **** Planning the trip
@@ -264,11 +236,6 @@ There are three train routes from Neuchatel to Luzerne
 - What to pack
 - How to get to the station
 - Putting one foot in front of the other.
-*** Hierarchical control
-**** High-level planner
-Selecting plans for the low-level controller
-**** Low-level controller
-Selects actions for each plan selected by the high-level planner
 *** Learning and memory
 
 **** Belief state
@@ -304,6 +271,16 @@ Selects actions for each plan selected by the high-level planner
 
 
 
+*** Hierarchical control and the mind-body interface
+**** What is the "agent" in a Mars Rover?
+- The Rover itself?
+- The CPU module controlling the rovers motors?
+- The software that is running on the CPU?
+
+**** High-level planner
+Selecting plans for the low-level controller
+**** Low-level controller
+Selects actions for each plan selected by the high-level planner
 
 * Designing agents
 ** Goals
@@ -409,7 +386,7 @@ How can we find the decision maximising utility / minimising cost?
 - 9. Which functions?
 - 11. Autonomous cars: state of the art.
   
-
+  
 * Humans and AI
 ** Safety
 *** Design problems

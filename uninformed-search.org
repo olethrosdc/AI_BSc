@@ -114,7 +114,7 @@ A graph $G$ is defined by:
       \draw[->] (2) edge["a=0~c=1"] (3);
 \end{tikzpicture}
 - Action labels $a$: Tell you which action traverses an edge
-- Edge costs $c$: Optionally, $c$
+- Edge costs $c$: How much it costs to traverse an edge
 - Node labels: Some nodes are *goal* or *start* nodes.
 **** Notation
 - For a node $i \in N$, we write $g(i) = 1$ if it's a goal label.
@@ -417,9 +417,48 @@ implementation.
 
 
 
-*** Minimum-cost search    
+*** Minimum-cost search  example
+**** State space graph
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
 
-Note that DFS always adds the minimum depth node. We can instead add the minimum-cost node.
+\begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
+      \node[RV,label=below:{start}] at (0,0) (0) {0};
+      \node[RV] at (0,2) (1) {1};
+      \node[RV] at (4,2) (2) {2};
+      \node[RV,label=below:{goal}] at (4,0) (3) {3};
+      \draw[->] (0) edge["a=1~c=1"] (1);
+      \draw[->] (1) edge["a=0~c=2"] (2);
+      \draw[->] (0) edge["a=0~c=5"] (3);
+      \draw[->] (2) edge["a=0~c=3"] (3);
+\end{tikzpicture}
+**** Search graph
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+Search graph
+
+\begin{tikzpicture}
+	\node[RV, label=below:{0}] at (0,0) (0) {0};
+	\uncover<2->{
+	\node[RV, label=below:{1}] at (1,0) (1) {1};
+	\draw[->] (0) to (1);
+	}
+	\uncover<3->{
+	\node[RV, label=below:{4}] at (2,0) (2) {2};
+	\draw[->] (1) to (2);
+	}		
+	\uncover<4->{
+	\node[RV, label=below:{5}] at (1,1) (3) {3};
+	\draw[->] (0) to (3);
+	}		
+\end{tikzpicture}
+
+We have to keep track of the total cost at each search node.
+
+*** Minimum-cost search 
+Note that BFS always adds the minimum depth node. We can instead add the minimum-cost node.
 
 \begin{algorithmic}
 
@@ -433,7 +472,7 @@ Note that DFS always adds the minimum depth node. We can instead add the minimum
 \STATE $n = \argmin_{f \in F} c_f$. Select minimum cost node.
 \STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
 \IF {$n \notin S'$}
-\STATE $B = \child(n) \setminus S'$. Get the set of unsearched children of $n$.
+\STATE $B = \{i \in \child(n) : i \noin \anc{n}\}. Get the set of unsearched children of $n$.
 \STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
 \STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
 \STATE $F = F \cup B$. Add $n$'s children to the frontier.
@@ -441,3 +480,4 @@ Note that DFS always adds the minimum depth node. We can instead add the minimum
 \ENDWHILE
 \end{algorithmic}
 
+*** General idea of search algorithms

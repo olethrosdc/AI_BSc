@@ -246,7 +246,7 @@ One or more of the following:
 **** Solution specification
 - $\pi : S \to A$ deterministic policy
 - When problem and the policy are deterministic, the policy is *open loop*
-*** The search graph $S'$
+*** The search graph
 #+ATTR_BEAMER: :overlay +-
 - Node $0$ is *root* of the search graph.
 - Each node $i \in S'$ corresponds to a state $s^i \in S$.
@@ -480,4 +480,8 @@ Note that BFS always adds the minimum depth node. We can instead add the minimum
 \ENDWHILE
 \end{algorithmic}
 
+<<<<<<< HEAD
 *** General idea of search algorithms
+=======
+
+>>>>>>> 227375b7d5f300da2ee638ed59173b64229ed30c

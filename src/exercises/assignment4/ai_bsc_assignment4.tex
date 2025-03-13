@@ -162,8 +162,34 @@ For coding:
     \item Any other python coding environment you prefer using.
 \end{itemize}
 
-
 \section*{Exercise 1}
+
+Let's consider a train scheduling problem.
+We must ensure that connections are all feasible. We assume that a connection between train A and B at station S is feasible if train A arrives at S exactly when B leaves S. 
+
+Here are the required connections (this is simplified):
+\begin{itemize}
+    \item The Neuchâtel-Lausanne train must connect to the Lausanne-Geneva and Lausanne-Bern.
+    \item The Lausanne-Geneva train must connect to the Geneva-Versoix train.
+    \item The Bern-Lausanne train must connect to the Lausanne-Geneva.
+\end{itemize}
+
+Here are the possible times for departure/arrival for each trains:
+\begin{itemize}
+    \item Neuchâtel-Lausanne: (08:30/09:30) -- (09:30/10:30) -- (10:30/11:30)
+    \item Lausanne-Geneva: (07:30/08:30) -- (08:30/09:30) -- (09:30/10:30) -- (10:30/11:30)
+    \item Lausanne-Bern: (09:00/09:30) -- (10:00/11:30)
+    \item Geneva-Versoix: (09:30/09:50) -- (10:00/10:20) -- (10:30/10:50)
+    \item Bern-Lausanne: (07:00/08:30) -- (08:00/09:30) -- (09:00/10:30)
+\end{itemize}
+
+\textbf{Task:}
+\begin{itemize}
+    \item Define appropriate variables to formalise the problem.
+    \item Find a valid solution to the problem by drawing a graph.
+\end{itemize}
+
+\section*{Exercise 2}
 
 Here is an example of how to solve a problem through logical inference:
 
@@ -202,7 +228,7 @@ Using the rule of the contraposition, we have:
 Following this example, answer the following questions:
 
 \begin{enumerate}
-    \item Considering the same problem as the one given in the example, let's assume additionally that the ground is wet \emph{only} if the grass is slippery, and that the grass is slippery. 
+    \item Considering the same problem as the one given in the example, let's assume additionally that the ground is wet if the grass is slippery, and that the grass is slippery. 
     
     \textbf{Quesiton:} Did it rain or not ?
 

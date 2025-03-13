@@ -1,0 +1,456 @@
+\documentclass[11pt]{article}
+\usepackage{parskip}
+
+\usepackage{../assets/tp}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{tgcursor}
+\usepackage[T1]{fontenc}
+\usepackage[]{../assets/subfigure}
+\usepackage{xspace}
+\usepackage{url}
+\usepackage{ifthen}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{dirtree}
+\usepackage[scaled]{helvet}
+\usepackage{gensymb}
+\usepackage{epsfig}
+\usepackage{tikz}
+\usepackage{centernot}
+\usetikzlibrary{arrows,automata, shapes, backgrounds}
+
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\makeatletter
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}%
+   {\csname the#1\endcsname\quad}%    default
+   {\csname #1@cntformat\endcsname}}% enable individual control
+\newcommand\section@cntformat{}     % section level 
+\makeatother
+
+\lstset{
+     extendedchars=true,
+     literate=%
+         {á}{{\'a}}1
+         {í}{{\'i}}1
+         {é}{{\'e}}1
+         {è}{{\`e}}1
+         {ý}{{\'y}}1
+         {ú}{{\'u}}1
+         {ó}{{\'o}}1
+         {ě}{{\v{e}}}1
+         {š}{{\v{s}}}1
+         {č}{{\v{c}}}1
+         {ř}{{\v{r}}}1
+         {ž}{{\v{z}}}1
+         {ď}{{\v{d}}}1
+         {ť}{{\v{t}}}1
+         {ň}{{\v{n}}}1
+         {ů}{{\r{u}}}1
+         {Á}{{\'A}}1
+         {Í}{{\'I}}1
+         {É}{{\'E}}1
+         {Ý}{{\'Y}}1
+         {Ú}{{\'U}}1
+         {Ó}{{\'O}}1
+         {Ě}{{\v{E}}}1
+         {Š}{{\v{S}}}1
+         {Č}{{\v{C}}}1
+         {Ř}{{\v{R}}}1
+         {Ž}{{\v{Z}}}1
+         {Ď}{{\v{D}}}1
+         {Ť}{{\v{T}}}1
+         {Ň}{{\v{N}}}1
+         {Ů}{{\r{U}}}1
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!red,
+  urlcolor=green!70!black
+}
+\numberwithin{equation}{section}
+
+\newcommand{\sol}[1]{
+    %{\color{blue} #1}
+    }
+\renewcommand{\deg}[1]{\:^\circ\text{#1}}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\renewcommand*\DTstylecomment{\rmfamily}
+
+\definecolor{codegray}{rgb}{0.0,0.0,0.7}
+\lstset{float,
+  commentstyle=\color{codegray},
+  basicstyle=\scriptsize,
+  columns=fullflexible,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=5pt,
+  xleftmargin=5pt,
+  frame=tb,
+  captionpos=b,
+  mathescape=true,
+  tabsize=2,
+  showtabs=true,
+  escapeinside={(*@}{@*)}}
+
+
+\newboolean{showcomments}
+\setboolean{showcomments}{true}
+\ifthenelse{\boolean{showcomments}}
+{ \newcommand{\mynote}[3]{
+    \fbox{\bfseries\sffamily\scriptsize#1}
+    {\small$\blacktriangleright$\textsf{\emph{\color{#3}{#2}}}$\blacktriangleleft$}}}
+{ \newcommand{\mynote}[3]{}}
+\newcommand{\shrink}[1]{}
+% One command per author:
+\newcommand{\pf}[1]{\mynote{Pascal}{#1}{magenta}}
+\newcommand{\cg}[1]{\mynote{Christian}{#1}{orange}}
+\newcommand{\rd}[1]{\mynote{R\'emi}{#1}{purple}}
+\newcommand{\answer}[1]{\mynote{Answer:}{#1}{blue}}
+
+\makeatletter
+    \def\blfootnote{\xdef\@thefnmark{}\@footnotetext}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\quand{2023-2024}
+\siglemat{Artificial Intelligence}
+\sorte{Week}
+\formation{Computer science department}
+\titre{Assignment 4}
+
+\usepackage{courier}
+
+\begin{document}
+\thispagestyle{plain}
+\mettreletitre
+
+\blfootnote{Questions ? victor.villin@unine.ch}
+
+\section*{Subject}
+
+Topics of this session:
+\begin{enumerate}
+\item Constrained Search.
+\item Logical Inference, knowledge-based agents.
+\item Formalise a problem as a constrained graph search problem.
+\end{enumerate}
+\textbf{This assignement is graded and must be submitted (individually) on Moodle before next week's class}. 
+
+\smallskip
+For each exercise, detail your reflexion steps:
+\begin{itemize}
+    \item We are mostly interested in your actual thinking process.
+    \item Even if you are unable to solve an exercise, write out what were you reflexion steps.
+    \item For each attempted exercise, a written feedback will be provided. 
+\end{itemize}
+
+\smallskip
+Reference material: \href{https://github.com/yanshengjia/ml-road/blob/master/resources/Artificial%20Intelligence%20-%20A%20Modern%20Approach%20(3rd%20Edition).pdf}{Artificial Intelligence, A Modern Approach, Chapters 6, 7}.
+
+For coding:
+\begin{itemize}
+    \item \href{https://noto.epfl.ch}{Noto} (Online Jupyter NoteBook).
+    \item Any other python coding environment you prefer using.
+\end{itemize}
+
+
+\section*{Exercise 1}
+
+Here is an example of how to solve a problem through logical inference:
+
+\smallskip
+\textbf{Example:} 
+\begin{itemize}
+    \item If it rains, then the ground is wet.
+    \item If the ground is wet, then the grass is slippery.
+    \item The grass is not slippery.
+\end{itemize}
+\textbf{Question:}  Did it rain or not ?
+
+\paragraph{Notations}
+\begin{itemize}
+    \item Rain: $R$.
+    \item The ground is wet: $W$.
+    \item The grass is slippery: $S$.
+\end{itemize}
+
+\paragraph{Knowledge base} Each of the following statements are true:
+\begin{enumerate}
+    \item If it rains, then the ground is wet: $R \implies W$.
+    \item If the ground is wet, then the grass is slippery: $ W \implies S$.
+    \item The grass is not slippery: $\neg S$.
+\end{enumerate}
+
+\paragraph{Deduction}
+Using the rule of the contraposition, we have:
+\begin{itemize}
+    \item[] $ \neg S \implies \neg W$. \quad\quad (1.)
+    \item[] $ \neg W \implies \neg R$. \quad\quad (2.)
+    \item[] Thus, since $\neg S$ is true, \textbf{it did not rain}.
+\end{itemize}
+
+\bigskip
+Following this example, answer the following questions:
+
+\begin{enumerate}
+    \item Considering the same problem as the one given in the example, let's assume additionally that the ground is wet \emph{only} if the grass is slippery, and that the grass is slippery. 
+    
+    \textbf{Quesiton:} Did it rain or not ?
+
+    \sol{
+        On top of knowing that the grass is slippery ($S$), we have a new rule: $S \implies W$.
+        We thus know that the ground is wet as well: $W$.
+
+        However, we cannot tell anything about the rain, as the grass being slippery or the ground being wet does not imply anything about the rain: $(S \land W) \centernot\implies R$. 
+        We thus cannot say anything about the rain.
+    }
+
+    \item You are trying to catch a train, and you know for a fact that:
+    \begin{itemize}
+        \item If the train is late, you \emph{will} catch it.
+        \item If the train is on time and you leave on time, you \emph{will} catch it.
+        \item If you leave late, you \emph{will} miss the train.
+        \item You left late.
+    \end{itemize}
+    \textbf{Question:} Can you infer whether the train was late or not?
+
+    \sol{
+        \paragraph{Notations}
+        \begin{itemize}
+            \item The train is on time: $T$.
+            \item You left late: $L$.
+            \item You catch the train: $C$.
+        \end{itemize}
+
+        \paragraph{Knowledge base}
+        \begin{enumerate}
+            \item If the train is late, you \emph{will} catch it: $\neg T \implies C$.
+            \item If the train is on time and you leave on time, you \emph{will} catch it: $(T \land \neg L) \implies C$.
+            \item If you leave late, you \emph{will} miss the train: $L \implies \neg C$.
+            \item You left late: $L$.
+        \end{enumerate}
+
+        \paragraph{Deduction}
+        We must infer whether the train was late or not.
+        \begin{itemize}
+            \item We left late, so that means that we missed the train (c): $\neg C$.
+            \item By contraposition of (b): $\neg C \implies (\neg T \lor L)$. This rule cannot inform us about ($T$) since we are late ($L$).
+            \item By contraposition of (a): $\neg C \implies T$.
+            %\item Rule (b) does not provide anything additional.
+            \item With the latter, we inferred that \textbf{the train was on time}.
+        \end{itemize}
+    }
+
+    \item We are wondering about the relationships between Alice, Bob, and Charlie. We have that:
+    \begin{itemize}
+        \item If Bob is friends with Charlie, then Charlie is friends with Alice.
+        \item If Alice is friends with Bob, and Charlie is friends with Bob, then Alice is also friends with Charlie.
+        \item If Alice is not friends with Bob, then Charlie is not friends with Alice.
+        \item Bob and Charlie are friends.
+    \end{itemize}
+    \textbf{Question:} Prove whether Alice and Charlie are friends.
+    
+    \sol{
+        \paragraph{Notations}
+        \begin{itemize}
+            \item Alice is friends with Bob: $A_B$.
+            \item Alice is friends with Charlie: $A_C$.
+            \item Bob is friends with Alice: $B_A$.
+            \item Bob is friends with Charlie: $B_C$.
+            \item Charlie is friends with Alice: $C_A$.
+            \item Charlie is friends with Bob: $C_B$.
+        \end{itemize}
+
+        \paragraph{Knowledge base}
+        \begin{enumerate}
+            \item If Bob is friends with Charlie, then Charlie is friends with Alice: $B_C \implies C_A$.
+            \item If Alice is friends with Bob, and Charlie is friends with Bob, then Alice is also friends with Charlie: $(A_B \land C_B) \implies A_C$.
+            \item If Alice is not friends with Bob, then Charlie is not friends with Alice: $\neg A_B \implies \neg C_A$.
+            \item Bob and Charlie are friends: $B_C \land C_B$.
+        \end{enumerate}
+
+        \paragraph{Deduction}
+        We must infer the relationship between Alice and Charlie.
+        \begin{itemize}
+            \item Since Bob is friends with Charlie (d), we know that Charlie is friends with Alice (a): $C_A$.
+            \item Knowing that $C_A$ is true, through the contraposition of (c), $C_A \implies A_B$, we know that Alice is friends with Bob.
+            \item Finally, since Charlie (d) and Alice are friends with Bob, we know through (b) that $A_C$ must be also true.
+            \item Thus, \textbf{Alice and Charlie are friends}: $C_A \land A_C$.
+        \end{itemize}
+    }
+
+    \item Your friend is complaining about cramps. You know that they are practicing \emph{only} one of the four possible sports: Swimming, Running, Basketball, or Cycling.
+    You wish to guess which sport they are actually practicing. Let's assume that:
+    \begin{itemize}
+        \item \emph{Only} Swimming, Running, and Basketball \emph{can} cause cramps.
+        \item Basketball and Cycling \emph{always} make you thirsty.
+        \item Running \emph{cannot} make you dirty \emph{and} thirsty at the same time.
+    \end{itemize}
+    \textbf{Question:} Under which additional condition do you know for sure that your friend practices Basketball?
+    \sol{
+
+\paragraph{Given Conditions}
+We define the following logical statements:
+\begin{itemize}
+    \item $S$ = Swimming.
+    \item $R$ = Running.
+    \item $B$ = Basketball.
+    \item $C$ = Cycling.
+    \item $X$ = The friend has cramps.
+    \item $Y$ = The friend is thirsty.
+    \item $Z$ = The friend is dirty.
+\end{itemize}
+
+\paragraph{Knowledge Base}
+\begin{enumerate}
+    \item The friend practices one sport: $S \lor R \lor B \lor C$
+    \item The friend practices \emph{only} one sport: $\neg (S \land R) \land \neg (S \land B) \land \neg (S \land C) \land \neg (R \land B) \land \neg (R \land C) \land \neg (B \land C)$
+    \item Cramps occur only if the sport is Swimming, Running, or Basketball: $X \implies (S \lor R \lor B)$.
+    \item Basketball and Cycling always make you thirsty: $B \land C \implies Y$.
+    \item Running cannot make you both thirsty and dirty: $(Y \land Z) \implies \neg R$.
+    \item The friend has cramps: $X$.
+\end{enumerate}
+
+\paragraph{Deduction}
+We want to find under what conditions we can deduce that our friend is practicing Basketball ($B$).
+\begin{itemize}
+    \item Since the friend has cramps (f), they must be doing Swimming, Running, or Basketball (c): $S \lor R \lor B$.
+    \item Since we know that the friend practices only one sport (a \& b), we can rule out Cycling: $\neg C$.
+    \item If we further observe that the friend is \textbf{thirsty and dirty} ($Y \land Z$), then Running is ruled out because Running cannot make someone both dirty and thirsty (e by contraposition): $\neg R$
+    \item If we additionally observe that the sport \textbf{always makes them thirsty}, then Swimming must be ruled out, because Swimming does not always make people thirsty (d, $S \centernot\implies Y$) : $\neg S$
+    \item The only remaining sport is Basketball.
+\end{itemize}
+
+\paragraph{Conclusion}
+If we additionally observe that the friend is \textbf{Dirty} and \textbf{always Thirsty}, then we can infer that the friend is practicing Basketball ($B$). 
+    } 
+\end{enumerate}
+
+\section*{\textbf{Project -- Part 2}}
+
+\textbf{This whole section must be done in groups of \underline{2-3 people}.}
+\smallskip
+
+Reutilising what we did last week, we will add \textbf{constraints} to our problem using \textbf{logic}.
+
+\subsection{Guided Project}
+
+\paragraph{Dungeon Gridworld}
+
+\begin{figure}[h]
+    \centering
+\begin{tikzpicture}[scale=1]
+
+    % Draw outer walls (5x5 grid with walls around it)
+    \draw[thick] (-1, -1) rectangle (6, 6);
+
+    % Draw internal grid
+    \foreach \x in {0,...,5} {
+        \foreach \y in {0,...,5} {
+            \draw (\x, \y) rectangle ++(1, 1);
+        }
+    }
+    
+    % Draw surrounding walls as filled gray cells
+    \foreach \pos in {
+        (-1,-1), (0,-1), (1,-1), (2,-1), (3,-1), (4,-1), (5,-1), (5,-1),
+        (-1,2), (5,2),
+        (-1,3), (5,3),
+        (-1,4), (5,4),
+        (-1,5), (5,5),
+        (-1,5), (0,5), (1,5), (2,5), (3,5), (4,5), (5,5), (5,5),
+        (-1, 1), (-1, 0), (5, 1), (5, 0),
+        % walls
+        (2, 3), (2, 2), (0, 2), (2, 0)
+    } {
+        \fill[black] \pos rectangle ++(1, 1);
+    }
+
+    % Start position
+    \node at (0.5, 0.5) {\includegraphics[width=0.5cm]{happy-man.png}};
+
+    % Holes
+    \node at (0.5, 4.5) {\includegraphics[width=0.5cm]{hole.png}};
+    \node at (3.5, 2.5) {\includegraphics[width=0.5cm]{hole.png}};
+
+
+    % Stairs
+    \node at (3.5, 4.5) {\includegraphics[width=0.5cm]{stairs.png}};
+
+
+    % Add small coordinate labels at the bottom right
+    \foreach \x in {0,...,5} {
+        \foreach \y in {0,...,5} {
+            \node[scale=0.5, anchor=south east] at (\x + 0.98, \y + 0.01) {\small (\x, \y)};
+        }
+    }
+
+    % sensing
+    %\draw[red, line width=1.5pt] (-0.99, -0.99) rectangle (1.99, 1.99);
+    %\node[anchor=south, scale=0.75] at (0.01, 2) {\color{red} Sensing Range};
+
+\end{tikzpicture}
+\label{fig:env}
+\caption{A simple dungeon room with holes. The agent starts at position (0, 0).}
+\end{figure}
+
+This time, we will set a more constrained observation space as well as some logic to our problem.
+
+\textbf{New Assumptions:}
+\begin{itemize}
+    \item {\color{gray} The goal is to reach the stairs \textbf{as quickly as possible}.}
+    \item {\color{gray} Falling into a hole causes the game to end immediately.}
+    \item The agent \textbf{has partial visibility}, and only senses adjecent tiles:
+    \begin{itemize}
+        \item[-]  Whenever the agent is adjacent to a hole, it hears an \emph{Echo}.
+        \item[-]  Whenever the agent hits a wall, it senses a \emph{Bump}.
+        \item[-]  Whenever the agent is in the same row or column as the stairs, it observes \emph{Light}.
+    \end{itemize}
+    \item We can write any observation, upon picking an action as $\{e, b, l\}$, where $e=1$ if the agent hears an \emph{Echo} and 0 otherwise,  $b=1$ if the action resulted in no movements and 0 otherwise, etc.
+
+    \item additionally, we have the following \textbf{constraints}:
+    \begin{itemize}
+        \item[-]  Holes are \emph{always} on the same row or column as the stairs.
+        \item[-]  The stairs are \emph{never} adjacent to a hole.
+        \item[-]  If a tile is a wall, there \emph{cannot} be any agent, hole or stairs there.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Tasks:}
+\begin{enumerate}
+    \item Using logic notations, and by introducing appropriate variables, formalise under which conditions the agent sense an \emph{Echo}, a \emph{Bump} and \emph{Light}.
+    \item Let's say the agent performed the actions [↑,↑,→,→,→]. What is the knowledge base of the agent at this point in time ? 
+    
+    \sol{
+        \paragraph{Knowledge Base}
+        \begin{enumerate}
+        \item We bumped into a wall after the second action, thus, there is a wall at (0, 2). This also means that we walked the following path: [(0,0), (0,1), (1,1), (2,1), (3,1)].
+        \item There were no light at (0,0), (0,1), (1,1), (2,1), thus, $y_S \centernot \in \{0,1,2\}$ and  $x_S \centernot \in \{0, 1\}$.
+        \item There were light at (3,1), it could either mean that $x_S =3$ or that $y_S=1$. However, knowing that $y_S \centernot\in \{0, 1\}$, it implies that $x_S=3$.
+        \item Upon reaching tile (3,1), we heard an echo. This means that there is a hole either in (3,2), (4,1) or (3,0). (2,1) is not an option since we walked on that tile. 
+        (4,1) is not an option either since the hole must be on the same row or column than the stairs, but $x_S\neq 4$ and $y_S \neq 1$.
+        \end{enumerate}
+    }
+
+    \item Let's further imagine that the agent keeps going and performs next [→, ↑, ↑,↑]. What is the knowledge base at this point in time? Enumerate all possible models for tile (3,4).
+    \item Implement a simple logical inference module (Belief State update logic) using the template code in \texttt{dungeon\_with\_constraints.ipynb}.
+    \item Implement a simple agent using that inference module (\texttt{your\_agent()} function in \\ \texttt{dungeon\_with\_constraints.ipynb}).
+\end{enumerate}
+
+\subsection{Personal Project}
+
+Add some constraints and/or partial observability to your problem, then, if applicable:
+\begin{enumerate}
+\item Using logic notations, and by introducing appropriate variables, formalise the new constraints and/or formalise under which conditions observations are made. 
+\item Implement and try solving the problem with the added sensing and constraints in Python.
+\end{enumerate}
+
+\end{document}

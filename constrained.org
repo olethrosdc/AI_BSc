@@ -18,8 +18,8 @@
 - Bipartite matching.
 - Spanning trees.
 **** Continuous optimisation
-- Maximum flow: inequality constraints
-- Minimum-cost flow: equality constraints.
+- Linear programming.
+- Maximum flow / minimum-cost flow.
 
 * Constraint optimisation
 ** Introduction
@@ -118,6 +118,11 @@ The flow satisfies the following constraints:
 **** The maximum network flow problem
 Maximise $|f|$ while satisfying the capacity and conservation constraints.
 
+** Algorithms
+*** Naive search
+- Order variables $x_1, \ldots, x_n$.
+- At step $t = 1, \ldots, n$
+- Choose $x_t : $ such that the constraint is satisfied.
 * Logical constraints
 ** Logic 
 

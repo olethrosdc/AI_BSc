@@ -27,6 +27,7 @@
 #+LaTeX_HEADER: \newcommand \bA {\matrixsym{A}}
 #+LaTeX_HEADER: \newcommand \bR {\matrixsym{R}}
 #+LaTeX_HEADER: \newcommand \bp {\vectorsym{\pi}}
+#+LaTeX_HEADER: \newcommand \ba {\vectorsym{a}}
 #+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
 #+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
 #+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
@@ -35,6 +36,9 @@
 #+LaTeX_HEADER: \newcommand \Pols {\Pi}
 #+LaTeX_HEADER: \newcommand \mdp {\mu}
 #+LaTeX_HEADER: \newcommand \MDPs {\mathcal{M}}
+#+LaTeX_HEADER: \newcommand \PC {\texttt{P}}
+#+LaTeX_HEADER: \newcommand \NP {\texttt{NP}}
+#+LaTeX_HEADER: \newcommand \PPAD {\texttt{PPAD}}
 #+LaTeX_HEADER: \newcommand \bel {\beta}
 #+LaTeX_HEADER: \newcommand \Bels {\mathcal{B}}
 #+LaTeX_HEADER: \newcommand \Unif {\textrm{Unif}}
@@ -267,7 +271,7 @@ V^{1,*}_{t+1}(j)
 The above recursion can be used to calculate the minimax value function.
 
 *** Normal-form simultaneous-move zero-sum games
-(Also called *minimax* games)
+    (Also called *minimax* games)
 - Player $a$ chooses action $a$ in secret.
 - Player $b$ chooses action $b$ in secret.
 - Players observe both actions
@@ -280,7 +284,7 @@ Each player chooses an action randomly, independently of one another:
 \]
 $\pol_i$ is called a *mixed* strategy.
 *** Optimal strategies for zero-sum games
-**** The value of a game
+**** The value of a strategy pair
 The expected value of the game for the first player is
 \[
 V(\pol_1, \pol_2) \defn \sum_{a,b} \pol_1(a) \rho(a, b) \pol_2(b) = \bp_1^\top \bR \bp_2,
@@ -289,9 +293,9 @@ where $\bp_i$ is the vector form representation of $i$'s strategy.
 **** The value of the game
 Any zero-sum game has at least one solution $\pol^*$ over mixed strategies so that
 \[
-U(\pol^*_1, \pol^*_2)
-= \max_{\pol_1} \min_{\pol_2} U(\pol_1, \pol_2)
-= \min_{\pol_2} \max_{\pol_1}  U(\pol_1, \pol_2)
+V(\pol^*_1, \pol^*_2)
+= \max_{\pol_1} \min_{\pol_2} V(\pol_1, \pol_2)
+= \min_{\pol_2} \max_{\pol_1}  V(\pol_1, \pol_2)
 \]
 The problem can be solved through *linear programming*
 
@@ -325,24 +329,13 @@ Find the lowest upper bound for player 2
 * General sum games
 ** Normal-form games
 *** Normal-form general sum games
-Each player moves at the same time
-*** Example: Chicken
-| $\rho^1, \rho^2$ | turn  | dare |
-|------------------+-------+----------|
-| /                | <     | <        |
-| turn             | 0, 0  | -5, -1   |
-|------------------+-------+----------|
-| dare             | 1, -5 | -10, -10 |
-
-*** Example: Prisoner's dilemma
-| $\rho^1, \rho^2$ | cooperate | defect   |
-|------------------+-----------+----------|
-| /                | <         | <        |
-| cooperate        | 0, 0      | -5, -1   |
-|------------------+-----------+----------|
-| defect           | 1, -5     | -10, -10 |
-
-
+**** Game structure
+- Each player $i$ chooses action $a^i \in A_i$ in secret.
+- The *joint action* is $\ba = (a^1, \ldots, a^n)$.
+- The players then receive a reward $\rho^i(\ba)$
+**** Mixed strategies
+Players can independently draw actions $a^i$ from $\pol(a^i)$
+The expected utility of the strateg
 
 *** Example: penalty shot
 | $\rho^1, \rho^2$ | kick left | kick right |
@@ -353,12 +346,62 @@ Each player moves at the same time
 | dive right       | -1 1      | 1, -1      |
 
 
+*** Example: Chicken
+| $\rho^1, \rho^2$ | turn   | dare     |
+|------------------+--------+----------|
+| /                | <      | <        |
+| turn             | 0, 0   | -1, +1   |
+|------------------+--------+----------|
+| dare             | +1, -1 | -10, -10 |
+
+*** Example: Prisoner's dilemma
+| $\rho^1, \rho^2$ | cooperate | defect   |
+|------------------+-----------+----------|
+| /                | <         | <        |
+| cooperate        | -1, -1    | -5, 0    |
+|------------------+-----------+----------|
+| defect           | 0, -5     | -3, -3   |
+
+
+
+
 *** Pareto-Optimality
 [[./figures/Pareto.pdf]]
+
 *** Nash equilibria
+A good notion for these kinds of games are Nash equilibria
+
 
 *** Computing Nash equlibria
 
+
+- A Nash equilibrium always exists (Nash, 1950)
+- Nash is $\PPAD$, with $\PC \subseteq \PPAD \subseteq \NP$
+**** The Brouwer problem (PPAD)
+Input:
+- a function $F : [0,1]^m \to [0,1]^m$
+- $L \in (0,1)$ is a *Lipschitz constant* such that $\|F(x) - F(x')\| \leq L \|x - x'\|$
+- An $\epsilon >0$
+Output:
+- $x^*$ such that $\|F(x^*) - x^*\| \leq \epsilon$.
+**** The connection with Nash
+- Given by Nash himself in his 1950 proof.
+- The *fixed point* of $F$ is the *Nash equlibrium*
+*** The Linear Complementarity Problem
+- $\sum_b \rho^1(a,b) \pi_2(b) + s_1(a)= v_1$ for all $a$
+- $\sum_a \rho^2(j,b) \pi_1(a) + s_2(b) = v_1$ for all $b$
+- $\|\pi_i\|_1 = $, $\pi_i \geq 0$
+- $s \geq 0$
+- $\pi_i \cdot s_i = 0$: assigns zero to slack variables corresponding to actions with probability > 0
+*** Optimistic hedge
+**** Hedge
+\[
+w_{t+1} \propto w_t * exp(\eta r_t)
+\]
+**** Optimistic hedge
+\[
+x_{t+1} \propto x_t * \exp(\eta r_{t-1} - 2r_t)
+\]
 
 
 ** Extensive-form games

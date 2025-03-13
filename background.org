@@ -36,6 +36,7 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
+#+latex_header: \AtBeginSection[]{\begin{frame}<beamer>\tableofcontents[currentsection]\end{frame}}
 
 * Elementary background
 ** Logic and Set theory
@@ -200,6 +201,13 @@ P(f \in A \wedge g \in B) = P(f \in A) P(g \in B) = P_f(A) P_g(B).
 \]
 In that sense, $f \sim P_f$ and $g \sim P_g$.
 
+**** IID (Independent and Identically Distributed) random variables
+A sequence $x_t$ of r.v.s is IID if $x_t \sim P$
+$(x_1, \ldots, x_t, \ldots, x_T) \sim P^T$.
+
+
+
+
 *** Expectation
 For any real-valued random variable $f: \Omega \to \Reals$, the expectation with respect to a probability measure $P$ is
 \[
@@ -218,16 +226,14 @@ For any RVs $x, y$:
 If $x,y$ are independent RVs then $\E_P(xy) = \E(x)\E(y)$.
 **** Correlation
 If $x,y$ are *not* correlated then $\E_P(xy) = \E(x)\E(y)$.
-**** IID (Independent and Identically Distributed) random variables
-A sequence $x_t$ of r.v.s is IID if $x_t \sim P$
-$(x_1, \ldots, x_t, \ldots, x_T) \sim P^T$.
+
+
 
 *** Conditional expectation
 The conditional expectation of a random variable $f: \Omega \to \Reals$, with respect to a probability measure $P$ conditioned on some event $B$ is simply
 \[
 \E_P(f | B) = \sum_{\omega \in \Omega} f(\omega) P(\omega | B).
 \]
-
 
 *** Variance
 For any real-valued random variable $f: \Omega \to \Reals$, the variance with respect to a probability measure $P$ is
@@ -249,7 +255,10 @@ If $f,g$ are independent RVs
 
 * Linear algebra
 ** Vectors
-*** Vector space $F$ axioms
+*** Vector space $F$ 
+- The Euclidean space $\Reals^d$ is a vector space.
+- Vector spaces have the following properties.
+**** Axioms of $F$
 - $(x + y) + z = x + (y + z)$, for all $x, y, z \in F$.
 - $x + y = y + x$, for all $x, y \in F$.
 - There is a zero element $0 \in F$ such that $x + 0 = 0$ for all $x \in F$.
@@ -258,25 +267,29 @@ If $f,g$ are independent RVs
 - $(a+b)x = ax + bx$, For any $a,b \in \Reals$, $x \in F$.
 *** The real vector space $F = \Reals^d$
 For $a \in \Reals$ and $x, y \in F$, 
-- $x = (x_1, \ldots, x_d)$, $y = (y_1, \ldots, y_d)$
-- $x + y = (x_1 + y_1, \ldots, x_d + y_d)$.
-- $ax = (a x_1, \ldots, a x_d)$.
-- $-x = (-1) x$.
-- $0 = (0, \ldots, 0)$
+- Elements: $x = (x_1, \ldots, x_d)$, $y = (y_1, \ldots, y_d)$
+- Addition: $x + y = (x_1 + y_1, \ldots, x_d + y_d)$.
+- Scalar multiplication: $ax = (a x_1, \ldots, a x_d)$.
+- Negation: $-x = (-1) x$.
+- Zero element: $0 = (0, \ldots, 0)$
 
 ** Linear operators and matrices
 *** Linear operators
-**** Linear operator $A : F \to G$
-- $A(x + y) = Ax + Ay$
-- $A(ax) = a(Ax)$.
+**** Linear operator $A : F \to G$.
+A linear operator $A$ from one vector space $F$ to another, $G$ has the following properties:
+- $A(x + y) = Ax + Ay$ for all $x, y \in F$.
+- $A(ax) = a(Ax)$, for all $a \in \Reals$, $x \in F$.
 **** Matrices in $\Reals^{n \times m}$.
-A matrix $\bA \in \Reals^{n \times m}$ is a tabular array
-\(\bA= \begin{bmatrix}
-a_{1,1} & \cdots & a_{1, m}\\
+A matrix $A \in \Reals^{n \times m}$ is a tabular array
+\[
+A= \begin{bmatrix}
+A_{1,1} & \cdots & A_{1, m}\\
 \vdots  & \ddots & \vdots \\
-a_{n,1} & \cdots & a_{n, m}
-\end{bmatrix}\)
-Matrices can be seen as linear operators when used to multiply vectors.
+A_{n,1} & \cdots & A_{n, m}
+\end{bmatrix}
+\]
+
+Matrices can be seen as linear operators $A : \Reals^n \to \Reals^m$, mapping vectors in $\Reals^n$ to vectors in $\Reals^m$. 
 *** Multiplication operators
 **** Matrix multiplication
 For $A \in \Reals^{n \times d}$, $B \in \Reals^{d \times m}$, the
@@ -378,6 +391,7 @@ This is the vector of all its partial derivatives:
 \right)^\top
 \]
 **** Directional derivative
+We can also look at how much the function increases in a specific direction $\delta \in \Reals^n$.
 \[
 D_\delta f(x) = \lim_{\epsilon \to 0} \frac{f(x + \epsilon \delta) - f(x)}{\epsilon}.
 \]

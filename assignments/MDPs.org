@@ -1,0 +1,25 @@
+* Exercise 1
+
+Consider an MDP with the following probabilities.
+        \begin{tikzpicture}
+          \node at (0, -3) {$s_t$};
+          \node at (2, -3) {$a_t$};
+          \node at (3, -3) {$r_t$};
+          \node at (5, -3) {$s_{t+1}$};
+          \node[RV] at (0,0) (s1) {$\only<1>?\only<2>{1.4}$};
+          \node[select] at (2,-1) (a1) {$0.7$};
+          \node[select] at (2,1) (a2) {$1.4$};
+          \node[utility] at (3,2) (r2) {$1$};
+          \node[utility] at (3,-2) (r1) {$0$};
+          \node[RV] at (5,1) (s2a) {$1$};
+          \node[RV] at (5,-1) (s2b) {$0$};
+          \draw[->] (s1) to node [sloped,anchor=south] {$\only<1>{?}\only<2>{0}$} (a1);
+          \draw[->] (s1) to node [sloped,anchor=south] {$\only<1>{?}\only<2>{1}$} (a2);
+          \draw[->] (a1) to node [sloped,auto] {$0.7$} (s2a);
+          \draw[->] (a1) to node [sloped,auto] {$0.3$} (s2b);
+          \draw[->] (a2) to node [sloped,auto] {$0.4$} (s2a);
+          \draw[->] (a2) to node [sloped,auto] {$0.6$} (s2b);
+          \draw[->] (a1) to (r1);
+          \draw[->] (a2) to (r2);
+        \end{tikzpicture}
+

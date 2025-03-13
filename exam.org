@@ -1,0 +1,182 @@
+#+TITLE: Sample exam questions for Artificial Intelligence
+#+AUTHOR: Christos Dimitrakakis
+#+EMAIL:christos.dimitrakakis@unine.ch
+#+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
+#+LaTeX_HEADER: \usepackage{tikz}
+#+LaTeX_HEADER: \usepackage{amsmath}
+#+LaTeX_HEADER: \usepackage{amssymb}
+#+LaTeX_HEADER: \usepackage{isomath}
+#+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
+#+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
+#+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmax}{arg\,max}
+#+LaTeX_HEADER: \DeclareMathOperator*{\argmin}{arg\,min}
+#+LaTeX_HEADER: \DeclareMathOperator*{\sgn}{sgn}
+#+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
+#+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
+#+LaTeX_HEADER: \newcommand \Param {\Theta}
+#+LaTeX_HEADER: \newcommand \param {\theta}
+#+LaTeX_HEADER: \newcommand \vparam {\vectorsym{\theta}}
+#+LaTeX_HEADER: \newcommand \mparam {\matrixsym{\Theta}}
+#+LaTeX_HEADER: \newcommand \bW {\matrixsym{W}}
+#+LaTeX_HEADER: \newcommand \bw {\vectorsym{w}}
+#+LaTeX_HEADER: \newcommand \wi {\vectorsym{w}_i}
+#+LaTeX_HEADER: \newcommand \wij {w_{i,j}}
+#+LaTeX_HEADER: \newcommand \bA {\matrixsym{A}}
+#+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
+#+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
+#+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
+#+LaTeX_HEADER: \newcommand \cset[2] {\left\{#1 ~\middle|~ #2 \right\}}
+#+LaTeX_HEADER: \newcommand \pol {\pi}
+#+LaTeX_HEADER: \newcommand \Pols {\Pi}
+#+LaTeX_HEADER: \newcommand \mdp {\mu}
+#+LaTeX_HEADER: \newcommand \MDPs {\mathcal{M}}
+#+LaTeX_HEADER: \newcommand \bel {\beta}
+#+LaTeX_HEADER: \newcommand \Bels {\mathcal{B}}
+#+LaTeX_HEADER: \newcommand \Unif {\textrm{Unif}}
+#+LaTeX_HEADER: \newcommand \Ber {\textrm{Bernoulli}}
+#+LaTeX_HEADER: \newcommand \Mult {\textrm{Mult}}
+#+LaTeX_HEADER: \newcommand \Beta {\textrm{Beta}}
+#+LaTeX_HEADER: \newcommand \Dir {\textrm{Dir}}
+#+LaTeX_HEADER: \newcommand \Normal {\textrm{Normal}}
+#+LaTeX_HEADER: \newcommand \Simplex {\mathbb{\Delta}}
+#+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
+#+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
+#+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
+#+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
+#+LaTeX_HEADER: \usetikzlibrary{arrows.meta, positioning, quotes}
+#+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
+#+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
+#+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_CLASS_OPTIONS: [smaller]
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+TAGS: activity advanced definition exercise homework project example theory code
+#+OPTIONS:   H:3
+
+* General
+
+A *cleaning robot* is installed in a kitchen. A charger is installed at the corner of the kitchen. The robot has a infrared sensor that detects the angle towards the charger, a radar sensor, which gives distances to the closest obstacle in each of 360 degrees, as well a touch sensor in all four cardinal directions. It also has a sensor telling it how much dirt it has collected so far, and the condition of its battery. It can turn left or right, or move forward. When it is at the charging station, it charges automatically.
+
+Consider the optimisation problem of how the robot should act when it is instructed to 'clean the kitchen'. Assume nobody is in the kitchen while the robot is active. Justify your answers.
+
+1. Is the problem fully or partially observable?
+2. What is the state space?
+3. Is this a search problem, a (partially observable) Markov decision process, or a (general, or zero-sum) game? 
+4. What would be an appropriate cost of reward function?
+
+
+* Search
+
+- The reward $r_{ij}$ from each node $i$ to the next $j$ are given on the arcs.
+- The objective is to get the maximum reward path $\tau = (x_1, \ldots, x_t)$ from the start $s$ to the goal $g$, i.e. maximising
+\[
+\sum_{i =1}^{t-1} r_{x_{i},x_{i+1}}
+\]
+with $x_1 = s$ and $x_t = g$.
+
+\begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
+      \node[RV,label=below:{start}] at (0,0) (0) {0};
+      \node[RV] at (0,2) (1) {1};
+      \node[RV] at (4,2) (2) {2};
+      \node[RV] at (4,0) (3) {3};
+      \node[RV,label=below:{goal}] at (8,0) (4) {4};
+      \draw[->] (0) edge["r=1"] (1);
+      \draw[->] (1) edge["r=2"] (2);
+      \draw[->] (0) edge["r=5"] (3);
+      \draw[->] (2) edge["r=1"] (3);
+      \draw[->] (3) edge["r=1"] (4);
+      \draw[->] (2) edge["r=4"] (4);
+\end{tikzpicture}
+
+
+(A) For the given graph, and the following algorithms, what is the *first* path found by each algorithm, assuming that, other things equal, they all open lower-numbered nodes first.?
+
+1. Depth-first search.
+2. Breadth-first search.
+3. Search where we expand the next open node $j$ from node $i$ with maximal utility so far.
+
+(B)  How can we ensure that the *optimal* path is obtained in all cases?
+
+* Logic
+You have an exam at 9am next Friday. To succeed at the exam, the following are necessary (i.e. if you fail to satisfy any one of them, you will fail)
+We give names to each one of them:
+- $S$: You must study.
+- $A$: You have to set your alarm clock at 8am on the day of the exam.
+- $N$: You must fall asleep before midnight the night before.
+Finally, let us give the name $Y$ to 'exam success'.
+
+Write a logical formula connecting the above, where $\vee$ means *or*, $\wedge$ means *and*, $\Rightarrow$ means *implies*, and $\neg$ means *negation*
+
+* Probability
+A prosecutor claims that the defendant is guilty because they have found DNA matching them on the scene of the crime. He claims that DNA testing has a false positive rate of one in a million ($10^{-6}$). While this is indeed evidence for the prosecution, it does not mean that the probability that the defendant is innocent is $10^{-6}$. What other information would you need to calculate the probability of the defendant being guilty given the evidence, and how would you incorporate it?
+
+As a reminder, the definition of conditional probability is $P(A | B) = P(A \cap B) / P(B)$. 
+
+* Expected utility theory
+
+Consider two problem where you need to decide between two actions A, B. Each action gives you a certain monetary reward $\omega$ with a certain probability. For example action $A$ gives you 1 CHF with probability 9%.
+
+1. Assuming your utility for rewards is linear, i.e. $U(r) = r$, which action gives you a higher expected utility?
+2. Assuming your utility for rewards is exponential, i.e. $U(r) = 2^{r}$, which action gives you a higher expected utility?
+
+Hint: Use the definition of conditional expectation $\E[U | A]$.
+
+#+NAME: No downside
+|--------+--------+-------+--------|
+| Action | -1 CHF | 1 CHF | 10 CHF |
+|--------+--------+-------+--------|
+| A      |    90% |    9% |     1% |
+| B      |    10% |   90% |     0% |
+|--------+--------+-------+--------|
+
+
+
+
+
+* Markov decision processes
+  The following diagram shows a Markov decision process where the circles denote states, the squares denote action notes, and the rhomboids reward nodes. The probability of reaching a state by taking different actions is given on the connecting edges. The process ends after two steps and the utility is defined as the total reward $U_t = r_t + r_{t+1}$. Calculate the expected value of the first state at $s_t$ for the optimal policy, i.e. the one maximising expected utility.
+
+  \begin{tikzpicture}
+    \node at (0, -3) {$s_t$};
+    \node at (2, -3) {$a_t$};
+    \node at (3, -3) {$r_t$};
+    \node at (5, -3) {$s_{t+1}$};
+    \node at (6, -3) {$r_{t+1}$};
+    \node[RV] at (0,0) (s1) {};
+    \node[select] at (2,-1) (a1) {};
+    \node[select] at (2,1) (a2) {};
+    \node[utility] at (3,2) (r2) {$1$};
+    \node[utility] at (3,-2) (r1) {$0$};
+    \node[RV] at (5,1) (s2a) {};
+    \node[RV] at (5,-1) (s2b) {};
+    \node[utility] at (6,2) (r2a) {$0$};
+    \node[utility] at (6,-2) (r2b) {$1$};
+    \draw[->] (s1) to node [sloped,anchor=south] { } (a1);
+    \draw[->] (s1) to node [sloped,anchor=south] { } (a2);
+    \draw[->] (a1) to node [sloped,anchor=north] {$0.2$} (s2a);
+    \draw[->] (a1) to node [sloped,auto] {$0.8$} (s2b);
+    \draw[->] (a2) to node [sloped,auto] {$0.4$} (s2a);
+    \draw[->] (a2) to node [sloped,anchor=east] {$0.6$} (s2b);
+    \draw[->] (a1) to (r1);
+    \draw[->] (a2) to (r2);
+    \draw[->] (s2a) to (r2a);
+    \draw[->] (s2b) to (r2b);
+  \end{tikzpicture}
+
+* Game theory
+
+Consider a two-player game with payoffs $\rho_i(a, b)$ for player $i$, when P1 plays $a \in A$ and P2 $b \in B$,
+with $A, B$ both finite sets. Recall that a *pure Nash* equilibrium $a^*, b^*$ has the property
+\[
+\rho_1(a^*, b^*) \geq \rho_1(a, b^*), \qquad \rho_2(a^*, b^*) \geq \rho_2(a^*, b).
+\]
+
+We define:
+- $a_1, b_1$ be the optimal actions for the two players if P1 plays first and
+- $a_2, b_2$ be the optimal actions for the two players if P2 plays first.
+
+Show that if $a_1 = a_2$ and $b_1 = b_2$ then a pure Nash equilibrium exists.
+

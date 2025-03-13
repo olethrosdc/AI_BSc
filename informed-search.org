@@ -1,75 +1,48 @@
 #+TITLE: Informed search
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
-#+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
-#+LaTeX_HEADER: \usepackage{tikz}
-#+LaTeX_HEADER: \usepackage{amsmath}
-#+LaTeX_HEADER: \usepackage{amssymb}
-#+LaTeX_HEADER: \usepackage{isomath}
-#+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
-#+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
-#+LaTeX_HEADER: \DeclareMathOperator*{\argmax}{arg\,max}
-#+LaTeX_HEADER: \DeclareMathOperator*{\argmin}{arg\,min}
-#+LaTeX_HEADER: \DeclareMathOperator*{\sgn}{sgn}
-#+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
-#+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
-#+LaTeX_HEADER: \newcommand \Param {\Theta}
-#+LaTeX_HEADER: \newcommand \param {\theta}
-#+LaTeX_HEADER: \newcommand \vparam {\vectorsym{\theta}}
-#+LaTeX_HEADER: \newcommand \mparam {\matrixsym{\Theta}}
-#+LaTeX_HEADER: \newcommand \bW {\matrixsym{W}}
-#+LaTeX_HEADER: \newcommand \bw {\vectorsym{w}}
-#+LaTeX_HEADER: \newcommand \wi {\vectorsym{w}_i}
-#+LaTeX_HEADER: \newcommand \wij {w_{i,j}}
-#+LaTeX_HEADER: \newcommand \bA {\matrixsym{A}}
-#+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
-#+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
-#+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
-#+LaTeX_HEADER: \newcommand \cset[2] {\left\{#1 ~\middle|~ #2 \right\}}
-#+LaTeX_HEADER: \newcommand \pol {\pi}
-#+LaTeX_HEADER: \newcommand \Pols {\Pi}
-#+LaTeX_HEADER: \newcommand \mdp {\mu}
-#+LaTeX_HEADER: \newcommand \MDPs {\mathcal{M}}
-#+LaTeX_HEADER: \newcommand \bel {\beta}
-#+LaTeX_HEADER: \newcommand \Bels {\mathcal{B}}
-#+LaTeX_HEADER: \newcommand \Unif {\textrm{Unif}}
-#+LaTeX_HEADER: \newcommand \Ber {\textrm{Bernoulli}}
-#+LaTeX_HEADER: \newcommand \Mult {\textrm{Mult}}
-#+LaTeX_HEADER: \newcommand \Beta {\textrm{Beta}}
-#+LaTeX_HEADER: \newcommand \Dir {\textrm{Dir}}
-#+LaTeX_HEADER: \newcommand \Normal {\textrm{Normal}}
-#+LaTeX_HEADER: \newcommand \Simplex {\mathbb{\Delta}}
-#+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
-#+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
-#+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
-#+LaTeX_HEADER: \newcommand \parent {\texttt{parent}}
-#+LaTeX_HEADER: \newcommand \child {\texttt{child}}
-#+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
-#+LaTeX_HEADER: \usetikzlibrary{arrows.meta, positioning, quotes}
-#+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
-#+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
-#+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
-#+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \input{preamble}
 #+LaTeX_CLASS_OPTIONS: [smaller]
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
 * The Shortest Path Problem
 ** The shortest path problem
-*** The shortest path problem
+*** The costs of a path
+At time $t$:
 #+ATTR_BEAMER: :overlay <+->
-- Traversing arc $\langle x, y \rangle$ incurs *costs* $c(\langle x,y \rangle)$
-- Following a *path* $h$ has a total cost $C(h) = \sum_{\langle x,y \rangle \in h} c(\langle x,y \rangle)$
-- We can equivalently consider state-action *costs* $c(s,a)$.
-- A policy $\pi$ specifies a path $x_1, \ldots$ with $x_{k+1} = \tau(x_k, \pi(x_k))$
-- Following a *policy* $\pi$ from state $x_1 = x$ has a total cost $C^\pi(x_1) = \sum_{k=1}^{t} c(x_k, \pi(x_k))$.
+- We are in state $s_t \in S$.
+- We take some action $a_t \in A$.
+- Then we pay cost $c_t = c(s_t, a_t)$ and...
+- .. move to state $s_{t+1} = \trans(s_t, a_t)$.
 #+BEAMER: \pause
-**** The shortest path problem
-- Input:  *start* nodes $X$ and *goal* nodes $Y$ and edge costs $c: A \to \Reals$.
-- Output: Find a path $h$ from $X$ to $Y$ so that $C(h) \leq C(h')$ for all $h'$ 
+**** The cost of a policy $\pol : S \to A$.
+#+ATTR_BEAMER: :overlay <+->
+- A policy $\pol$ specifies a *path* $s_1, \ldots$ with $s_{k+1} = \tau(s_k, \pi(s_k))$
+- Following $\pol$ from state $s_1$ has a total *cost* $C^\pi(s_1) \defn \sum_{k=1}^{t} c(s_k, \pi(s_k))$.
+#+BEAMER: \pause
+**** The cost of a path (alternative)
+#+ATTR_BEAMER: :overlay <+->
+- We can instead use costs for going from state $x$ to state $y$:  $c(\langle x,y \rangle)$.
+- Following a *path* $h$ has a total cost $C(h) \defn \sum_{\langle x,y \rangle \in h} c(\langle x,y \rangle)$
+
+
+*** The shortest path problem
+**** Input: 
+#+ATTR_BEAMER: :overlay <+->
+- State space $S$.
+- *transition* function $\trans : S \times A \to S$.
+- *start* states $X \subset S$
+- *goal* states $Y \subset S$
+- *costs* $c: S \times A \to \Reals$
+
+#+BEAMER: \pause
+**** Output 
+#+ATTR_BEAMER: :overlay <+->
+Either:
+- Find a path $h$ from $X$ to $Y$ so that $C(h) \leq C(h')$ for all $h'$
+- Find a policy $\pol : S \to A$ that finds a shortest path for every starting state.
+
 #+BEAMER: \pause
 **** Notes
 - If the path/policy does not reach a goal, the cost is infinite.
@@ -79,16 +52,26 @@
 *** Formalising the shortest path problem
 The cost from state $s$ of a policy that reaches a goal in $Y$ is
 \[
-C^\pi(s) \defn \sum_{i=1}^\infty c[s_{t}, \pi(s_t)], \qquad s_{t+1} = \tau[s_t, \pi(s_t)], \quad s_{1} = s
+C^\pi(s) \defn \sum_{i=1}^\infty c[s_{i}, \pi(s_i)], \qquad s_{i+1} = \tau[s_i, \pi(s_i)], \quad s_{1} = s
 \]
-where for every $y \in Y$,  $y(s, a) = 0$ and $\tau(y,a) = y$ for all actions.
-- We can calculate this recursively (from the goal state)
+where for every $y \in Y$,  $c(s, a) = 0$ and $\tau(y,a) = y$ for all actions.
+#+BEAMER: \pause
+- We can calculate this recursively:
 \begin{align}
 C^\pi(s)
-& = \sum_{i=1}^\infty c[s_{t}, \pi(s_t)]\\
-& = c[s, \pi(s)] + \sum_{i=2}^\infty c[s_{t}, \pi(s_t)]\\
+\uncover<2->{
+& = \sum_{t=1}^\infty c[s_{t}, \pi(s_t)]\\
+}
+\uncover<3->{
+& = c[s, \pi(s)] + \sum_{t=2}^\infty c[s_{t}, \pi(s_t)]\\
+}
+\uncover<4->{
 & = c[s, \pi(s)] + C^\pi\{\tau[s, \pi(s)]\}.
+}
 \end{align}
+#+BEAMER: \pause
+#+BEAMER: \pause
+#+BEAMER: \pause
 - The same idea applies for the *shortest* path
 \begin{align}
 C^*(s) 
@@ -100,13 +83,14 @@ C^*(s)
 **** Shortest path algorithm
 \begin{algorithmic}
 \STATE Input: Goal states $Y$, starting state $x$.
-\STATE Set $C(s) = 0$ for all states $s \in Y$, $F_0 = Y$.
-\FOR {$t = 0,1, \ldots$}
-\FOR {$s' \in F_t$}
+\STATE Set $C(s) = 0$ for $s \in Y$, $C(s) = \infty$ for $s \notin Y$, $F_0 = Y$
+\FOR {$t = 0, 1, \ldots$}
+\STATE $s_t = \argmin_{s \in F_t} C(s)$
+\FOR {$s \in \parent(s_t)$}
 \STATE $\pol(s) = \argmin_a c(s,a) + C(\tau(s, a))$
 \STATE $C(s) = \min_a c(s,a) + C(\tau(s, a))$
 \ENDFOR
-\STATE $F_{t+1} = \parent(F_t)$.
+\STATE $F_{t+1} = F_t \setminus \{s_t\} \cup \parent(s_t)$
 \IF {$F_{t+1} = \emptyset$ or $x \in F_t$}
 \RETURN $\pol, C$
 \ENDIF
@@ -120,45 +104,74 @@ C^*(s)
 *** Optimality proof
 **** Theorem
 $C(s) = C^*(s)$
+#+BEAMER: \pause
 **** Proof
+#+ATTR_BEAMER: :overlay <+->
 - If $s \in Y$, then $C(s) = 0 = C^*(s)$.
 - For any other $s', s = \parent(s')$: we will show that:
  if $C(s') \leq C^*(s')$ then $C(s) \leq C^*(s)$.
 \begin{align*}
+\uncover<3->{
 C(s)
 &=
 \min_a \left\{c(s,a) + C(\tau(s,a))\right\}
 \tag{by definition}
 \\
+}
+\uncover<4->{
 &\leq
 \min_a \left\{ c(s,a) + C^*(\tau(s,a)) \right\}
 \tag{by induction}
 \\
+}
+\uncover<5->{
 &\leq
 \min_a \left\{ c(s,a) + C^{\pi'}(\tau(s,a)) \right\},
 \qquad \forall \pi'
 \tag{by optimality}
 \\
+}
+\uncover<6->{
 &\leq
 C^\pi(s), \qquad \forall \pi.
+}
 \end{align*}
+#+BEAMER: \pause
+#+BEAMER: \pause
+#+BEAMER: \pause
 For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s)$, so $C(s) \leq C^*(s)$. Finally,
 \[
-C^*(s) \geq C^{\pi}(s) = C(s) \geq C^*(s),
+C^*(s) \leq C^{\pi}(s) = C(s) \leq C^*(s),
 \]
 since $C^{\pi}(s) = C(s)$ for the policy returned by the algorithm.
+*** Properties of Dijkstra's algorithm
+The properties of the algorithm depend on some details.
+
+**** Finding the shortest path from $X$ to $Y$.
+- Stops when a *goal* is found.
+- The costs along that optimal path are correct.
+- Costs of any other state may be incorrect.
+- This is because of the greedy step in which states are searched.
+- This version is used in search and practical papers.
+
+**** Finds all optimal paths from $X$ to $Y$.
+- Stops when  *no more updates* are possible.
+- The costs along all paths are correct.
+- This is because of the stopping condition.
+- This version is used in theoretical algorithmic papers.
+
 ** Heuristic Search
 *** Partial graphs
 - Why do we need search?
 - We do not want to calculate on the whole graph
 - We use *search* to find the shortest path more efficiently (perhaps).
-- We denote the total cost of some path $x_1, \ldots, x_t$ as:
+- We denote the total cost of some path $s_1, \ldots, s_t$ as:
 \[
-C(x_1, \ldots, x_t)
+C(s_1, \ldots, s_t)
 \]
-- The remaining cost from $x_t$ to the goal using some policy $\pi$ as
+- The remaining cost from $s_t$ to the goal using some policy $\pi$ as
 \[
-C^\pi(x_t)
+C^\pi(s_t)
 \]
 
 *** Generic search
@@ -194,17 +207,17 @@ We now consider a general method for searching a node in the frontier.
 \STATE \textbf{input} $h : N \to \Reals$: heuristic function.
 \STATE \textbf{input} $x$ : Start node
 \STATE \textbf{function} \texttt{A-Star}($G, x, h$)
-\STATE $S' = \emptyset$ : Nodes searched.
-\STATE $F = \{x\}$. Initialise the frontier
-\STATE $c_x = 0$. Initialise the cost of node $x$
+\STATE $S' = \emptyset$ \# Nodes searched.
+\STATE $F = \{x\}$. \# Initialise the frontier
+\STATE $c_x = 0$. \# Initialise the cost of node $x$
 \WHILE {$F \neq \emptyset$}
-\STATE $n = \argmin_{i \in F} c_i + h(i)$. Select minimum cost + heuristic node.
-\STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
+\STATE $n = \argmin_{i \in F} c_i + h(i)$. \# Select minimum cost + heuristic.
+\STATE $F = F \setminus \{n\}$. \# Remove $n$ from the frontier.
 \IF {$n \notin S'$}
-\STATE $B = \child(n) \setminus S'$. Get the set of unsearched children of $n$.
-\STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
-\STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
-\STATE $F = F \cup B$. Add $n$'s children to the frontier.
+\STATE $B = \child(n) \setminus S'$. \# Get the set of unsearched children of $n$.
+\STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. \# Calculate the total cost to each child $b$.
+\STATE $S' = S' \cup \{n\}$. \# Add $n$ to the list of searched nodes.
+\STATE $F = F \cup B$. \# Add $n$'s children to the frontier.
 \ENDIF
 \ENDWHILE
 \end{algorithmic}
@@ -219,12 +232,15 @@ C^*(n) \geq h(n).
 *** Admissibility of $A^*$
 **** Theorem
 $A^*$ returns an optimal solution if
+#+ATTR_BEAMER: :overlay <+->
 - The graph has a bounded branching factor.
 - All costs are greater that $\epsilon > 0$
 - The heuristic is admissible, i.e. $0 \leq h(n) \leq C^*(n)$ for all $n \in N$.
+#+BEAMER: \pause
 **** Proof
+#+ATTR_BEAMER: :overlay <+->
 - *Existence*. There is a finite number of paths that will be explored, as the longest possible path to a goal is $C^*(0)/\epsilon$ and the branching factor is bounded.
-- *Optimality*. The proof is by contradiction. Let as assume that $A^*$ finds some $\pi \neq \pi^*$ so that $C(\pi) > C(\pi^*)$. That means that at some node $n$ on the path there is an action $a^*$ on the optimal policy, but we keep expanding the path $x_1, x_2, \ldots$ of $\pi$. However, since $C(\pi) > C(\pi^*)$ there must be some $t$ such that $C(n, x_1, \ldots, x_t) > C^{\pi^*}(n)$. But then, to expand $\pi$ requires that $C(n, x_1, \ldots, x_t) + h(x') < h(x) \leq C^{\pi^*}(n)$.
+- *Optimality*. The proof is by contradiction. Let as assume that $A^*$ finds some $\pi \neq \pi^*$ so that $C(\pi) > C(\pi^*)$. That means that at some node $n$ on the path there is an action $a^*$ on the optimal policy, but we keep expanding the path $s_1, s_2, \ldots$ of $\pi$. However, since $C(\pi) > C(\pi^*)$ there must be some $t$ such that $C(n, s_1, \ldots, s_t) > C^{\pi^*}(n)$. But then, to expand $\pi$ requires that $C(n, s_1, \ldots, s_t) + h(s') < h(s) \leq C^{\pi^*}(n)$.
 
 ** Upper and lower bounds algorithms
 *** Calculating Upper and Lower Bounds
@@ -269,23 +285,34 @@ The algorithm is rather simple to describe in words.
 - However, the basic algorithmic idea is again Dynamic Programming
 **** Bellman-Ford Algorithm
 In state-action notation, the algorithm is simply
-- $C_0(0) = 0$, $C_i(0) = \infty$ for all $i \neq 0$.
-- For $k \in 1, \ldots, |S|$:
+- $C_0(0) = 0$, $C_0(s) = \infty$ for all $s \neq 0$.
+- For $k \in 1, \ldots, |S| - 1$:
 \[
-C_{k}(s) = \min_a c(s,a) + C_{k-1}(\tau(s,a))
+\forall s \in S: C_{k}(s) = \min_a c(s,a) + C_{k-1}(\tau(s,a))
 \]
+- If $C_{|S|-1}(s) \neq \min_a c(s,a) + C_{|S|-1}(\tau(s,a))$ for some $s$, *error*
+**** Difference with Dijkstra :B_alertblock:
+     :PROPERTIES:
+     :BEAMER_env: alertblock
+     :END:
+- Bellman-Ford loops over all states in every iteration.
+- Dijkstra only chooses a state in the frontier.
+- It can handle negative costs and detect infinite cycles.
+- Instead of tracking the frontier, it initialises $C$ to infinity.
 
 *** Bellman-Ford Algorithm
 
 \begin{algorithmic}
 \STATE $C(0) = 0$. $C(i) = \infty$, for $i \neq 0$.
-\FOR {$i \in 1, \ldots, |N| - 1$}
+\FOR {$n \in 1, \ldots, |S| - 1$}
+\STATE \# implement  $\forall j \in S$: $C(j) = \min_i c(i,j) + C(i)$
 \FOR {all edges $(i,j)$}
 \IF {$C(i) + c(i,j) < C(j)$}
-\STATE $c(j) = C(i) + c(i,j)$
+\STATE $C(j) = C(i) + c(i,j)$
 \ENDIF
 \ENDFOR
 \ENDFOR
+\STATE  \# Cycle detection
 \FOR {all edges $(i,j)$}
 \IF {$C(i) + c(i,j) < C(j)$}
 \STATE \textbf{error} "Negative cycle"
@@ -293,8 +320,6 @@ C_{k}(s) = \min_a c(s,a) + C_{k-1}(\tau(s,a))
 \ENDFOR
 \end{algorithmic}
 
-- Succinctly, the algorithm is just like Dijkstra, but it ensures it goes at most $|N| - 1$ times through all vertices, and has a sanity check as no more updates should be possible at the end.
-- Instead of keeping a track of explored nodes, it uses the fact that $C$ is initialised to infinity.
 
 
 

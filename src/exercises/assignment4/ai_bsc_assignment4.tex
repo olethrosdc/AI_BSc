@@ -21,6 +21,7 @@
 \usepackage{epsfig}
 \usepackage{tikz}
 \usepackage{centernot}
+\usepackage{verbatim}
 \usetikzlibrary{arrows,automata, shapes, backgrounds}
 
 \renewcommand{\thesubsection}{\arabic{subsection}}
@@ -249,7 +250,9 @@ Following this example, answer the following questions:
         \end{itemize}
     }
 
+    \iffalse
     \item We are wondering about the relationships between Alice, Bob, and Charlie. We have that:
+    
     \begin{itemize}
         \item If Bob is friends with Charlie, then Charlie is friends with Alice.
         \item If Alice is friends with Bob, and Charlie is friends with Bob, then Alice is also friends with Charlie.
@@ -286,6 +289,7 @@ Following this example, answer the following questions:
             \item Thus, \textbf{Alice and Charlie are friends}: $C_A \land A_C$.
         \end{itemize}
     }
+    \fi
 
     \item Your friend is complaining about cramps. You know that they are practicing \emph{only} one of the four possible sports: Swimming, Running, Basketball, or Cycling.
     You wish to guess which sport they are actually practicing. Let's assume that:
@@ -332,6 +336,7 @@ We want to find under what conditions we can deduce that our friend is practicin
 \paragraph{Conclusion}
 If we additionally observe that the friend is \textbf{Dirty} and \textbf{always Thirsty}, then we can infer that the friend is practicing Basketball ($B$). 
     } 
+
 \end{enumerate}
 
 \section*{\textbf{Project -- Part 2}}
@@ -339,7 +344,7 @@ If we additionally observe that the friend is \textbf{Dirty} and \textbf{always 
 \textbf{This whole section must be done in groups of \underline{2-3 people}.}
 \smallskip
 
-Reutilising what we did last week, we will add \textbf{constraints} to our problem using \textbf{logic}.
+Reutilising what we did last week, we will add \textbf{constraints} and \textbf{logical rules} to our problem.
 
 \subsection{Guided Project}
 
@@ -414,9 +419,8 @@ This time, we will set a more constrained observation space as well as some logi
         \item[-]  Whenever the agent hits a wall, it senses a \emph{Bump}.
         \item[-]  Whenever the agent is in the same row or column as the stairs, it observes \emph{Light}.
     \end{itemize}
-    \item We can write any observation, upon picking an action as $\{e, b, l\}$, where $e=1$ if the agent hears an \emph{Echo} and 0 otherwise,  $b=1$ if the action resulted in no movements and 0 otherwise, etc.
-
-    \item additionally, we have the following \textbf{constraints}:
+    \item Each time the agent picks an action, it observes $\{e, b, l\}$, where $e=1$ if the agent hears an \emph{Echo} and 0 otherwise,  $b=1$ if the action resulted in no movements and 0 otherwise, etc.
+    \item additionally, we have the following \textbf{rules}:
     \begin{itemize}
         \item[-]  Holes are \emph{always} on the same row or column as the stairs.
         \item[-]  The stairs are \emph{never} adjacent to a hole.
@@ -440,17 +444,18 @@ This time, we will set a more constrained observation space as well as some logi
         \end{enumerate}
     }
 
-    \item Let's further imagine that the agent keeps going and performs next [→, ↑, ↑,↑]. What is the knowledge base at this point in time? Enumerate all possible models for tile (3,4).
-    \item Implement a simple logical inference module (Belief State update logic) using the template code in \texttt{dungeon\_with\_constraints.ipynb}.
-    \item Implement a simple agent using that inference module (\texttt{your\_agent()} function in \\ \texttt{dungeon\_with\_constraints.ipynb}).
+    \item Let's further imagine that the agent keeps going and performs next [→, ↑, ↑,↑]. What is the knowledge base at this point in time? Enumerate all possibilities for tile (3,4): does it have stairs, a wall, a hole?
+    \item Think about one constraint you could have in this problem. 
+    %\item Implement a simple logical inference module (Belief State update logic) using the template code in \texttt{dungeon\_with\_constraints.ipynb}.
+    %\item Implement a simple agent using that inference module (\texttt{your\_agent()} function in \\ \texttt{dungeon\_with\_constraints.ipynb}).
 \end{enumerate}
 
 \subsection{Personal Project}
 
-Add some constraints and/or partial observability to your problem, then, if applicable:
+Add some constraints and/or partial observability to your problem, then, \textbf{if applicable}:
 \begin{enumerate}
 \item Using logic notations, and by introducing appropriate variables, formalise the new constraints and/or formalise under which conditions observations are made. 
-\item Implement and try solving the problem with the added sensing and constraints in Python.
+%\item Implement and try solving the problem with the added sensing and constraints in Python.
 \end{enumerate}
 
 \end{document}

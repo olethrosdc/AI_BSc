@@ -153,9 +153,6 @@ For each exercise, detail your reflexion steps:
     \item For each attempted exercise, a written feedback will be provided (if time alllows it). 
 \end{itemize}
 
-\smallskip
-Reference material: \href{https://github.com/yanshengjia/ml-road/blob/master/resources/Artificial%20Intelligence%20-%20A%20Modern%20Approach%20(3rd%20Edition).pdf}{Artificial Intelligence, A Modern Approach, Chapters 6, 7}.
-
 For coding:
 \begin{itemize}
     \item \href{https://noto.epfl.ch}{Noto} (Online Jupyter NoteBook).
@@ -168,7 +165,7 @@ In the beginning we believe equally each weather station forecasts.
 
 \textbf{Tasks:}
 \begin{enumerate}
-    \item Represent the problem as a graph, where nodes are the events, and edges represent relationships between events.
+    \item Represent our belief network, where nodes are the events, and directed edges represent relationships between events.
 
     \sol{
         \paragraph{Notations}
@@ -176,7 +173,7 @@ In the beginning we believe equally each weather station forecasts.
             \item $C_i$: Station $i$ predicts correctly the weather.
             \item $R$: It will rain.
         \end{itemize}
-        Using those notations, we can draw this graph representing the relationships between variables:
+        Using those notations, we can draw this belief network representing the relationships between variables:
         
         {\centering
         \begin{tikzpicture}[node distance=1cm and 2cm, every node/.style={minimum width=1cm}, every path/.style={draw, thick}, edge/.style = {->,> = latex', >=stealth}]

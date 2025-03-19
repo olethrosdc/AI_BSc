@@ -1,0 +1,421 @@
+\documentclass[11pt]{article}
+\usepackage{parskip}
+
+\usepackage{../assets/tp}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{tgcursor}
+\usepackage[T1]{fontenc}
+\usepackage[]{../assets/subfigure}
+\usepackage{xspace}
+\usepackage{url}
+\usepackage{ifthen}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{dirtree}
+\usepackage[scaled]{helvet}
+\usepackage{gensymb}
+\usepackage{epsfig}
+\usepackage{tikz}
+\usepackage{centernot}
+\usepackage{verbatim}
+\usetikzlibrary{arrows,automata, shapes, backgrounds, positioning}
+
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\makeatletter
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}%
+   {\csname the#1\endcsname\quad}%    default
+   {\csname #1@cntformat\endcsname}}% enable individual control
+\newcommand\section@cntformat{}     % section level 
+\makeatother
+
+\lstset{
+     extendedchars=true,
+     literate=%
+         {á}{{\'a}}1
+         {í}{{\'i}}1
+         {é}{{\'e}}1
+         {è}{{\`e}}1
+         {ý}{{\'y}}1
+         {ú}{{\'u}}1
+         {ó}{{\'o}}1
+         {ě}{{\v{e}}}1
+         {š}{{\v{s}}}1
+         {č}{{\v{c}}}1
+         {ř}{{\v{r}}}1
+         {ž}{{\v{z}}}1
+         {ď}{{\v{d}}}1
+         {ť}{{\v{t}}}1
+         {ň}{{\v{n}}}1
+         {ů}{{\r{u}}}1
+         {Á}{{\'A}}1
+         {Í}{{\'I}}1
+         {É}{{\'E}}1
+         {Ý}{{\'Y}}1
+         {Ú}{{\'U}}1
+         {Ó}{{\'O}}1
+         {Ě}{{\v{E}}}1
+         {Š}{{\v{S}}}1
+         {Č}{{\v{C}}}1
+         {Ř}{{\v{R}}}1
+         {Ž}{{\v{Z}}}1
+         {Ď}{{\v{D}}}1
+         {Ť}{{\v{T}}}1
+         {Ň}{{\v{N}}}1
+         {Ů}{{\r{U}}}1
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!red,
+  urlcolor=green!70!black
+}
+\numberwithin{equation}{section}
+
+\newcommand{\sol}[1]{
+    %{\color{blue} #1}
+    }
+\renewcommand{\deg}[1]{\:^\circ\text{#1}}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\renewcommand*\DTstylecomment{\rmfamily}
+
+\definecolor{codegray}{rgb}{0.0,0.0,0.7}
+\lstset{float,
+  commentstyle=\color{codegray},
+  basicstyle=\scriptsize,
+  columns=fullflexible,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=5pt,
+  xleftmargin=5pt,
+  frame=tb,
+  captionpos=b,
+  mathescape=true,
+  tabsize=2,
+  showtabs=true,
+  escapeinside={(*@}{@*)}}
+
+
+\newboolean{showcomments}
+\setboolean{showcomments}{true}
+\ifthenelse{\boolean{showcomments}}
+{ \newcommand{\mynote}[3]{
+    \fbox{\bfseries\sffamily\scriptsize#1}
+    {\small$\blacktriangleright$\textsf{\emph{\color{#3}{#2}}}$\blacktriangleleft$}}}
+{ \newcommand{\mynote}[3]{}}
+\newcommand{\shrink}[1]{}
+% One command per author:
+\newcommand{\pf}[1]{\mynote{Pascal}{#1}{magenta}}
+\newcommand{\cg}[1]{\mynote{Christian}{#1}{orange}}
+\newcommand{\rd}[1]{\mynote{R\'emi}{#1}{purple}}
+\newcommand{\answer}[1]{\mynote{Answer:}{#1}{blue}}
+
+\makeatletter
+    \def\blfootnote{\xdef\@thefnmark{}\@footnotetext}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\quand{2023-2024}
+\siglemat{Artificial Intelligence}
+\sorte{Week}
+\formation{Computer science department}
+\titre{Assignment 5}
+
+\usepackage{courier}
+
+\begin{document}
+\thispagestyle{plain}
+\mettreletitre
+
+\blfootnote{Questions ? victor.villin@unine.ch}
+
+\section*{Subject}
+
+Topics of this session:
+\begin{enumerate}
+\item Conditional probability and independence.
+\item Bayes’s theorem.
+\item Belief Networks.
+\end{enumerate}
+\textbf{This assignement is graded and must be submitted (individually) on Moodle before next week's class}. 
+
+\smallskip
+For each exercise, detail your reflexion steps:
+\begin{itemize}
+    \item We are mostly interested in your actual thinking process.
+    \item Even if you are unable to solve an exercise, write out what were you reflexion steps.
+    \item For each attempted exercise, a written feedback will be provided (if time alllows it). 
+\end{itemize}
+
+\smallskip
+Reference material: \href{https://github.com/yanshengjia/ml-road/blob/master/resources/Artificial%20Intelligence%20-%20A%20Modern%20Approach%20(3rd%20Edition).pdf}{Artificial Intelligence, A Modern Approach, Chapters 6, 7}.
+
+For coding:
+\begin{itemize}
+    \item \href{https://noto.epfl.ch}{Noto} (Online Jupyter NoteBook).
+    \item Any other python coding environment you prefer using.
+\end{itemize}
+
+\section*{Exercise 1}
+Let's consider the $N$-meteorologist problem. Assume there are $N=3$ weather stations, which predict what is the chance that it's going to rain or not.
+In the beginning we believe equally each weather station forecasts.
+
+\textbf{Tasks:}
+\begin{enumerate}
+    \item Represent the problem as a graph, where nodes are the events, and edges represent relationships between events.
+
+    \sol{
+        \paragraph{Notations}
+        \begin{itemize}
+            \item $C_i$: Station $i$ predicts correctly the weather.
+            \item $R$: It will rain.
+        \end{itemize}
+        Using those notations, we can draw this graph representing the relationships between variables:
+        
+        {\centering
+        \begin{tikzpicture}[node distance=1cm and 2cm, every node/.style={minimum width=1cm}, every path/.style={draw, thick}, edge/.style = {->,> = latex', >=stealth}]
+            \node (C2) [draw, circle] {$C_2$};
+            \node (C1) [draw, circle, left=of C2] {$C_1$};
+            \node (C3) [draw, circle, right=of C2] {$C_3$};
+            \node (R) [draw, circle, above=of C2] {$R$};
+            
+            % Edges
+            \draw[edge] (R) to (C1);
+            \draw[edge] (R) to (C2);
+            \draw[edge] (R) to (C3);
+        \end{tikzpicture}
+        }
+    }
+
+    \item Express the probabilities of rain for the first day, using our initial belief, based on the following forecasts:
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{ c | c c c }
+          & Station 1 & Station 2 & Station 3 \\ 
+         \hline
+         Rain Probability & 0.5 & 0.7 & 0.05 \\
+        \end{tabular}
+        \caption{Forecasts for the first day.}
+    \end{table}
+
+    \sol{
+        We have an initial belief that we should believe equally in all three stations, that is: $P(C_i) = 1/3$, for $i\in\{1,2,3\}$.
+        Additionally, the entries in the table correspond to the rain probabilities given each station $i$'s forecast: $P(R | C_i)$.
+        Thus:
+
+        \begin{equation*}
+            P(R) = \sum_{i=1}^3 P(R|C_i) P(C_i) = \dfrac{0.5 \times 0.7 \times 0.05}{3} \approx 0.417.
+        \end{equation*}
+        With our initial belief, we believe that it will rain with probability 0.417.
+    }
+    \item Using Baye's Theorem, update our belief about stations being correct, knowing that it \emph{rained} on the first day.
+
+
+    \sol{
+
+        Let's update our belief for all three stations. For each station $i$, we have:
+        \begin{equation*}
+            P(C_i | R) = \dfrac{P(R | C_i) P(C_i)}{P(R)}.
+        \end{equation*}
+
+        We end up with:
+        \begin{itemize}
+            \item $P(C_i | R) = 0.4$,
+            \item $P(C_i | R) = 0.56$,
+            \item $P(C_i | R) = 0.04$.
+        \end{itemize}
+
+        What happens is that we believe a lot more more in the second station now, but almost no longer believe in the third one.
+
+    }
+
+    \item Assuming that the weather is independent of the past, update our belief about stations being correct, knowing that it also \emph{rained} on the second day, with the following forecasts:
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{ c | c c c }
+            & Station 1 & Station 2 & Station 3 \\ 
+           \hline
+           Rain Probability & 0.3 & 0.2 & 0.2 \\
+          \end{tabular}
+        \caption{Forecasts for the second day.}
+    \end{table}
+
+    \sol{
+
+    \paragraph{Additional notations}
+    \begin{itemize}
+        \item $C^2_i$: station $i$'s forecast is correct for the second day.
+        \item $R^2$: it will rain on the second day.
+    \end{itemize}
+
+    Similarly to before, we first compute the probability of rain using our updated belief:
+
+    \begin{equation*}
+        P(R^2|R) = P(R^2) = \sum_{i=1}^3 P(R^2|C_i, R) P(C_i | R) = 0.3 \times 0.4 + 0.2 \times 0.56 + 0.2 \times 0.04 = 0.24.
+    \end{equation*}
+
+    We then compute the posteriors knowing that it rained on the second day:
+    \begin{equation*}
+        P(C_i | R^2, R) = \dfrac{P(R^2 | C_i, R) P(C_i | R)}{P(R^2 | R)} = \dfrac{P(R^2 | C_i) P(C_i | R)}{P(R^2)}.
+    \end{equation*}
+
+    \begin{itemize}
+        \item $P(C_i | R^2, R) = 0.5$,
+        \item $P(C_i | R^2, R) \approx 0.467$,
+        \item $P(C_i | R^2, R) \approx 0.033$.
+    \end{itemize}
+    }
+
+\end{enumerate}
+
+\section*{Exercise 2}
+We are given a coin, but we do not know its bias toward heads or tails. Instead, we model our belief about the probability of heads, denoted as , using a Beta distribution:
+
+\begin{equation*}
+    \theta \sim \text{Beta}(\alpha, \beta)
+\end{equation*}
+
+where $\theta$ represents the probability of heads, and $\alpha$ and $\beta$ are the parameters representing our belief.
+
+Reminders:
+\begin{itemize}
+    \item The posterior distribution for the Beta Distribution remains a Beta distribution with updated parameters:
+\[
+\theta \mid \text{data} \sim \text{Beta}(\alpha + k, \beta + (n-k)).
+\]
+where in our case, $k$ would be the number of heads and $n-k$ the number of tails observed in the data.
+    \item The mean of a Beta distribution $\text{Beta}(\alpha, \beta)$ is given by:
+    \[
+    E[\theta] =  \dfrac{\alpha}{\alpha + \beta}.
+\]
+\end{itemize}
+
+\textbf{Tasks:}
+\begin{enumerate}
+\item Assume we start with a uniform prior, meaning we have no prior knowledge about the coin's bias. What values should we set for $\alpha$ and $\beta$ ?
+
+\sol{
+    Since we have no prior knowledge, we should initialise our belief with parameters that do not favor tail or head probabilities: $\alpha = \beta$.
+}
+
+\item Assuming coin tosses are independent, if we initially set \( \alpha = 2 \) and \( \beta = 2 \), and after 10 coin flips we observe 7 heads, compute the posterior distribution of \( \theta \).
+
+\sol{
+    Denoting $D$ the 10 observed tosses, we have $\theta | D \sim \text{Beta}(9, 5)$. 
+}
+
+\item Compute the mean of the posterior distribution and interpret its meaning in the context of estimating the coin's bias.
+
+\sol{
+    The mean of the posterior is as follows: $E[\theta | D] = \dfrac{9}{9 + 5} \approx 0.643$.
+     Under this posterior belief, we believe that the coin is slightly biased, such that we expect to get heads 64.3\% of the time.
+}
+\item Implement \texttt{BetaConjugatePrior} in \texttt{coin\_toss.ipynb} and observe how the belief changes as observations come. What can you say about the model after many observations ?
+\end{enumerate}
+
+
+\section*{\textbf{Project -- Part 3}}
+
+\textbf{This whole section must be done in groups of \underline{2-3 people}.}
+\smallskip
+
+This week, we will assume that some observations are stochastic. Our goal is to perform \textbf{Bayesian inference} to update our belief about the true model of the environment.
+
+\subsection{Guided Project}
+
+\paragraph{Dungeon Gridworld} We will once more update the assumptions about the world, adding randomness in observations.
+
+\begin{figure}[h]
+    \centering
+\begin{tikzpicture}[scale=1]
+
+    % Draw outer walls (5x5 grid with walls around it)
+    \draw[thick] (-1, -1) rectangle (6, 6);
+
+    % Draw internal grid
+    \foreach \x in {0,...,5} {
+        \foreach \y in {0,...,5} {
+            \draw (\x, \y) rectangle ++(1, 1);
+        }
+    }
+    
+    % Draw surrounding walls as filled gray cells
+    \foreach \pos in {
+        (-1,-1), (0,-1), (1,-1), (2,-1), (3,-1), (4,-1), (5,-1), (5,-1),
+        (-1,2), (5,2),
+        (-1,3), (5,3),
+        (-1,4), (5,4),
+        (-1,5), (5,5),
+        (-1,5), (0,5), (1,5), (2,5), (3,5), (4,5), (5,5), (5,5),
+        (-1, 1), (-1, 0), (5, 1), (5, 0),
+        % walls
+        (2, 3), (2, 2), (0, 2), (2, 0)
+    } {
+        \fill[black] \pos rectangle ++(1, 1);
+    }
+
+    % Start position
+    \node at (0.5, 0.5) {\includegraphics[width=0.5cm]{happy-man.png}};
+
+    % Holes
+    \node at (0.5, 4.5) {\includegraphics[width=0.5cm]{hole.png}};
+    \node at (3.5, 2.5) {\includegraphics[width=0.5cm]{hole.png}};
+
+
+    % Stairs
+    \node at (3.5, 4.5) {\includegraphics[width=0.5cm]{stairs.png}};
+
+
+    % Add small coordinate labels at the bottom right
+    \foreach \x in {0,...,5} {
+        \foreach \y in {0,...,5} {
+            \node[scale=0.5, anchor=south east] at (\x + 0.98, \y + 0.01) {\small (\x, \y)};
+        }
+    }
+
+    % sensing
+    %\draw[red, line width=1.5pt] (-0.99, -0.99) rectangle (1.99, 1.99);
+    %\node[anchor=south, scale=0.75] at (0.01, 2) {\color{red} Sensing Range};
+
+\end{tikzpicture}
+\label{fig:env}
+\caption{A simple dungeon room with holes. The agent starts at position (0, 0).}
+\end{figure}
+
+\textbf{New Assumptions:}
+\begin{itemize}
+    \item {\color{gray} Falling into a hole causes the game to end immediately.}
+    \item The goal is to reach the stairs (the number of steps we take does not matter this time). 
+    \item The agent \textbf{has partial and noisy observations}:
+    \begin{itemize}
+        \item[-]  Whenever the agent is adjacent to a hole, it hears an \emph{Echo} from it with probability $p_E = \dfrac{1}{3}$.
+        \item[-]  We assume we can observe perfectly our position.
+        \item[-]  For simplicy, we assume we do not sense anything else (no \emph{Bump} and \emph{Light}).
+        \item[-]  We have an initial belief that all tiles have a probability 0.1 to be a hole.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Tasks:}
+\begin{enumerate}
+    \item In \texttt{dungeon\_inference.ipynb}, implement the logic for updating the belief state.
+    \item Ensure that the agent properly learns about the presence of holes for each tile. \textbf{Note:} Since the agent \textbf{does} not observe whether it falls into a hole, it \textbf{cannot} update its belief using that information.
+    \item (Optional) Try improving the agent (implement \texttt{smarter\_agent()}) with a simple rule, such as: "\textit{If I believe that a tile has no hole with probability at least 0.9, I can go there; otherwise, I avoid it.}".
+\end{enumerate}
+
+\subsection{Personal Project}
+
+For your project, follow these steps:
+\begin{enumerate}
+\item Introduce \textbf{randomness} to certain observations and implement the corresponding changes in your environment.
+\item Code a simple \textbf{random agent} that selects actions uniformly at random.
+\item Define an initial belief for your agent about the environment.
+\item Implement a simple \textbf{Bayesian inference method} to update the agent's belief about the environment, using data collected by the random agent.
+\end{enumerate}
+
+\end{document}

@@ -1,63 +1,10 @@
 #+TITLE: Inference
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
-#+LaTeX_HEADER: \usepackage{algorithm,algorithmic}
-#+LaTeX_HEADER: \usepackage{tikz}
-#+LaTeX_HEADER: \usepackage{amsmath}
-#+LaTeX_HEADER: \usepackage{amssymb}
-#+LaTeX_HEADER: \usepackage{isomath}
-#+LaTeX_HEADER: \usepackage{tikzsymbols}
-#+LaTeX_HEADER: \newcommand \E {\mathop{\mbox{\ensuremath{\mathbb{E}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand \Var {\mathop{\mbox{\ensuremath{\mathbb{V}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand \Bias {\mathop{\mbox{\ensuremath{\mathbb{B}}}}\nolimits}
-#+LaTeX_HEADER: \newcommand\ind[1]{\mathop{\mbox{\ensuremath{\mathbb{I}}}}\left\{#1\right\}}
-#+LaTeX_HEADER: \renewcommand \Pr {\mathop{\mbox{\ensuremath{\mathbb{P}}}}\nolimits}
-#+LaTeX_HEADER: \DeclareMathOperator*{\argmax}{arg\,max}
-#+LaTeX_HEADER: \DeclareMathOperator*{\argmin}{arg\,min}
-#+LaTeX_HEADER: \DeclareMathOperator*{\sgn}{sgn}
-#+LaTeX_HEADER: \newcommand \defn {\mathrel{\triangleq}}
-#+LaTeX_HEADER: \newcommand \Reals {\mathbb{R}}
-#+LaTeX_HEADER: \newcommand \Param {\Theta}
-#+LaTeX_HEADER: \newcommand \param {\theta}
-#+LaTeX_HEADER: \newcommand \vparam {\vectorsym{\theta}}
-#+LaTeX_HEADER: \newcommand \mparam {\matrixsym{\Theta}}
-#+LaTeX_HEADER: \newcommand \bW {\matrixsym{W}}
-#+LaTeX_HEADER: \newcommand \bw {\vectorsym{w}}
-#+LaTeX_HEADER: \newcommand \wi {\vectorsym{w}_i}
-#+LaTeX_HEADER: \newcommand \wij {w_{i,j}}
-#+LaTeX_HEADER: \newcommand \bA {\matrixsym{A}}
-#+LaTeX_HEADER: \newcommand \ai {\vectorsym{a}_i}
-#+LaTeX_HEADER: \newcommand \aij {a_{i,j}}
-#+LaTeX_HEADER: \newcommand \bx {\vectorsym{x}}
-#+LaTeX_HEADER: \newcommand \callcset[2] {\left\{#1 ~\middle|~ #2 \right\}}
-#+LaTeX_HEADER: \newcommand \pol {\pi}
-#+LaTeX_HEADER: \newcommand \Pols {\Pi}
-#+LaTeX_HEADER: \newcommand \mdp {\mu}
-#+LaTeX_HEADER: \newcommand \MDPs {\mathcal{M}}
-#+LaTeX_HEADER: \newcommand \bel {\beta}
-#+LaTeX_HEADER: \newcommand \Bels {\mathcal{B}}
-#+LaTeX_HEADER: \newcommand \Unif {\textrm{Unif}}
-#+LaTeX_HEADER: \newcommand \Ber {\textrm{Bernoulli}}
-#+LaTeX_HEADER: \newcommand \Mult {\textrm{Mult}}
-#+LaTeX_HEADER: \newcommand \Beta {\textrm{Beta}}
-#+LaTeX_HEADER: \newcommand \Dir {\textrm{Dir}}
-#+LaTeX_HEADER: \newcommand \Normal {\textrm{Normal}}
-#+LaTeX_HEADER: \newcommand \Simplex {\mathbb{\Delta}}
-#+LaTeX_HEADER: \newcommand \pn {\param^{(n)}}
-#+LaTeX_HEADER: \newcommand \pnn {\param^{(n+1)}}
-#+LaTeX_HEADER: \newcommand \pnp {\param^{(n-1)}}
-#+LaTeX_HEADER: \newcommand{\indep}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
-#+LaTeX_HEADER: \usetikzlibrary{shapes.geometric}
-#+LaTeX_HEADER: \usetikzlibrary{arrows.meta, positioning, quotes}
-#+LaTeX_HEADER: \tikzstyle{utility}=[diamond,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=8mm]
-#+LaTeX_HEADER: \tikzstyle{select}=[rectangle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
-#+LaTeX_HEADER: \tikzstyle{hidden}=[dashed,draw=black,fill=red!10]
-#+LaTeX_HEADER: \tikzstyle{RV}=[circle,draw=black,draw=blue!50,fill=blue!10,inner sep=0mm, minimum size=6mm]
-#+LaTeX_HEADER: \tikzstyle{con}=[rectangle,draw=white,fill=gray,inner sep=0mm, minimum size=6mm]
+#+LaTeX_HEADER: \input{preamble}
 #+LaTeX_CLASS_OPTIONS: [smaller]
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
-
 #+OPTIONS:   H:3
 * Logical inference
   #+TOC: headlines [currentsection]
@@ -167,11 +114,6 @@ and
 P(A_j | B) = \frac{P(B | A_j)}{\sum_{i=1}^n P(B | A_i) P(A_i)}
 \]
 
-*** Independence
-**** Independent events $A \indep B$
-$A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
-**** Conditional independence $A \indep B \mid C$
- $A, B$ are *conditionally independent* given $C$ iff $P(A \cap B | C) = P(A | C) P(B | C)$.
 ** Posterior distributions and model estimation
 *** Bayes's theorem
 **** As a conditional measure
@@ -183,12 +125,14 @@ P(A \mid B)
 \frac{P(B \mid A) P(A)}{P(B \mid A) P(A) + P(B \mid \neg A) P(\neg A)}
 \]
 
+#+BEAMER: \pause
 **** As a causal explanation
 \[
 \Pr(\textrm{cause} \mid \textrm{effect})
 = 
 \frac{\Pr(\textrm{effect} \mid \textrm{cause}) \Pr(\textrm{cause})}{\Pr(\textrm{effect})}
 \]
+#+BEAMER: \pause
 **** As model inference
 - Prior $\bel(\param)$
 - Model class $\{P_\param(\bel) : \param \in \Param\}$
@@ -201,6 +145,13 @@ P(A \mid B)
 \frac{P_\param(x) \bel(x)}{\sum_{\param' \in \Param} P_{\param'}(x) \bel(\param')}
 \]
 
+
+*** Independence
+**** Independent events $A \indep B$
+$A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
+**** Conditional independence $A \indep B \mid C$
+ $A, B$ are *conditionally independent* given $C$ iff $P(A \cap B | C) = P(A | C) P(B | C)$.
+
 *** Example: Naive Bayes models
 Sometimes we observe multiple effects that have a common cause, but which are otherwise independent:
 \[
@@ -210,7 +161,7 @@ Sometimes we observe multiple effects that have a common cause, but which are ot
 \]
 **** Naive Bayes model
 - Observations $(\bx_t, y_t)_{t=1}^T$ with $\bx_t = (x_{t,1}, \ldots, x_{t,n})$.
-- Probability *models* $P_\mdp(y \mid \bx) = \prod_{i=1}^n P_\mdp(y \mid x_i)$.
+- Probability *models* $P_\param(y \mid \bx) = \prod_{i=1}^n P_\param(y \mid x_i)$.
 *** Conditional independence
 
 For any set of events $A_1, A_2, A_3, \ldots$, we can write their co-occurence probability as
@@ -292,25 +243,25 @@ P(A_1) P(A_2) P(B | A_1 \cap A_2) P(C_1 | B) P(C_2 | B).
 - What is the probability of a hole above f you *don't* feel a breeze?
 
 *** Example: The k-meteorologists problem
-- A set of stations $\MDPs$, with $\mdp \in \MDPs$ making weather predictions:
+- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
   \[
-  P_\mdp(x_{t+1} \mid x_1, \ldots, x_{t})
+  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
   \]
-- A *prior probability* $P(\mdp)$ on the stations.
+- A *prior probability* $P(\param)$ on the stations.
 - The *marginal* probability
 \[
-P(x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_1, \ldots, x_t) P(\mdp)
+P(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) P(\param)
 \]
 - The *posterior* probability
 \begin{align*}
-P(\mdp \mid x_1, \ldots, x_t)
-&= \frac{P_\mdp(x_1, \ldots, x_t) P(\mdp)}{P(x_1, \ldots, x_t)}
-= \frac{\prod_{i=1}^t P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp)}{P(x_1, \ldots, x_t)}\\
-&= \frac{P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
+P(\param \mid x_1, \ldots, x_t)
+&= \frac{P_\param(x_1, \ldots, x_t) P(\param)}{P(x_1, \ldots, x_t)}
+= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  P(\param)}{P(x_1, \ldots, x_t)}\\
+&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  P(\param \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
 \end{align*}
 - The *marginal posterior* probability
 \[
-P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_{t+1} \mid x_1, \ldots, x_t) P(\mdp \mid x_1, \ldots, x_t)
+P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) P(\param \mid x_1, \ldots, x_t)
 \]
 
 * Statistical Decision Theory
@@ -490,29 +441,29 @@ What are the expected gains for these bets?
 *** Example: Estimation
 - In this example, probabilities are calculated starting from subjective beliefs
 **** Mean-Square Estimation
-If we want to guess $\hat{\mdp}$, and we knew that $\mdp \sim P$, then the guess
+If we want to guess $\hat{\param}$, and we knew that $\param \sim P$, then the guess
 \[
-\hat{\mdp} = \E_P(\mdp) = \argmin_{\hat{\mdp}} \E_P [(\mdp - \hat{\mdp})^2]
+\hat{\param} = \E_P(\param) = \argmin_{\hat{\param}} \E_P [(\param - \hat{\param})^2]
 \]
 
 *** Example: The k-meteorologists problem
-- A set of stations $\MDPs$, with $\mdp \in \MDPs$ making weather predictions:
+- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
   \[
-  P_\mdp(x_{t+1} \mid x_1, \ldots, x_{t})
+  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
   \]
-- A *prior probability* $P(\mdp)$ on the stations.
+- A *prior probability* $P(\param)$ on the stations.
 - The *marginal* probability
 \[
-P(x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_1, \ldots, x_t) P(\mdp)
+P(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) P(\param)
 \]
 - The *posterior* probability
 \begin{align*}
-P(\mdp \mid x_1, \ldots, x_t)
-&= \frac{P_\mdp(x_1, \ldots, x_t) P(\mdp)}{P(x_1, \ldots, x_t)}
-= \frac{\prod_{i=1}^t P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp)}{P(x_1, \ldots, x_t)}\\
-&= \frac{P_\mdp(x_t \mid x_1, \ldots, x_{t-1})  P(\mdp \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
+P(\param \mid x_1, \ldots, x_t)
+&= \frac{P_\param(x_1, \ldots, x_t) P(\param)}{P(x_1, \ldots, x_t)}
+= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  P(\param)}{P(x_1, \ldots, x_t)}\\
+&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  P(\param \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
 \end{align*}
 - The *marginal posterior* probability
 \[
-P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\mdp \in \MDPs} P_\mdp(x_{t+1} \mid x_1, \ldots, x_t) P(\mdp \mid x_1, \ldots, x_t)
+P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) P(\param \mid x_1, \ldots, x_t)
 \]

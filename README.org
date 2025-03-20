@@ -259,33 +259,42 @@ If you get an F in either the exam or the project, the course is failed and you 
 |    | 1. Simple gridworld implementation                                                                                          |
 |    | 2. Basic logical inference                                                                                                  |
 |----+-----------------------------------------------------------------------------------------------------------------------------|
-| 55 | 9.1 Probability, Independence, Belief Networks                                                                              |
+|  5 | 9.1 Probability, Independence, Belief Networks                                                                              |
 |    |                                                                                                                             |
 |    | Conditional probability and independence, Bayes's theorem                                                                   |
 |    | Assignment:                                                                                                                 |
 |    | 1. Give a graphical model for some problem                                                                                  |
 |    | 2. Some simple Bayes' theorem demonstration e.g. covid tests                                                                |
 |----+-----------------------------------------------------------------------------------------------------------------------------|
-|  6 | 12.1. Preferences and Utility. 12.2 Probability. Decision making.                                                           |
+|  6 | Independence, Conditional Independence                                                                                      |
+|    | Graphical models                                                                                                            |
 |    |                                                                                                                             |
 |    | Assignment:                                                                                                                 |
-|    | Find optimal choice of some stochastic problems with:                                                                       |
+|    | - Graphical model of their project problem                                                                                  |
+|----+-----------------------------------------------------------------------------------------------------------------------------|
+|  7 | 12.1. Preferences and Utility. 12.2 Probability. Decision making.                                                           |
+|    |                                                                                                                             |
+|    | Decision making under uncertainty.                                                                                          |
+|    | One-shot decisions                                                                                                          |
+|    | Stochastic gradient optimisation.                                                                                           |
+|    | 
+|    | Assignment: Find optimal choice of some stochastic problems with:                                                           |
 |    | 1. Discrete action sets                                                                                                     |
 |    | 2. Continuous actions                                                                                                       |
 |----+-----------------------------------------------------------------------------------------------------------------------------|
-|  7 | Markov decision processes                                                                                                   |
+|  8 | Markov decision processes                                                                                                   |
 |    |                                                                                                                             |
 |    | Value iteration                                                                                                             |
 |    |                                                                                                                             |
 |    | Assignment: Extend world so that there are randomised dynamics (but full observation) with fixed policies for other agents  |
 |----+-----------------------------------------------------------------------------------------------------------------------------|
-|  8 | Markov games                                                                                                                |
+|  9 | Markov games                                                                                                                |
 |    |                                                                                                                             |
 |    | Backwards induction                                                                                                         |
 |    |                                                                                                                             |
 |    | Assignment: Extend world so that the other agent is adversarial                                                             |
 |----+-----------------------------------------------------------------------------------------------------------------------------|
-|  9 | Simultaneous games                                                                                                          |
+| 10 | Simultaneous games                                                                                                          |
 |    |                                                                                                                             |
 |    | Linear programming                                                                                                          |
 |    |                                                                                                                             |

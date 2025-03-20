@@ -64,11 +64,17 @@ Probability can be seen as an area-like function assigning a likelihood to sets.
 - $P : \Sigma \to [0,1]$  gives the likelihood $P(A)$ of an event $A \in \Sigma$.
 - $P(\Omega) = 1$
 - For $A, B \subset \Omega$, if $A \cap B = \emptyset$ then $P(A \cup B) = P(A) + P(B)$.
+*** Marginalisation
+**** Partition
+If $A_1, \ldots, A_n$ are a partition of $B$ then:
+- $A_j \cap A_i = \emptyset$ for $i \neq j$
+- $\bigcup_{i=1}^n A_i = A_i = B$.
 **** Marginalisation
 If $A_1, \ldots, A_n \subset \Omega$ are a partition of $\Omega$
 \[
 P(B) = \sum_{i = 1}^n P(B \cap A_i).
 \]
+
 
 ** Conditional probability and independence
 *** Conditional probability
@@ -145,6 +151,25 @@ P(A \mid B)
 \frac{P_\param(x) \bel(x)}{\sum_{\param' \in \Param} P_{\param'}(x) \bel(\param')}
 \]
 
+*** Example: COVID symptoms
+**** Activity
+- Throw two dice. Note the two numbers, $x, y$.
+- If ($x = 0$), *or* ($x = y$ and $x, y$ are even), you have *symptoms*.
+- Do you have COVID?
+#+BEAMER: \pause
+**** Information
+- 10% of people have COVID
+- 50% of people  *with* COVID have symptoms.
+- 10% of people with *no* COVID have symptoms.
+- If you *do* have symptoms, what are the chances you have COVID?
+#+BEAMER: \pause
+**** Formalisation
+- Prior $P(C)=  0.1$:
+- Likelihood: $P(S | C) = 0.5$, $P(S | \neg C) = 0.1$
+- Posterior: 
+\[
+P(C | S) = \frac{P(S | C) P(C)}{P(S | C) P(C) + P(S | \neg C) P( \neg C)}
+\]
 
 *** Independence
 **** Independent events $A \indep B$
@@ -152,16 +177,6 @@ $A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
 **** Conditional independence $A \indep B \mid C$
  $A, B$ are *conditionally independent* given $C$ iff $P(A \cap B | C) = P(A | C) P(B | C)$.
 
-*** Example: Naive Bayes models
-Sometimes we observe multiple effects that have a common cause, but which are otherwise independent:
-\[
-\Pr(\textrm{effect}_1, \ldots \textrm{effect}_n \mid \textrm{cause})
-=
-\prod_{i=1}^n \Pr(\textrm{effect}_i \mid \textrm{cause})
-\]
-**** Naive Bayes model
-- Observations $(\bx_t, y_t)_{t=1}^T$ with $\bx_t = (x_{t,1}, \ldots, x_{t,n})$.
-- Probability *models* $P_\param(y \mid \bx) = \prod_{i=1}^n P_\param(y \mid x_i)$.
 *** Conditional independence
 
 For any set of events $A_1, A_2, A_3, \ldots$, we can write their co-occurence probability as
@@ -197,6 +212,33 @@ We can now write the distribution of the above example as
 P( B, C_1, C_2) = 
 P(A_1) P(A_2) P(B | A_1 \cap A_2) P(C_1 | B) P(C_2 | B).
 \]
+*** Example: COVID test 
+**** Information
+- 10% of people have COVID
+- 50% of people with COVID have a positive *test*
+- 50% of people with COVID have *symptoms*
+- 1% of people without COVID have a positive *test*
+- 10% of people without COVID have *symptoms*
+#+BEAMER: \pause
+**** Formalisation
+- Prior: $P(C = 1) = 0.1$
+- Likelihood: $P(T, S | C) = P(T | C) P(S | C)$, $P(T, S | \neg C)$ for all values of $T, S, C$.
+- Posterior: 
+\[
+P(C | T, S) = 
+\frac{P(S | C)P (T | C) P(C)}
+{\sum_{i=0}^1 P(S | C = i)P (T | C = i) P(C = i)}
+\]
+*** Example: Naive Bayes models
+Sometimes we observe multiple effects that have a common cause, but which are otherwise independent:
+\[
+\Pr(\textrm{effect}_1, \ldots \textrm{effect}_n \mid \textrm{cause})
+=
+\prod_{i=1}^n \Pr(\textrm{effect}_i \mid \textrm{cause})
+\]
+**** Naive Bayes model
+- Observations $(\bx_t, y_t)_{t=1}^T$ with $\bx_t = (x_{t,1}, \ldots, x_{t,n})$.
+- Probability *models* $P_\param(y \mid \bx) = \prod_{i=1}^n P_\param(y \mid x_i)$.
 *** Example: Wumpus world
 **** World 1
 :PROPERTIES:
@@ -263,6 +305,7 @@ P(\param \mid x_1, \ldots, x_t)
 \[
 P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) P(\param \mid x_1, \ldots, x_t)
 \]
+
 
 * Statistical Decision Theory
   #+TOC: headlines [currentsection]
@@ -446,24 +489,4 @@ If we want to guess $\hat{\param}$, and we knew that $\param \sim P$, then the g
 \hat{\param} = \E_P(\param) = \argmin_{\hat{\param}} \E_P [(\param - \hat{\param})^2]
 \]
 
-*** Example: The k-meteorologists problem
-- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
-  \[
-  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
-  \]
-- A *prior probability* $P(\param)$ on the stations.
-- The *marginal* probability
-\[
-P(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) P(\param)
-\]
-- The *posterior* probability
-\begin{align*}
-P(\param \mid x_1, \ldots, x_t)
-&= \frac{P_\param(x_1, \ldots, x_t) P(\param)}{P(x_1, \ldots, x_t)}
-= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  P(\param)}{P(x_1, \ldots, x_t)}\\
-&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  P(\param \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
-\end{align*}
-- The *marginal posterior* probability
-\[
-P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) P(\param \mid x_1, \ldots, x_t)
-\]
+

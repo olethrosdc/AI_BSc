@@ -68,7 +68,7 @@ Probability can be seen as an area-like function assigning a likelihood to sets.
 **** Partition
 If $A_1, \ldots, A_n$ are a partition of $B$ then:
 - $A_j \cap A_i = \emptyset$ for $i \neq j$
-- $\bigcup_{i=1}^n A_i = A_i = B$.
+- $\bigcup_{i=1}^n A_i = B$.
 **** Marginalisation
 If $A_1, \ldots, A_n \subset \Omega$ are a partition of $\Omega$
 \[
@@ -152,13 +152,13 @@ P(A \mid B)
 \]
 
 *** Example: COVID symptoms
-**** Activity
-- Throw two dice. Note the two numbers, $x, y$.
-- If ($x = 0$), *or* ($x = y$ and $x, y$ are even), you have *symptoms*.
+**** Activity (with playing cards or dice)
+- Pick two ($x, y$) from 1 to 10.
+- If ($x = 1$ and $y < 9$), *or* ($x$ is even and $y \geq 9$), you have *symptoms*.
 - Do you have COVID?
 #+BEAMER: \pause
 **** Information
-- 10% of people have COVID
+- 20% of people have COVID
 - 50% of people  *with* COVID have symptoms.
 - 10% of people with *no* COVID have symptoms.
 - If you *do* have symptoms, what are the chances you have COVID?
@@ -217,12 +217,12 @@ P(A_1) P(A_2) P(B | A_1 \cap A_2) P(C_1 | B) P(C_2 | B).
 - 10% of people have COVID
 - 50% of people with COVID have a positive *test*
 - 50% of people with COVID have *symptoms*
-- 1% of people without COVID have a positive *test*
-- 10% of people without COVID have *symptoms*
+- 10% of people without COVID have a positive *test*
+- 20% of people without COVID have *symptoms*
 #+BEAMER: \pause
 **** Formalisation
 - Prior: $P(C = 1) = 0.1$
-- Likelihood: $P(T, S | C) = P(T | C) P(S | C)$, $P(T, S | \neg C)$ for all values of $T, S, C$.
+- Likelihood: $P(T, S | C) = P(T | C) P(S | C)$, $P(T, S | \neg C)$ for all va43lues of $T, S, C$.
 - Posterior: 
 \[
 P(C | T, S) = 
@@ -284,26 +284,50 @@ Sometimes we observe multiple effects that have a common cause, but which are ot
 - What is the probability of a hole above if you *feel* a breeze?
 - What is the probability of a hole above f you *don't* feel a breeze?
 
-*** Example: The k-meteorologists problem
+*** Example: The k-meteorologists problem (set notation)
+- $R_t$: The *event* that it rains at time $t$.
 - A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
   \[
-  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
+  P(R_{t+1} \mid R_1, \ldots, R_{t}, \param), 
   \]
 - A *prior probability* $P(\param)$ on the stations.
 - The *marginal* probability
 \[
-P(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) P(\param)
+P(R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_1, \ldots, R_t  \mid \param) P(\param)
 \]
 - The *posterior* probability
 \begin{align*}
-P(\param \mid x_1, \ldots, x_t)
-&= \frac{P_\param(x_1, \ldots, x_t) P(\param)}{P(x_1, \ldots, x_t)}
-= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  P(\param)}{P(x_1, \ldots, x_t)}\\
-&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  P(\param \mid x_1, \ldots, x_{t-1})}{P(x_t \mid x_1, \ldots, x_{t-1})}
+P(\param \mid R_1, \ldots, R_t)
+&= \frac{P(R_1, \ldots, R_t \mid \param) P(\param)}{P(R_1, \ldots, R_t)}
+= \frac{\prod_{i=1}^t P(R_t \mid R_1, \ldots, R_{t-1}, \param)  P(\param)}{P(R_1, \ldots, R_t)}\\
+&= \frac{P(R_t \mid R_1, \ldots, R_{t-1} \mid \param)  P(\param \mid R_1, \ldots, R_{t-1})}{P(R_t \mid R_1, \ldots, R_{t-1})}
 \end{align*}
 - The *marginal posterior* probability
 \[
-P(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) P(\param \mid x_1, \ldots, x_t)
+P(R_{t+1} \mid R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_{t+1} \mid R_1, \ldots, R_t, \param) P(\param \mid R_1, \ldots, R_t)
+\]
+
+*** Example: The k-meteorologists problem (stat notation)
+- $x_t \in \{0,1\}$: A *random variable*, telling us whether it rains at time $t$.
+- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
+  \[
+  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
+  \]
+- A *prior probability* $\bel(\param)$ on the stations.
+- The *marginal* probability
+\[
+\Pr_\bel(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) \bel(\param)
+\]
+- The *posterior* probability
+\begin{align*}
+\bel(\param \mid x_1, \ldots, x_t)
+&= \frac{P_\param(x_1, \ldots, x_t) \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}
+= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}\\
+&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param \mid x_1, \ldots, x_{t-1})}{\Pr_\bel(x_t \mid x_1, \ldots, x_{t-1})}
+\end{align*}
+- The *marginal posterior* probability
+\[
+\Pr_\bel(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) \bel(\param \mid x_1, \ldots, x_t)
 \]
 
 
@@ -363,16 +387,26 @@ P_f(A) \defn P(\{\omega \in \Omega : f(\omega) \in A\}),
 \]
 and we write $f \sim P_f$. 
 **** Shorthands for RV
-- For RVs $f : \Omega \to \Reals$, we can write $P(f \in A)$ to mean $P_f(A)$.
-- For RVs $f : \Omega \to X$, where $X$ is a finite set e.g. $\{1, 2, \ldots, n\}$, we can write $P(f = x)$ for any $x \in X$.
-**** Independence
-Two RVs $f,g$ are independent in the same way that events are independent:
+- For RVs $f : \Omega \to \Reals$, we write $P(f \in A)$ to mean $P_f(A)$.
+- For RVs $f : \Omega \to X$, where $X$ is a finite set e.g. $\{1, 2, \ldots, n\}$, we write $P(f = x) = P_f(\{x\})$ for any $x \in X$.
+*** Independence of random variables
+
+Two RVs $f,g$ are independent in the same way that events are independent. 
 \[
 P(f \in A \wedge g \in B) = P(f \in A) P(g \in B) = P_f(A) P_g(B).
 \]
-In that sense, $f \sim P_f$ and $g \sim P_g$.
-
-
+In that sense, $f \sim P_f$ and $g \sim P_g$. 
+**** Formal definition
+More specifically, we are measuring the set of \(\omega\) values for which $f(\omega) \in A$ and $g(\omega) \in B$:
+\[
+P(\{\omega : f(\omega) \in A, g(\omega) \in B\}) = P_f(A) P_g(B).
+\]
+**** Shorthand notation
+Since the above is very cumbersome, we usually just write that
+\[
+P(f, g) = P(f) P(g)
+\]
+for any two independent random variables $f, g$.
 *** Expectation
 For any real-valued random variable $f: \Omega \to \Reals$, the expectation with respect to a probability measure $P$ is
 \[

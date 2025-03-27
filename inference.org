@@ -181,18 +181,18 @@ P(C | S) = \frac{P(S | C) P(C)}{P(S | C) P(C) + P(S | \neg C) P( \neg C)}
 - A *prior probability* $P(\param)$ on the stations.
 - The *marginal* probability
 \[
-P(R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_1, \ldots, R_t  \mid \param) P(\param)
+P(R_1 \cup \cdots \cup R_t) = \sum_{\param \in \Param} P(R_1 \cap \cdots \cap R_t  \mid \param) P(\param)
 \]
 - The *posterior* probability
 \begin{align*}
-P(\param \mid R_1, \ldots, R_t)
-&= \frac{P(R_1, \ldots, R_t \mid \param) P(\param)}{P(R_1, \ldots, R_t)}
-= \frac{\prod_{i=1}^t P(R_t \mid R_1, \ldots, R_{t-1}, \param)  P(\param)}{P(R_1, \ldots, R_t)}\\
-&= \frac{P(R_t \mid R_1, \ldots, R_{t-1} \mid \param)  P(\param \mid R_1, \ldots, R_{t-1})}{P(R_t \mid R_1, \ldots, R_{t-1})}
+P(\param \mid R_1\cap \cdots \cap R_t)
+&= \frac{P(R_1\cap \cdots \cap R_t \mid \param) P(\param)}{P(R_1\cap \cdots \cap R_t)}
+= \frac{\prod_{i=1}^t P(R_t \mid R_1 \cap \cdots \cap R_{t-1}, \param)  P(\param)}{P(R_1 \cap \cdots \cap R_t)}\\
+&= \frac{P(R_t \mid R_1 \cap \cdots \cap R_{t-1} \mid \param)  P(\param \mid R_1 \cap \cdots \cap R_{t-1})}{P(R_t \mid R_1 \cap \cdots \cap R_{t-1})}
 \end{align*}
 - The *marginal posterior* probability
 \[
-P(R_{t+1} \mid R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_{t+1} \mid R_1, \ldots, R_t, \param) P(\param \mid R_1, \ldots, R_t)
+P(R_{t+1} \mid R_1\cap \cdots \cap R_t) = \sum_{\param \in \Param} P(R_{t+1} \mid R_1\cap \cdots \cap R_t, \param) P(\param \mid R_1\cap \cdots \cap R_t)
 \]
 
 *** Example: The k-meteorologists problem (stat notation)

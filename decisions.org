@@ -9,7 +9,6 @@
 #+latex_header: \AtBeginSubsection[]{\begin{frame}<beamer>\tableofcontents[currentsubsection]\end{frame}}
 
 * Statistical Decision Theory
-  #+TOC: headlines [currentsection]
 ** Elementary Decision Theory
 *** Preferences
 **** Types of rewards                                               :example:
@@ -54,87 +53,6 @@ What is the reward here?
 - Each gamble gives us different rewards with different probabilities.
 - These rewards are then *random*
 - For simplicity, we assign a real-valued *utility* to outcomes. This is a *random variable*
-** Random variables, expectation and variance
-*** Random variables
-A random variable $f : \Omega \to \Reals$ is a real-valued *function*, with $\omega \sim P$.
-**** The distribution of $f$
-The probability that $f$ lies in some subset $A \subset \Reals$ is
-\[
-P_f(A) \defn P(\{\omega \in \Omega : f(\omega) \in A\}),
-\]
-and we write $f \sim P_f$. 
-**** Shorthands for RV
-- For RVs $f : \Omega \to \Reals$, we write $P(f \in A)$ to mean $P_f(A)$.
-- For RVs $f : \Omega \to X$, where $X$ is a finite set e.g. $\{1, 2, \ldots, n\}$, we write $P(f = x) = P_f(\{x\})$ for any $x \in X$.
-*** Independence of random variables
-
-Two RVs $f,g$ are independent in the same way that events are independent. 
-\[
-P(f \in A \wedge g \in B) = P(f \in A) P(g \in B) = P_f(A) P_g(B).
-\]
-In that sense, $f \sim P_f$ and $g \sim P_g$. 
-**** Formal definition
-More specifically, we are measuring the set of \(\omega\) values for which $f(\omega) \in A$ and $g(\omega) \in B$:
-\[
-P(\{\omega : f(\omega) \in A, g(\omega) \in B\}) = P_f(A) P_g(B).
-\]
-**** Shorthand notation
-Since the above is very cumbersome, we usually just write that
-\[
-P(f, g) = P(f) P(g)
-\]
-for any two independent random variables $f, g$.
-*** Expectation
-For any real-valued random variable $f: \Omega \to \Reals$, the expectation with respect to a probability measure $P$ is
-\[
-\E_P(f) = \sum_{\omega \in \Omega} f(\omega) P(\omega).
-\]
-When $\Omega$ is continuous, we can use a density $p$
-\[
-\E_P(f) = \int_{\Omega} f(\omega) p(\omega) d\omega.
-\]
-**** Linearity of expectations
-For any RVs $x, y$:
-\[
-\E_P(x + y) = \E_P(x) + \E_P(y)
-\]
-*** Multiple variables
-**** The joint distribution $P(x,y)$
-For two (or more) RVs $x : \Omega \to \Reals$, and $y : \Omega \to
- \Reals$, this is a *shorthand* for the distribution of $(x(\omega),
- y(\omega))$ when $\omega \sim P$. We can also use $P(x = i, y = j)$ for the probability that the two variables assume the values $i, j$ respectively.
-**** Independence
-If $x,y$ are independent RVs then $P(x,y) = P_x(x) P_y(y)$.
-**** Correlation
-If $x,y$ are *not* correlated then $\E_P(xy) = \E(x)\E(y)$.
-**** IID (Independent and Identically Distributed) random variables
-A sequence $x_t$ of r.v.s is IID if $x_t \sim P$
-so that
-\[
-(x_1, \ldots, x_t, \ldots, x_T) \sim P^T
-\]
-i.e. a \(T\)-length sample is drawn from the product distribution $P^T = P \times P \times \cdots \times P$.
-*** Conditional expectation
-The conditional expectation of a random variable $f: \Omega \to \Reals$, with respect to a probability measure $P$ conditioned on some event $B$ is simply
-\[
-\E_P(f | B) = \sum_{\omega \in \Omega} f(\omega) P(\omega | B).
-\]
-Conditional expectations are similar to conditional probabilities.
-*** Conditional probabilities of RVs
-Similarly to the notation over sets,
-\[
-P(A \cap B) = P(A \mid B) P(B),
-\]
-when dealing with RVs, it is common to use the notation
-\[
-P(x, y) = P(x | y) P(y)
-\]
-This equation works for all possible values of $x, y$ e.g.
-\[
-P(x = 1, y = 0) = P(x = 1 | y = 0) P(y = 0)
-\]
-which then denotes the probability msas of each
-
 ** Statistical Decision Theory
 
 *** Expected utility
@@ -199,7 +117,22 @@ If we want to guess $\hat{\param}$, and we knew that $\param \sim P$, then the g
 \[
 \hat{\param} = \E_P(\param) = \argmin_{\hat{\param}} \E_P [(\param - \hat{\param})^2]
 \]
-
+minimises the squared error. This is because
+\begin{align}
+\frac{d}{d \hat{\theta}}
+ \E_P [(\param - \hat{\param})^2]
+&=
+\frac{d}{d \hat{\theta}}
+ \sum_\omega [\theta(\omega) -  \hat{\param}]^2 P(\omega)\\
+&=
+ \sum_\omega \frac{d}{d \hat{\theta}}
+ [\theta(\omega) -  \hat{\param}]^2 P(\omega)\\
+&=
+ \sum_\omega 2 [\theta(\omega) -  \hat{\param}] (-1) P(\omega)
+&=
+	 2 (\hat{\param} - \E_P [\theta]).
+\end{align}
+Setting this to $0$ gives $\hat{\param} - \E_P [\theta]$
 
 *** Example: Noisy optimisation
 We wish to find the maximum of a function
@@ -209,3 +142,216 @@ f(x) &\defn \E[g | x],
 \E[g | x] = \int_{- \infty}^\infty g(\omega, x) p(\omega) d\omega
 \end{align}
 
+For this problem we need to use some more complex optimisation method, such as gradient methods
+* Gradient methods
+** Gradients for optimisation
+*** The gradient descent method: one dimension
+- Function to minimise $f : \Reals \to \Reals$.
+- Derivative $\frac{d}{d \param} f(\beta)$
+**** Gradient descent algorithm
+- Input: initial value $\param^0$, *learning rate* schedule $\alpha_t$
+- For $t=1, \ldots, T$
+  - $\param^{t+1} = \param^t - \alpha_t \frac{d}{d \param} f(\param^t)$
+- Return $\param^T$
+
+**** Properties
+- If $\sum_t \alpha_t = \infty$ and $\sum_t \alpha_t^2 < \infty$, it finds a local minimum $\param^T$, i.e. there is $\epsilon > 0$ so that
+\[
+f(\param^T) < f(\param), \forall \param: \|\param^T - \param\| < \epsilon.
+\]
+*** Gradient methods for expected value :example:
+**** Estimate the expected value
+$x_t \sim P$ with $\E_P[x_t] = \mu$.
+#+BEAMER: \pause
+**** Objective: mean squared error
+Here $\ell(x, \param) = (x - \param)^2$.
+\[
+\min_\param \E_P[(x_t - \param)^2].
+\]
+#+BEAMER: \pause
+**** Exact gradient update
+If we know $P$, then we can calculate
+\begin{align}
+\param^{t+1} &= \param^t - \alpha_t \frac{d}{d\param} \E_P[(x - \param^t)^2]\\
+\frac{d}{d\param} \E_P[(x - \param^t)^2] &= 2 \E_P[x] - \param^t
+\end{align}
+
+*** Gradient for mean estimation :example:
+- Let us show this in detail
+\begin{align*}
+ \frac{d}{d\param} \E_P [(x - \param)^2] 
+&= \int_{-\infty}^\infty dP(x) \frac{d}{d\param} (x - \param)^2
+\\
+&=  \int_{-\infty}^\infty dP(x) 2(x - \param)
+\\
+&=  2 \E_P[x] - 2\param.
+\end{align*}
+- If we set the derivative to zero, then we find the optimal solution:
+\[
+\param^* = \E_P[x]
+\]
+- How can we do this if we only have data $x_t \sim P$?
+*** Mean-squared error cost function
+\begin{tikzpicture}[domain=-1:2, range=-1:2]
+   \draw[dotted, color=gray] (-1.1,-2.1) grid (3.1,4.1);
+   \draw[->] (0,0) -- (2,0) node[right] {$\beta$};
+   \draw[->] (0,0) -- (0,4) node[above] {$\ell$};
+   \draw[color=red] plot (\x, {(\x-1)^2})  node[right] {$\mu = 1$};
+   \draw[color=blue] plot (\x, {(\x)^2})  node[right] {$\mu = 0$};
+\end{tikzpicture}
+Here we see a plot of $\ell(\mu, \beta) = (\beta - \mu)^2$.
+*** Stochastic gradient for mean estimation
+**** Sampling :B_theorem:
+     :PROPERTIES:
+     :BEAMER_env: theorem
+     :END:
+For any bounded random variable $f$, 
+\[
+\E_P[f] = \int_{X} dP(x) f(x)
+ = 
+\lim_{T \to \infty} \frac{1}{T} \sum_{t=1}^T f(x_t)
+ = 
+\E_P \left[\frac{1}{T} \sum_{t=1}^T f(x_t)\right]
+, \qquad x_t \sim P
+\]
+**** Sampling :B_example:
+     :PROPERTIES:
+     :BEAMER_env: example
+     :END:
+- If we sample $x$ we approximate the gradient:
+\begin{align*}
+ \frac{d}{d\param} \E_P [(x - \param)^2] 
+= \int_{-\infty}^\infty \!\!\!\! dP(x) \frac{d}{d\param} (x - \param)^2
+\approx \frac{1}{T} \sum_{t=1}^T \frac{d}{d\param} (x_t - \param)^2
+= \frac{1}{T} \sum_{t=1}^T 2(x_t - \param)
+\end{align*}
+#+BEAMER: \pause
+- If we update $\param$ after each new sample $x_t$, we obtain:
+\[
+\param^{t+1} = \param^t + 2 \alpha_t (x_t - \param^t)
+\]
+
+*** The gradient method
+- Function to minimise $f : \Reals^n \to \Reals$.
+- Derivative $\nabla_\param f(\param)  = \left(\frac{\partial f(\param)}{\partial \param_1}, \ldots, \frac{\partial f(\param)}{\partial \param_n}\right)$,
+ where $\frac{\partial f}{\partial \beta_n}$ denotes the *partial* derivative, i.e. varying one argument and keeping the others fixed.
+**** Gradient descent algorithm
+- Input: initial value $\param^0$, learning rate schedule $\alpha_t$
+- For $t=1, \ldots, T$
+  - $\param^{t+1} = \param^t - \alpha_t \nabla_\param f(\param^t)$
+- Return $\param^T$
+
+**** Properties
+- If $\sum_t \alpha_t = \infty$ and $\sum_t \alpha_t^2 < \infty$, it finds a local minimum $\param^T$, i.e. there is $\epsilon > 0$ so that
+\[
+f(\param^T) < f(\param), \forall \param: \|\param^T - \param\| < \epsilon.
+\]
+*** Stochastic gradient method
+This is the same as the gradient method, but with added noise:
+- $\param^{t+1} = \param^t - \alpha_t [\nabla_\param f(\param^t) + \omega_t]$
+- $\E[\omega_t] = 0$ is sufficient for convergence.
+#+BEAMER: \pause
+**** When the cost is an expectation                     :B_example:
+	 :PROPERTIES:
+	 :BEAMER_env: example
+	 :END:
+In machine learning, the cost is frequently an expectation of some function $\ell$, 
+\[
+f(\param) = \int_X dP(x) \ell(x, \param)
+\]
+This can be approximated with a sample
+\[
+f(\param) \approx \frac{1}{T} \sum_t \ell(x_t, \param)
+\]
+The same holds for the gradient:
+\[
+\nabla_\param f(\param) = \int_X dP(x) \nabla_\param \ell(x, \param)
+\approx \frac{1}{T} \sum_t \nabla_\param \ell(x_t, \param)
+\]
+
+** The perceptron as a gradient algorithm
+*** Perceptron algorithm as gradient descent
+**** Target error function
+\[
+\E_{\alert{P}}^\param[\ell] = \int_{\CX} d\alert{P}(x) \sum_y \alert{P}(y|x) \ell(x, y, \param)
+\]
+Minimises the error on the true distribution.
+#+BEAMER: \pause
+**** Empirical error function
+\[
+\E_{\alert{D}}^\param[\ell]= \frac{1}{T} \sum_{t=1}^T \ell(x_t, y_t, \param),
+\qquad\alert{D} = (x_t, y_t)_{t=1}^T, \quad x_t, y_t \sim P.
+\]
+Minimises the error on the empirical distribution.
+*** Cost functions and the chain rule
+**** Perceptron cost function
+The cost of each example
+\begin{align}
+\ell(x,y, \param) 
+&= \overbrace{\ind{y(x^\top \param) < 0}}^{\textrm{misclassified?}} \overbrace{[ - y (x^\top \param)]}^{\textrm{margin of error}}
+\end{align}
+where the *indicator function $\ind{A}$* is  1 when $A$ is true and $0$ otherwise.
+\begin{center}
+\begin{tikzpicture}[domain=-2:2, samples=200,range=-1:2]
+   \draw[dotted, color=gray] (-2.1,-2.1) grid (3.1,3.1);
+   \draw[->] (0,0) -- (2,0) node[right] {$f(x)$};
+   \draw[->] (0,0) -- (0,4) node[above] {$\ell$};
+   \draw[thick, color=red] plot (\x, {max(0, \x)}) node [right] {perceptron cost};
+   \draw[dashed, thick, color=blue] plot (\x, {\x >= 0)}) node [right] {classification cost};
+\end{tikzpicture}
+\end{center}
+
+Here we see a plot of $\ell(\mu, \beta) = (\beta - \mu)^2$.
+*** Derivative of the perceptron cost function
+The total cost over the data is defined as
+\[
+L(D, \param) = \sum_{(x, y) \in D} \ell(x, y, \param)
+\]
+Taking the derivative, we have
+\[
+\nabla_\param L(D, \param) = \nabla_\param \sum_{(x, y) \in D} \ell(x, y, \beta)
+  = \sum_{(x, y) \in D} \nabla_\param \ell(x, y, \param)
+\]
+
+
+**** Reminder: The chain rule
+Let $z = g(y)$, $y = f(x)$ so that $z= g(f(x))$. Then $\frac{dz}{dx} = \frac{dz}{d\alert{y}}\frac{d\alert{y}}{dx}$
+
+#+BEAMER: \pause
+**** Applying the chain rule to calculate the gradient
+#+ATTR_BEAMER: :overlay <+->
+- $\nabla_\param \ell(x,y, \param) = - \ind{y(x^\top \param) < 0} \nabla_\param [y(x^\top \param)]$.
+- $\frac{\partial \param}{\partial{\param_i}} [y(x_t^\top \param)] = y x_{t,i}$ (gradient of Perceptron's output)
+- Gradient update: $\param^{t+1} = \param^t - \nabla_\param \ell(x,y, \param) = \param^t + y x_{t}$
+#+BEAMER: \pause
+The classification error cost function is *not* differentiable :(
+*** Margins and confidences
+#+ATTR_BEAMER: :overlay <+->
+We can think of the output of the network as a measure of confidence
+#+attr_html: :width 100px
+#+attr_latex: :width 100px
+[[./fig/margin.pdf]]
+#+BEAMER: \pause
+By applying the *logit* function, we can bound a real number $x$ to $[0,1]$:
+\[
+f(x) = \frac{e^x}{1 + e^x} = \frac{1}{1 + e^{-x}}
+\]
+*** Logistic regression
+**** Output as a measure of confidence, given the parameter $\param$
+\[
+P_\param(y = 1| x) = \frac{1}{1 + \exp(- x_t^\top \param)}
+\]
+The original output $x_t^\top \param$ is now passed through the logit function.
+#+BEAMER: \pause
+**** Negative Log likelihood
+#+ATTR_BEAMER: :overlay <+->
+$\ell(x_t, y_t, \param) = - \ln P_\param( y_t | x_t) = \ln(1 + \exp(- y_t x_t^\top \param))$
+\begin{align*}
+\nabla_\param \ell(x_t, y_t, \param) 
+&= \frac{1}{1 + \exp(- y x_t^\top \param)} \nabla_\param[1 + \exp(-y x_t^\top \param)]
+\\
+&= \frac{1}{1 + \exp(- y x_t^\top \param)} \exp(-y x_t^\top \param) [\nabla_\param (-y_t x_t^\top \param)]
+\\
+&= - \frac{1}{1 + \exp(x_t^\top \param)} (x_{t,i})_{i=1}^ne
+\end{align*}
+- $\E_P(\ell) = \int_X dP(x) \sum_{y \in Y} P(y|x) P_\param(y_t + x_t)$

@@ -218,6 +218,88 @@ P(R_{t+1} \mid R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_{t+1} \mid R_1, 
 \Pr_\bel(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) \bel(\param \mid x_1, \ldots, x_t)
 \]
 
+** Random variables, expectation and variance
+*** Random variables
+A random variable $f : \Omega \to \Reals$ is a real-valued *function*, with $\omega \sim P$.
+**** The distribution of $f$
+The probability that $f$ lies in some subset $A \subset \Reals$ is
+\[
+P_f(A) \defn P(\{\omega \in \Omega : f(\omega) \in A\}),
+\]
+and we write $f \sim P_f$. 
+**** Shorthands for RV
+- For RVs $f : \Omega \to \Reals$, we write $P(f \in A)$ to mean $P_f(A)$.
+- For RVs $f : \Omega \to X$, where $X$ is a finite set e.g. $\{1, 2, \ldots, n\}$, we write $P(f = x) = P_f(\{x\})$ for any $x \in X$.
+*** Independence of random variables
+
+Two RVs $f,g$ are independent in the same way that events are independent. 
+\[
+P(f \in A \wedge g \in B) = P(f \in A) P(g \in B) = P_f(A) P_g(B).
+\]
+In that sense, $f \sim P_f$ and $g \sim P_g$. 
+**** Formal definition
+More specifically, we are measuring the set of \(\omega\) values for which $f(\omega) \in A$ and $g(\omega) \in B$:
+\[
+P(\{\omega : f(\omega) \in A, g(\omega) \in B\}) = P_f(A) P_g(B).
+\]
+**** Shorthand notation
+Since the above is very cumbersome, we usually just write that
+\[
+P(f, g) = P(f) P(g)
+\]
+for any two independent random variables $f, g$.
+*** Expectation
+For any real-valued random variable $f: \Omega \to \Reals$, the expectation with respect to a probability measure $P$ is
+\[
+\E_P(f) = \sum_{\omega \in \Omega} f(\omega) P(\omega).
+\]
+When $\Omega$ is continuous, we can use a density $p$
+\[
+\E_P(f) = \int_{\Omega} f(\omega) p(\omega) d\omega.
+\]
+
+**** Linearity of expectations
+For any RVs $x, y$:
+\[
+\E_P(x + y) = \E_P(x) + \E_P(y)
+\]
+*** Multiple variables
+**** The joint distribution $P(x,y)$
+For two (or more) RVs $x : \Omega \to \Reals$, and $y : \Omega \to
+ \Reals$, this is a *shorthand* for the distribution of $(x(\omega),
+ y(\omega))$ when $\omega \sim P$. We can also use $P(x = i, y = j)$ for the probability that the two variables assume the values $i, j$ respectively.
+**** Independence
+If $x,y$ are independent RVs then $P(x,y) = P_x(x) P_y(y)$.
+**** Correlation
+If $x,y$ are *not* correlated then $\E_P(xy) = \E(x)\E(y)$.
+**** IID (Independent and Identically Distributed) random variables
+A sequence $x_t$ of r.v.s is IID if $x_t \sim P$
+so that
+\[
+(x_1, \ldots, x_t, \ldots, x_T) \sim P^T
+\]
+i.e. a \(T\)-length sample is drawn from the product distribution $P^T = P \times P \times \cdots \times P$.
+*** Conditional expectation
+The conditional expectation of a random variable $f: \Omega \to \Reals$, with respect to a probability measure $P$ conditioned on some event $B$ is simply
+\[
+\E_P(f | B) = \sum_{\omega \in \Omega} f(\omega) P(\omega | B).
+\]
+Conditional expectations are similar to conditional probabilities.
+*** Conditional probabilities of RVs
+Similarly to the notation over sets,
+\[
+P(A \cap B) = P(A \mid B) P(B),
+\]
+when dealing with RVs, it is common to use the notation
+\[
+P(x, y) = P(x | y) P(y)
+\]
+This equation works for all possible values of $x, y$ e.g.
+\[
+P(x = 1, y = 0) = P(x = 1 | y = 0) P(y = 0)
+\]
+which then denotes the probability msas of each
+
 
 * Graphical models
 

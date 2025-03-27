@@ -6,6 +6,7 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
+#+latex_header: \AtBeginSubsection[]{\begin{frame}<beamer>\tableofcontents[currentsubsection]\end{frame}}
 * Logical inference
   #+TOC: headlines [currentsection]
 ** Set theory and logic
@@ -171,11 +172,411 @@ P(A \mid B)
 P(C | S) = \frac{P(S | C) P(C)}{P(S | C) P(C) + P(S | \neg C) P( \neg C)}
 \]
 
+*** Example: The k-meteorologists problem (set notation)
+- $R_t$: The *event* that it rains at time $t$.
+- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
+  \[
+  P(R_{t+1} \mid R_1, \ldots, R_{t}, \param), 
+  \]
+- A *prior probability* $P(\param)$ on the stations.
+- The *marginal* probability
+\[
+P(R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_1, \ldots, R_t  \mid \param) P(\param)
+\]
+- The *posterior* probability
+\begin{align*}
+P(\param \mid R_1, \ldots, R_t)
+&= \frac{P(R_1, \ldots, R_t \mid \param) P(\param)}{P(R_1, \ldots, R_t)}
+= \frac{\prod_{i=1}^t P(R_t \mid R_1, \ldots, R_{t-1}, \param)  P(\param)}{P(R_1, \ldots, R_t)}\\
+&= \frac{P(R_t \mid R_1, \ldots, R_{t-1} \mid \param)  P(\param \mid R_1, \ldots, R_{t-1})}{P(R_t \mid R_1, \ldots, R_{t-1})}
+\end{align*}
+- The *marginal posterior* probability
+\[
+P(R_{t+1} \mid R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_{t+1} \mid R_1, \ldots, R_t, \param) P(\param \mid R_1, \ldots, R_t)
+\]
+
+*** Example: The k-meteorologists problem (stat notation)
+- $x_t \in \{0,1\}$: A *random variable*, telling us whether it rains at time $t$.
+- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
+  \[
+  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
+  \]
+- A *prior probability* $\bel(\param)$ on the stations.
+- The *marginal* probability
+\[
+\Pr_\bel(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) \bel(\param)
+\]
+- The *posterior* probability
+\begin{align*}
+\bel(\param \mid x_1, \ldots, x_t)
+&= \frac{P_\param(x_1, \ldots, x_t) \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}
+= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}\\
+&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param \mid x_1, \ldots, x_{t-1})}{\Pr_\bel(x_t \mid x_1, \ldots, x_{t-1})}
+\end{align*}
+- The *marginal posterior* probability
+\[
+\Pr_\bel(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) \bel(\param \mid x_1, \ldots, x_t)
+\]
+
+
+* Graphical models
+
+** Graphical model
 *** Independence
 **** Independent events $A \indep B$
-$A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
+-  $A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
+- Knowing if $A$ happened, does not tell us anything about whether $B$ happened
+
 **** Conditional independence $A \indep B \mid C$
- $A, B$ are *conditionally independent* given $C$ iff $P(A \cap B | C) = P(A | C) P(B | C)$.
+- $A, B$ are *conditionally independent* given $C$ iff $P(A \cap B | C) = P(A | C) P(B | C)$.
+- Knowing if $C$ happened tells us all we need to know about $A$ and $B$.
+
+**** For random variables
+- Independence: $P(x, y) = P(x,y)$.
+- Conditional independence:  $P(x, y | z) = P(x | z) P(y |z)$.
+
+
+*** Model specification: Independent
+\begin{center}
+      \begin{tikzpicture}
+        \node[RV] at (0,0) (x1) {$x_1$};
+        \node[RV] at (2,0) (x2) {$x_2$};
+      \end{tikzpicture}
+\end{center}
+
+**** Specification                                                    :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.3
+     :END:
+    \begin{align*}
+      f &= \Ber(1/2)\\
+      g &= \Ber(0.8)\\
+      x_1 &\sim f\\
+      x_2 &\sim g
+    \end{align*}
+**** Code                                                             :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.7
+     :END:
+
+#+BEGIN_SRC python
+def f():
+  return np.random.choice(2)
+def g: 
+  return np.random.choice(2, [0.2, 0.8])
+x1 = f()
+x2 = g()
+#+END_SRC 
+
+
+*** Model specification: Gaussian Dependent variables
+\begin{center}
+      \begin{tikzpicture}
+        \node[RV] at (0,0) (x1) {$x_1$};
+        \node[RV] at (2,0) (x2) {$x_2$};
+	\draw[->] (x1)--(x2);
+      \end{tikzpicture}
+\end{center}
+
+**** Specification                                                    :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.3
+     :END:
+    \begin{align*}
+      f &= \Normal(0, 1)\\
+      g(a) &= \Normal(a, 1)\\
+      x_1 &\sim f\\
+      x_2 | x_1 = a &\sim g(a)
+    \end{align*}
+**** Code                                                             :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.7
+     :END:
+
+#+BEGIN_SRC python
+def f():
+  return np.random.normal(0,1)
+def g(a): 
+  return np.random.normal(a)
+x1 = f()
+x2 = g(x1)
+#+END_SRC 
+
+
+
+
+*** Model specification: Bernoulli Dependent variables
+\begin{center}
+      \begin{tikzpicture}
+        \node[RV] at (0,0) (x1) {$x_1$};
+        \node[RV] at (2,0) (x2) {$x_2$};
+	\draw[->] (x1)--(x2);
+      \end{tikzpicture}
+\end{center}
+
+**** Specification                                                    :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.3
+     :END:
+    \begin{align*}
+      f &= \Ber(1/2)\\
+      g(a) &= \Ber(\theta_a)\\
+      x_1 &\sim f\\
+      x_2 | x_1 = a &\sim g(a)\\
+       \theta &= (0.6, 0.5)
+    \end{align*}
+**** Code                                                             :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.7
+     :END:
+
+#+BEGIN_SRC python
+def f():
+  return np.random.choice(2)
+def g(a): 
+  theta = [0.6, 0.5]
+  return np.random.choice(theta[a])
+x1 = f()
+x2 = g(x1)
+#+END_SRC 
+
+
+
+
+*** Graphical models
+\begin{center}
+    \begin{tikzpicture}
+      \node[RV] at (2,0) (xi) {$x_3$};
+      \node[RV] at (0,0) (xB) {$x_1$};
+      \node[RV] at (1,1) (xD) {$x_2$};
+      \draw[->] (xB) to (xD);
+      \draw[->] (xD) to (xi);
+      \draw[->] (xB) to (xi);
+    \end{tikzpicture}
+\end{center}
+- Variables: $x_1, x_2, x_3$
+- Arrows denote dependencies between variables.
+
+*** Conditional independence
+**** Example
+    \begin{tikzpicture}
+      \node[RV] at (2,0) (xi) {$x_3$};
+      \node[RV] at (0,0) (xB) {$x_1$};
+      \node[RV] at (1,1) (xD) {$x_2$};
+      \draw[->] (xB)--(xD);
+      \draw[->] (xD)--(xi);
+    \end{tikzpicture}
+    Graphical model for the factorisation $\Pr(x_3 \mid x_2) \Pr(x_2 \mid x_1) \Pr(x_1)$.
+**** Definition
+    - Consider variables $x_1, \ldots, x_n$.
+    - Let $B, D$ be subsets of $[n]$.
+
+    We say $x_i$ is *conditionally independent* of $\bx_B$ given $\bx_D$ and write 
+    \[x_i \indep \bx_B \mid \bx_D\]
+    if and only if:
+    \[
+    \Pr(x_i, \bx_B \mid \bx_D)
+    =
+    \Pr(x_i \mid \bx_D)
+    \Pr(\bx_B \mid \bx_D).
+    \]
+*** Directed graphical model
+A collection of $n$ random variables $x_i : \Omega \to X_i$, and let $X \defn \prod_i X_i$, with underlying probability measure $P$ on $\Omega$.
+      Let $\bx = (x_i)_{i=1}^n$ and for any subset $B \subset[n]$ let
+      \begin{align}
+        \bx_B &\defn (x_i)_{i \in B}\\
+        \bx_{-j} &\defn (x_i)_{i \neq i}
+      \end{align}
+
+*** Model specification: Chain
+\begin{center}
+      \begin{tikzpicture}
+        \node[RV] at (0,0) (x1) {$x_1$};
+        \node[RV] at (2,0) (x2) {$x_2$};
+        \node[RV] at (4,0) (x3) {$x_3$};
+        \draw[->] (x1)--(x2);
+        \draw[->] (x2)--(x3);
+      \end{tikzpicture}
+\end{center}
+
+**** Specification                                                    :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+    \begin{align}
+      \label{eq:factored-model}
+      x_1 &\sim f\\
+      x_2 \mid x_1 = a &\sim g(a)\\
+      x_3 \mid x_2 = b &\sim h(b),
+    \end{align}
+**** Code                                                             :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+
+#+BEGIN_SRC python
+def f():
+  return np.random.uniform()
+def g(a): 
+  return np.random.uniform() + a
+def h(b)
+  return np.random.uniform * b
+x1 = f()
+x2 = g(x1)
+x3 = h(x2)
+#+END_SRC 
+
+*** Smoking and lung cancer
+      \begin{tikzpicture}
+        \node[RV] at (0,0) (x1) {$S$};
+        \node[RV] at (2,0) (x2) {$C$};
+        \node[RV] at (4,0) (x3) {$A$};
+        \draw[->] (x1)--(x2);
+        \draw[->] (x3)--(x2);
+      \end{tikzpicture}
+      
+Smoking and lung cancer graphical model, where $S$: Smoking, $C$: cancer, $A$: asbestos exposure.
+
+*** Time of arrival at work
+      \begin{tikzpicture}
+        \node[RV] at (0,0) (x1) {$x_1$};
+        \node[RV] at (1,1) (x2) {$T$};
+        \node[RV] at (2,0) (x3) {$x_2$};
+        \draw[->] (x2)--(x3);
+        \draw[->] (x2)--(x1);
+      \end{tikzpicture}
+     
+Time of arrival at work graphical model where $T$ is a traffic jam and $x_1$ is the time John arrives at the office and $x_2$ is the time Jane arrives at the office.
+
+*Conditional independence:
+- Even though $x_1, x_2$ are *not independent*, they become independent once you know $T$.
+
+*** School admission
+|--------+------+--------|
+| School | Male | Female |
+|--------+------+--------|
+| A      |   62 |     82 |
+| B      |   63 |     68 |
+| C      |   37 |     34 |
+| D      |   33 |     35 |
+| E      |   28 |     24 |
+| F      |    6 |      7 |
+|--------+------+--------|
+
+- $z$: gender
+- $s$: school applied to
+- $a$: admission
+
+**** Col A                                                            :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+        \begin{tikzpicture}
+          \node[RV] at (0,0) (z) {$z$};
+          \node[RV] at (1,1) (s) {$s$};
+          \node[RV] at (2,0) (a) {$a$};
+          \draw[->] (z)--(s);
+          \draw[->] (z)--(s);
+          \draw[->] (s)--(a);
+        \end{tikzpicture}
+	Is admission independent of gender?
+**** Col B                                                            :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+
+
+
+        \begin{tikzpicture}
+          \node[RV] at (0,0) (z) {$z$};
+          \node[RV] at (1,1) (s) {$s$};
+          \node[RV] at (2,0) (a) {$a$};
+          \draw[->] (z)--(s);
+          \draw[->] (z)--(s);
+          \draw[->] (s)--(a);
+          \draw[->] (z)--(a);
+        \end{tikzpicture}
+
+	How about here?
+** Exercises
+*** What is the model for this graph?
+       \begin{tikzpicture}
+          \node[RV] at (0,0) (a) {$a$};
+          \node[RV] at (0,2) (b) {$b$};
+          \node[RV] at (2,0) (c) {$c$};
+          \node[RV] at (2,2) (d) {$d$};
+          \draw[->] (a)--(b);
+          \draw[->] (b)--(c);
+          \draw[->] (c)--(d);
+        \end{tikzpicture}
+\[
+P(a, b, c, d) = \cdots
+\]
+*** What is the model for this graph?
+       \begin{tikzpicture}
+          \node[RV] at (0,0) (a) {$a$};
+          \node[RV] at (0,2) (b) {$b$};
+          \node[RV] at (2,0) (c) {$c$};
+          \node[RV] at (2,2) (d) {$d$};
+          \draw[->] (a)--(b);
+          \draw[->] (b)--(c);
+          \draw[->] (c)--(d);
+          \draw[->] (b)--(d);
+        \end{tikzpicture}
+\[
+P(a, b, c, d) = 
+\]
+*** What is the model for this graph?
+       \begin{tikzpicture}
+          \node[RV] at (0,0) (a) {$a$};
+          \node[RV] at (0,2) (b) {$b$};
+          \node[RV] at (2,0) (c) {$c$};
+          \node[RV] at (2,2) (d) {$d$};
+          \draw[->] (a)--(b);
+          \draw[->] (a)--(c);
+        \end{tikzpicture}
+\[
+P(a, b, c, d) = 
+\]
+*** Draw the graph for this model
+       \begin{tikzpicture}
+          \node[RV] at (0,0) (a) {$a$};
+          \node[RV] at (0,2) (b) {$b$};
+          \node[RV] at (2,0) (c) {$c$};
+          \node[RV] at (2,2) (d) {$d$};
+        \end{tikzpicture}
+\[
+P(a, b, c, d) = P(a) P(b | a) P (c | b) P(d | b)
+\]
+
+*** Draw the graph for this model
+       \begin{tikzpicture}
+          \node[RV] at (0,0) (a) {$a$};
+          \node[RV] at (0,2) (b) {$b$};
+          \node[RV] at (2,0) (c) {$c$};
+          \node[RV] at (2,2) (d) {$d$};
+        \end{tikzpicture}
+\[
+P(a, b, c, d) = P(a) P(b | a) P (d | c) P(c)
+\]
+
+*** Draw the graph for this model
+       \begin{tikzpicture}
+          \node[RV] at (0,0) (a) {$a$};
+          \node[RV] at (0,2) (b) {$b$};
+          \node[RV] at (2,0) (c) {$c$};
+          \node[RV] at (2,2) (d) {$d$};
+        \end{tikzpicture}
+\[
+P(a, b, c, d) = P(a) P(b | a) P (c | a) P(d | b, c)
+\]
+
+
+
+
+
+
+
 
 *** Conditional independence
 
@@ -284,51 +685,6 @@ Sometimes we observe multiple effects that have a common cause, but which are ot
 - What is the probability of a hole above if you *feel* a breeze?
 - What is the probability of a hole above f you *don't* feel a breeze?
 
-*** Example: The k-meteorologists problem (set notation)
-- $R_t$: The *event* that it rains at time $t$.
-- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
-  \[
-  P(R_{t+1} \mid R_1, \ldots, R_{t}, \param), 
-  \]
-- A *prior probability* $P(\param)$ on the stations.
-- The *marginal* probability
-\[
-P(R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_1, \ldots, R_t  \mid \param) P(\param)
-\]
-- The *posterior* probability
-\begin{align*}
-P(\param \mid R_1, \ldots, R_t)
-&= \frac{P(R_1, \ldots, R_t \mid \param) P(\param)}{P(R_1, \ldots, R_t)}
-= \frac{\prod_{i=1}^t P(R_t \mid R_1, \ldots, R_{t-1}, \param)  P(\param)}{P(R_1, \ldots, R_t)}\\
-&= \frac{P(R_t \mid R_1, \ldots, R_{t-1} \mid \param)  P(\param \mid R_1, \ldots, R_{t-1})}{P(R_t \mid R_1, \ldots, R_{t-1})}
-\end{align*}
-- The *marginal posterior* probability
-\[
-P(R_{t+1} \mid R_1, \ldots, R_t) = \sum_{\param \in \Param} P(R_{t+1} \mid R_1, \ldots, R_t, \param) P(\param \mid R_1, \ldots, R_t)
-\]
-
-*** Example: The k-meteorologists problem (stat notation)
-- $x_t \in \{0,1\}$: A *random variable*, telling us whether it rains at time $t$.
-- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
-  \[
-  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
-  \]
-- A *prior probability* $\bel(\param)$ on the stations.
-- The *marginal* probability
-\[
-\Pr_\bel(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) \bel(\param)
-\]
-- The *posterior* probability
-\begin{align*}
-\bel(\param \mid x_1, \ldots, x_t)
-&= \frac{P_\param(x_1, \ldots, x_t) \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}
-= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}\\
-&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param \mid x_1, \ldots, x_{t-1})}{\Pr_\bel(x_t \mid x_1, \ldots, x_{t-1})}
-\end{align*}
-- The *marginal posterior* probability
-\[
-\Pr_\bel(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) \bel(\param \mid x_1, \ldots, x_t)
-\]
 
 
 * Statistical Decision Theory
@@ -523,4 +879,12 @@ If we want to guess $\hat{\param}$, and we knew that $\param \sim P$, then the g
 \hat{\param} = \E_P(\param) = \argmin_{\hat{\param}} \E_P [(\param - \hat{\param})^2]
 \]
 
+
+*** Example: Noisy optimisation
+We wish to find the maximum of a function
+\begin{align}
+f(x) &\defn \E[g | x],
+&
+\E[g | x] = \int_{- \infty}^\infty g(\omega, x) p(\omega) d\omega
+\end{align}
 

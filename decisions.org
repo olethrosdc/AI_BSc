@@ -143,6 +143,14 @@ f(x) &\defn \E[g | x],
 \end{align}
 
 For this problem we need to use some more complex optimisation method, such as gradient methods
+
+**** Theorem
+If $f: \Reals \to \Reals$ is a continuous function, and $x^*$ is a maximum i.e. $f(x^*) \geq f(x) \forall x$ then
+\[
+\frac{d}{dx} f(x^*) = 0,
+\qquad
+\frac{d}{dx^2} f(x^*) < 0.
+\]
 * Gradient methods
 ** Gradients for optimisation
 *** The gradient descent method: one dimension

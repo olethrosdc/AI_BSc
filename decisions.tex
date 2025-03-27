@@ -1,0 +1,398 @@
+% Created 2025-03-27 Do 08:34
+% Intended LaTeX compiler: pdflatex
+\documentclass[smaller]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\input{preamble}
+\AtBeginSubsection[]{\begin{frame}<beamer>\tableofcontents[currentsubsection]\end{frame}}
+\usetheme{default}
+\author{Christos Dimitrakakis}
+\date{\today}
+\title{Decisions and randomness}
+\hypersetup{
+ pdfauthor={Christos Dimitrakakis},
+ pdftitle={Decisions and randomness},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.3 (Org mode 9.1.9)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+
+\section{Statistical Decision Theory}
+\label{sec:orgbef8326}
+\subsection{Elementary Decision Theory}
+\label{sec:org57e7e44}
+\begin{frame}[label={sec:org658a9d4}]{Preferences}
+\begin{block}{Types of rewards}
+\begin{itemize}
+\item For e.g. a student: Tickets to concerts.
+\item For e.g. an investor: A basket of stocks, bonds and currency.
+\item For everybody: Money.
+\end{itemize}
+\end{block}
+
+\begin{block}{Preferences among rewards}
+For any rewards \(x, y \in R\), we either
+\begin{itemize}
+\item (a) Prefer \(x\) at least as much as \(y\) and write \(x \preceq^* y\).
+\item (b) Prefer \(x\) not more than \(y\) and write \(x \succeq^* y\).
+\item (c) Prefer \(x\) about the same as \(y\) and write \(x \eqsim^* y\).
+\item (d) Similarly define \(\succ^*\) and \(\prec^*\)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[label={sec:org5ed0001}]{Utility and Cost}
+\begin{block}{Utility function}
+To make it easy, assign a utility \(U(x)\) to every reward through a
+utility function \(U : R \to \Reals\).
+\end{block}
+
+\begin{block}{Utility-derived preferences}
+We prefer items with higher utility, i.e.
+\begin{itemize}
+\item (a) \(U(x) \geq U(y)\) \(\Leftrightarrow\) \(x \succeq^* y\)
+\item (b) \(U(x) \leq U(y)\) \(\Leftrightarrow\) \(y \succeq^* x\)
+\end{itemize}
+\end{block}
+
+\begin{block}{Cost}
+It is sometimes more convenient to define a cost function \(C: R \to \Reals\) so that we prefer items with lower cost, i.e.
+\begin{itemize}
+\item \(C(x) \geq C(y)\) \(\Leftrightarrow\) \(y \succeq^* x\)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[label={sec:org75afa78}]{Random outcomes}
+\begin{block}{Choosing among rewards}
+-[A] Bet 10 CHF on black
+-[B] Bet 10 CHF on 0
+-[C] Bet nothing
+What is the reward here?
+\end{block}
+
+\begin{block}{Choosing among trips}
+-[A] Taking the car to Zurich (50' without delays, 80' with delays)
+-[B] Taking the train to Zurich (60' without delays)
+What is the reward here? 
+\end{block}
+
+\begin{block}{Random rewards}
+\begin{itemize}
+\item Each gamble gives us different rewards with different probabilities.
+\item These rewards are then \alert{random}
+\item For simplicity, we assign a real-valued \alert{utility} to outcomes. This is a \alert{random variable}
+\end{itemize}
+\end{block}
+\end{frame}
+\subsection{Statistical Decision Theory}
+\label{sec:org8b0f6ac}
+
+\begin{frame}[label={sec:org1b29b4a}]{Expected utility}
+\begin{block}{Actions, outcomes and utility}
+In this setting, we obtain random outcomes that depend on our actions.
+\begin{itemize}
+\item Actions \(a \in A\)
+\item Outcomes \(\omega \in \Omega\).
+\item Probability of outcomes \(P(\omega \mid a)\)
+\item Utility \(U : \Omega \to \Reals\)
+\end{itemize}
+\end{block}
+\begin{block}{Expected utility}
+The expected utility of an action is:
+\[
+\E_P[U \mid a] = \sum_{\omega \in \Omega} U(\omega) P(\omega \mid a).
+\]
+\end{block}
+
+\begin{block}{The expected utility hypothesis}
+We prefer \(a\) to \(a'\) if and only if
+\[
+\E_P[U \mid a] \geq \E_P[U \mid a']
+\]
+\end{block}
+\end{frame}
+
+\begin{frame}[label={sec:org809b666}]{The St-Petersburg Paradox}
+\begin{block}{The game}
+If you give me \(x\) CHF, then I promise to
+(a) Throw a fair coin until it comes heads.
+(b) If it does so after \(T\) throws, then I will give you \(2^T\) CHF.
+\end{block}
+\begin{block}{The question}
+\begin{itemize}
+\item How much \(x\) are you willing to pay to play?
+\item Given that the expected amount of money is infinite, why are you only willing to pay a small \(x\)?
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[label={sec:orgc0d7c6a}]{Example: Betting}
+In this example, probabilities reflect actual randomness
+
+\begin{center}
+\begin{tabular}{llrr}
+\hline
+Choice & Win Probability \(p\) & Payout \(w\) & Expected gain\\
+\hline
+Don't play & 0 & 0 & 0\\
+Black & 18/37 & 2 & \\
+Red & 18/37 & 2 & \\
+0 & 1/37 & 36 & \\
+1 & 1/37 & 36 & \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{./figures/roulette.jpg}
+\end{center}
+What are the expected gains for these bets?
+\end{frame}
+\begin{frame}[label={sec:orgcf5cf82}]{Example: Route selection}
+\begin{itemize}
+\item In this example, probabilities reflect subjective beliefs
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{lrlrl}
+\hline
+Choice & Best time & Chance of delay & Delay amount & Expected time\\
+\hline
+Train & 80 & 5\% & 5 & \\
+Car, route A & 60 & 50\% & 30 & \\
+Car, route B & 70 & 10\% & 10 & \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}[label={sec:org3968f18}]{Example: Estimation}
+\begin{itemize}
+\item In this example, probabilities are calculated starting from subjective beliefs
+\end{itemize}
+\begin{block}{Mean-Square Estimation}
+If we want to guess \(\hat{\param}\), and we knew that \(\param \sim P\), then the guess
+\[
+\hat{\param} = \E_P(\param) = \argmin_{\hat{\param}} \E_P [(\param - \hat{\param})^2]
+\]
+minimises the squared error. This is because
+\begin{align}
+\frac{d}{d \hat{\theta}}
+ \E_P [(\param - \hat{\param})^2]
+&=
+\frac{d}{d \hat{\theta}}
+ \sum_\omega [\theta(\omega) -  \hat{\param}]^2 P(\omega)\\
+&=
+ \sum_\omega \frac{d}{d \hat{\theta}}
+ [\theta(\omega) -  \hat{\param}]^2 P(\omega)\\
+&=
+ \sum_\omega 2 [\theta(\omega) -  \hat{\param}] (-1) P(\omega)
+&=
+	 2 (\hat{\param} - \E_P [\theta]).
+\end{align}
+Setting this to \(0\) gives \(\hat{\param} - \E_P [\theta]\)
+\end{block}
+\end{frame}
+
+\begin{frame}[label={sec:org937d29e}]{Example: Noisy optimisation}
+We wish to find the maximum of a function
+\begin{align}
+f(x) &\defn \E[g | x],
+&
+\E[g | x] = \int_{- \infty}^\infty g(\omega, x) p(\omega) d\omega
+\end{align}
+
+For this problem we need to use some more complex optimisation method, such as gradient methods
+
+\begin{block}{Theorem}
+If \(f: \Reals \to \Reals\) is a continuous function, and \(x^*\) is a maximum i.e. \(f(x^*) \geq f(x) \forall x\) then
+\[
+\frac{d}{dx} f(x^*) = 0,
+\qquad
+\frac{d}{dx^2} f(x^*) < 0.
+\]
+\end{block}
+\end{frame}
+\section{Gradient methods}
+\label{sec:org861e3dc}
+\subsection{Gradients for optimisation}
+\label{sec:org9fbfa1e}
+\begin{frame}[label={sec:orgc2cc2af}]{The gradient descent method: one dimension}
+\begin{itemize}
+\item Function to minimise \(f : \Reals \to \Reals\).
+\item Derivative \(\frac{d}{d \param} f(\beta)\)
+\end{itemize}
+\begin{block}{Gradient descent algorithm}
+\begin{itemize}
+\item Input: initial value \(\param^0\), \alert{learning rate} schedule \(\alpha_t\)
+\item For \(t=1, \ldots, T\)
+\begin{itemize}
+\item \(\param^{t+1} = \param^t - \alpha_t \frac{d}{d \param} f(\param^t)\)
+\end{itemize}
+\item Return \(\param^T\)
+\end{itemize}
+\end{block}
+
+\begin{block}{Properties}
+\begin{itemize}
+\item If \(\sum_t \alpha_t = \infty\) and \(\sum_t \alpha_t^2 < \infty\), it finds a local minimum \(\param^T\), i.e. there is \(\epsilon > 0\) so that
+\end{itemize}
+\[
+f(\param^T) < f(\param), \forall \param: \|\param^T - \param\| < \epsilon.
+\]
+\end{block}
+\end{frame}
+\begin{frame}[label={sec:orgd4543de}]{Gradient methods for expected value}
+\begin{block}{Estimate the expected value}
+\(x_t \sim P\) with \(\E_P[x_t] = \mu\).
+\pause
+\end{block}
+\begin{block}{Objective: mean squared error}
+Here \(\ell(x, \param) = (x - \param)^2\).
+\[
+\min_\param \E_P[(x_t - \param)^2].
+\]
+\pause
+\end{block}
+\begin{block}{Exact gradient update}
+If we know \(P\), then we can calculate
+\begin{align}
+\param^{t+1} &= \param^t - \alpha_t \frac{d}{d\param} \E_P[(x - \param^t)^2]\\
+\frac{d}{d\param} \E_P[(x - \param^t)^2] &= 2 \E_P[x] - \param^t
+\end{align}
+\end{block}
+\end{frame}
+
+\begin{frame}[label={sec:orgddfac0f}]{Gradient for mean estimation}
+\begin{itemize}
+\item Let us show this in detail
+\end{itemize}
+\begin{align*}
+ \frac{d}{d\param} \E_P [(x - \param)^2] 
+&= \int_{-\infty}^\infty dP(x) \frac{d}{d\param} (x - \param)^2
+\\
+&=  \int_{-\infty}^\infty dP(x) 2(x - \param)
+\\
+&=  2 \E_P[x] - 2\param.
+\end{align*}
+\begin{itemize}
+\item If we set the derivative to zero, then we find the optimal solution:
+\end{itemize}
+\[
+\param^* = \E_P[x]
+\]
+\begin{itemize}
+\item How can we do this if we only have data \(x_t \sim P\)?
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgf62cf2f}]{Mean-squared error cost function}
+\begin{tikzpicture}[domain=-1:2, range=-1:2]
+   \draw[dotted, color=gray] (-1.1,-2.1) grid (3.1,4.1);
+   \draw[->] (0,0) -- (2,0) node[right] {$\beta$};
+   \draw[->] (0,0) -- (0,4) node[above] {$\ell$};
+   \draw[color=red] plot (\x, {(\x-1)^2})  node[right] {$\mu = 1$};
+   \draw[color=blue] plot (\x, {(\x)^2})  node[right] {$\mu = 0$};
+\end{tikzpicture}
+Here we see a plot of \(\ell(\mu, \beta) = (\beta - \mu)^2\).
+\end{frame}
+\begin{frame}[label={sec:org1d6a32b}]{Stochastic gradient for mean estimation}
+\begin{theorem}[Sampling]
+For any bounded random variable \(f\), 
+\[
+\E_P[f] = \int_{X} dP(x) f(x)
+ = 
+\lim_{T \to \infty} \frac{1}{T} \sum_{t=1}^T f(x_t)
+ = 
+\E_P \left[\frac{1}{T} \sum_{t=1}^T f(x_t)\right]
+, \qquad x_t \sim P
+\]
+\end{theorem}
+\begin{example}[Sampling]
+\begin{itemize}
+\item If we sample \(x\) we approximate the gradient:
+\end{itemize}
+\begin{align*}
+ \frac{d}{d\param} \E_P [(x - \param)^2] 
+= \int_{-\infty}^\infty \!\!\!\! dP(x) \frac{d}{d\param} (x - \param)^2
+\approx \frac{1}{T} \sum_{t=1}^T \frac{d}{d\param} (x_t - \param)^2
+= \frac{1}{T} \sum_{t=1}^T 2(x_t - \param)
+\end{align*}
+\pause
+\begin{itemize}
+\item If we update \(\param\) after each new sample \(x_t\), we obtain:
+\end{itemize}
+\[
+\param^{t+1} = \param^t + 2 \alpha_t (x_t - \param^t)
+\]
+\end{example}
+\end{frame}
+
+\begin{frame}[label={sec:orgbd1d4d0}]{The gradient method}
+\begin{itemize}
+\item Function to minimise \(f : \Reals^n \to \Reals\).
+\item Derivative \(\nabla_\param f(\param)  = \left(\frac{\partial f(\param)}{\partial \param_1}, \ldots, \frac{\partial f(\param)}{\partial \param_n}\right)\),
+where \(\frac{\partial f}{\partial \beta_n}\) denotes the \alert{partial} derivative, i.e. varying one argument and keeping the others fixed.
+\end{itemize}
+\begin{block}{Gradient descent algorithm}
+\begin{itemize}
+\item Input: initial value \(\param^0\), learning rate schedule \(\alpha_t\)
+\item For \(t=1, \ldots, T\)
+\begin{itemize}
+\item \(\param^{t+1} = \param^t - \alpha_t \nabla_\param f(\param^t)\)
+\end{itemize}
+\item Return \(\param^T\)
+\end{itemize}
+\end{block}
+
+\begin{block}{Properties}
+\begin{itemize}
+\item If \(\sum_t \alpha_t = \infty\) and \(\sum_t \alpha_t^2 < \infty\), it finds a local minimum \(\param^T\), i.e. there is \(\epsilon > 0\) so that
+\end{itemize}
+\[
+f(\param^T) < f(\param), \forall \param: \|\param^T - \param\| < \epsilon.
+\]
+\end{block}
+\end{frame}
+\begin{frame}[label={sec:org37a746e}]{Stochastic gradient method}
+This is the same as the gradient method, but with added noise:
+\begin{itemize}
+\item \(\param^{t+1} = \param^t - \alpha_t [\nabla_\param f(\param^t) + \omega_t]\)
+\item \(\E[\omega_t] = 0\) is sufficient for convergence.
+\end{itemize}
+\pause
+\begin{example}[When the cost is an expectation]
+In machine learning, the cost is frequently an expectation of some function \(\ell\), 
+\[
+f(\param) = \int_X dP(x) \ell(x, \param)
+\]
+This can be approximated with a sample
+\[
+f(\param) \approx \frac{1}{T} \sum_t \ell(x_t, \param)
+\]
+The same holds for the gradient:
+\[
+\nabla_\param f(\param) = \int_X dP(x) \nabla_\param \ell(x, \param)
+\approx \frac{1}{T} \sum_t \nabla_\param \ell(x_t, \param)
+\]
+\end{example}
+\end{frame}
+\end{document}

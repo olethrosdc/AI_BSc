@@ -314,7 +314,7 @@ which then denotes the probability msas of each
 - Knowing if $C$ happened tells us all we need to know about $A$ and $B$.
 
 **** For random variables
-- Independence: $P(x, y) = P(x,y)$.
+- Independence: $P(x, y) = P(x) P(y)$.
 - Conditional independence:  $P(x, y | z) = P(x | z) P(y |z)$.
 
 
@@ -417,7 +417,8 @@ def f():
   return np.random.choice(2)
 def g(a): 
   theta = [0.6, 0.5]
-  return np.random.choice(theta[a])
+  return np.random.choice(2,
+ [1 - theta[a], theta[a]])
 x1 = f()
 x2 = g(x1)
 #+END_SRC 

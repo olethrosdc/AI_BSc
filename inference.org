@@ -172,51 +172,7 @@ P(A \mid B)
 P(C | S) = \frac{P(S | C) P(C)}{P(S | C) P(C) + P(S | \neg C) P( \neg C)}
 \]
 
-*** Example: The k-meteorologists problem (set notation)
-- $R_t$: The *event* that it rains at time $t$.
-- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
-  \[
-  P(R_{t+1} \mid R_1, \ldots, R_{t}, \param), 
-  \]
-- A *prior probability* $P(\param)$ on the stations.
-- The *marginal* probability
-\[
-P(R_1 \cup \cdots \cup R_t) = \sum_{\param \in \Param} P(R_1 \cap \cdots \cap R_t  \mid \param) P(\param)
-\]
-- The *posterior* probability
-\begin{align*}
-P(\param \mid R_1\cap \cdots \cap R_t)
-&= \frac{P(R_1\cap \cdots \cap R_t \mid \param) P(\param)}{P(R_1\cap \cdots \cap R_t)}
-= \frac{\prod_{i=1}^t P(R_t \mid R_1 \cap \cdots \cap R_{t-1}, \param)  P(\param)}{P(R_1 \cap \cdots \cap R_t)}\\
-&= \frac{P(R_t \mid R_1 \cap \cdots \cap R_{t-1} \mid \param)  P(\param \mid R_1 \cap \cdots \cap R_{t-1})}{P(R_t \mid R_1 \cap \cdots \cap R_{t-1})}
-\end{align*}
-- The *marginal posterior* probability
-\[
-P(R_{t+1} \mid R_1\cap \cdots \cap R_t) = \sum_{\param \in \Param} P(R_{t+1} \mid R_1\cap \cdots \cap R_t, \param) P(\param \mid R_1\cap \cdots \cap R_t)
-\]
 
-*** Example: The k-meteorologists problem (stat notation)
-- $x_t \in \{0,1\}$: A *random variable*, telling us whether it rains at time $t$.
-- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
-  \[
-  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
-  \]
-- A *prior probability* $\bel(\param)$ on the stations.
-- The *marginal* probability
-\[
-\Pr_\bel(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) \bel(\param)
-\]
-- The *posterior* probability
-\begin{align*}
-\bel(\param \mid x_1, \ldots, x_t)
-&= \frac{P_\param(x_1, \ldots, x_t) \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}
-= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}\\
-&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param \mid x_1, \ldots, x_{t-1})}{\Pr_\bel(x_t \mid x_1, \ldots, x_{t-1})}
-\end{align*}
-- The *marginal posterior* probability
-\[
-\Pr_\bel(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) \bel(\param \mid x_1, \ldots, x_t)
-\]
 
 ** Random variables, expectation and variance
 *** Random variables
@@ -300,10 +256,81 @@ P(x = 1, y = 0) = P(x = 1 | y = 0) P(y = 0)
 \]
 which then denotes the probability msas of each
 
+*** Probability notation: math versus statistics
+**** Math                                                             :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+- $P(C)$: Probability of  event $C$ 
+- $P(A \cap B)$: Probability of $A$ and $B$ 
+- $P(A | B)$: Probability of the event $A$ if we know $B$ 
+- $P(A \cup B)$: Probability of $A$ or $B$
+**** Stat                                                             :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+- $P(x)$:  distribution of variable $x$. 
+- $P(x, y)$: joint distribution of $x, y$
+- $P(x | y)$:  distribution of $x$ for different  values of $y$
+- No correspondence.
+
+*** Example: The k-meteorologists problem (set notation)
+- $R_t$: The *event* that it rains at time $t$.
+- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
+  \[
+  P(R_{t+1} \mid R_1, \ldots, R_{t}, \param), 
+  \]
+- A *prior probability* $P(\param)$ on the stations.
+- The *marginal* probability
+\[
+P(R_1 \cap \cdots \cap R_t) = \sum_{\param \in \Param} P(R_1 \cap \cdots \cap R_t  \mid \param) P(\param)
+\]
+- The *posterior* probability
+\begin{align*}
+P(\param \mid R_1\cap \cdots \cap R_t)
+&= \frac{P(R_1\cap \cdots \cap R_t \mid \param) P(\param)}{P(R_1\cap \cdots \cap R_t)}
+= \frac{\prod_{i=1}^t P(R_t \mid R_1 \cap \cdots \cap R_{t-1}, \param)  P(\param)}{P(R_1 \cap \cdots \cap R_t)}\\
+&= \frac{P(R_t \mid R_1 \cap \cdots \cap R_{t-1} \mid \param)  P(\param \mid R_1 \cap \cdots \cap R_{t-1})}{P(R_t \mid R_1 \cap \cdots \cap R_{t-1})}
+\end{align*}
+- The *marginal posterior* probability
+\[
+P(R_{t+1} \mid R_1\cap \cdots \cap R_t) = \sum_{\param \in \Param} P(R_{t+1} \mid R_1\cap \cdots \cap R_t, \param) P(\param \mid R_1\cap \cdots \cap R_t)
+\]
+
+*** Example: The k-meteorologists problem (stat notation)
+- $x_t \in \{0,1\}$: A *random variable*, telling us whether it rains at time $t$.
+- A set of stations $\Param$, with $\param \in \Param$ making weather predictions:
+  \[
+  P_\param(x_{t+1} \mid x_1, \ldots, x_{t})
+  \]
+- A *prior probability* $\bel(\param)$ on the stations.
+- The *marginal* probability
+\[
+\Pr_\bel(x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_1, \ldots, x_t) \bel(\param)
+\]
+- The *posterior* probability
+\begin{align*}
+\bel(\param \mid x_1, \ldots, x_t)
+&= \frac{P_\param(x_1, \ldots, x_t) \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}
+= \frac{\prod_{i=1}^t P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param)}{\Pr_\bel(x_1, \ldots, x_t)}\\
+&= \frac{P_\param(x_t \mid x_1, \ldots, x_{t-1})  \bel(\param \mid x_1, \ldots, x_{t-1})}{\Pr_\bel(x_t \mid x_1, \ldots, x_{t-1})}
+\end{align*}
+- The *marginal posterior* probability
+\[
+\Pr_\bel(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) \bel(\param \mid x_1, \ldots, x_t)
+\]
+
 
 * Graphical models
 
 ** Graphical model
+*** Graphical models
+
+- A *graphical model* or *Bayesian network* is used to model *dependencies* between *random variables*.
+- Each node in the graph is a variable.
+- The arcs show what variable is an input to which variable.
+
+
 *** Independence
 **** Independent events $A \indep B$
 -  $A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
@@ -425,52 +452,6 @@ x2 = g(x1)
 
 
 
-
-*** Graphical models
-\begin{center}
-    \begin{tikzpicture}
-      \node[RV] at (2,0) (xi) {$x_3$};
-      \node[RV] at (0,0) (xB) {$x_1$};
-      \node[RV] at (1,1) (xD) {$x_2$};
-      \draw[->] (xB) to (xD);
-      \draw[->] (xD) to (xi);
-      \draw[->] (xB) to (xi);
-    \end{tikzpicture}
-\end{center}
-- Variables: $x_1, x_2, x_3$
-- Arrows denote dependencies between variables.
-
-*** Conditional independence
-**** Example
-    \begin{tikzpicture}
-      \node[RV] at (2,0) (xi) {$x_3$};
-      \node[RV] at (0,0) (xB) {$x_1$};
-      \node[RV] at (1,1) (xD) {$x_2$};
-      \draw[->] (xB)--(xD);
-      \draw[->] (xD)--(xi);
-    \end{tikzpicture}
-    Graphical model for the factorisation $\Pr(x_3 \mid x_2) \Pr(x_2 \mid x_1) \Pr(x_1)$.
-**** Definition
-    - Consider variables $x_1, \ldots, x_n$.
-    - Let $B, D$ be subsets of $[n]$.
-
-    We say $x_i$ is *conditionally independent* of $\bx_B$ given $\bx_D$ and write 
-    \[x_i \indep \bx_B \mid \bx_D\]
-    if and only if:
-    \[
-    \Pr(x_i, \bx_B \mid \bx_D)
-    =
-    \Pr(x_i \mid \bx_D)
-    \Pr(\bx_B \mid \bx_D).
-    \]
-*** Directed graphical model
-A collection of $n$ random variables $x_i : \Omega \to X_i$, and let $X \defn \prod_i X_i$, with underlying probability measure $P$ on $\Omega$.
-      Let $\bx = (x_i)_{i=1}^n$ and for any subset $B \subset[n]$ let
-      \begin{align}
-        \bx_B &\defn (x_i)_{i \in B}\\
-        \bx_{-j} &\defn (x_i)_{i \neq i}
-      \end{align}
-
 *** Model specification: Chain
 \begin{center}
       \begin{tikzpicture}
@@ -509,6 +490,80 @@ x2 = g(x1)
 x3 = h(x2)
 #+END_SRC 
 
+*** Graphical models
+\begin{center}
+    \begin{tikzpicture}
+      \node[RV] at (2,0) (xi) {$x_3$};
+      \node[RV] at (0,0) (xB) {$x_1$};
+      \node[RV] at (1,1) (xD) {$x_2$};
+      \draw[->] (xB) to (xD);
+      \draw[->] (xD) to (xi);
+      \draw[->] (xB) to (xi);
+    \end{tikzpicture}
+\end{center}
+- Variables: $x_1, x_2, x_3$
+- Arrows denote dependencies between variables.
+- In this example the value of $x_3$ is a function of $x_1, x_2$, as well as a *random* input.
+
+*** Conditional independence
+**** Example
+    \begin{tikzpicture}
+      \node[RV] at (2,0) (xi) {$x_3$};
+      \node[RV] at (0,0) (xB) {$x_1$};
+      \node[RV] at (1,1) (xD) {$x_2$};
+      \draw[->] (xB)--(xD);
+      \draw[->] (xD)--(xi);
+    \end{tikzpicture}
+    Graphical model for the factorisation $\Pr(x_3 \mid x_2) \Pr(x_2 \mid x_1) \Pr(x_1)$.
+**** Definition
+    - Consider variables $x_1, \ldots, x_n$.
+    - Let $B, D$ be subsets of $[n]$.
+
+    We say $x_i$ is *conditionally independent* of $\bx_B$ given $\bx_D$ and write 
+    \[x_i \indep \bx_B \mid \bx_D\]
+    if and only if:
+    \[
+    \Pr(x_i, \bx_B \mid \bx_D)
+    =
+    \Pr(x_i \mid \bx_D)
+    \Pr(\bx_B \mid \bx_D).
+    \]
+
+*** Conditional independence
+
+For any set of random variables $x_1, x_2, x_3, \ldots$, we can write their joint as
+$\prod_i P(x_i  \mid  x_1,  \ldots,  x_{i-1})$. However,
+we can use a *Bayesian network* to define conditional independence structures.
+**** Bayesian Network
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+    \begin{tikzpicture}
+      \node[RV] at (0,0) (A1) {$A_1$};
+      \node[RV] at (0,1) (A2) {$A_2$};
+      \node[RV] at (1,0.5) (B) {$B$};
+      \node[RV] at (2,0) (C1) {$C_1$};
+      \node[RV] at (2,1) (C2) {$C_2$};
+      \draw[->] (A1) to (B);
+      \draw[->] (A2) to (B);
+      \draw[->] (B) to (C1);
+      \draw[->] (B) to (C2);
+    \end{tikzpicture}
+**** Network rule
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+If $A$ is a parent of $B$ and $C$ is a child of $B$, and there are *no other paths* from $A$ to $C$ then the following conditional independence holds:
+\[
+P(C \mid B, A) = P(C \mid B)
+\]
+i.e. $C$ is conditionally independent of $A$ given $B$. 
+**** Conditional probability tables
+We can now write the distribution of the above example as
+\[
+P( B, C_1, C_2) = 
+P(A_1) P(A_2) P(B | A_1, A_2) P(C_1 | B) P(C_2 | B).
+\]
 *** Smoking and lung cancer
       \begin{tikzpicture}
         \node[RV] at (0,0) (x1) {$S$};
@@ -519,6 +574,22 @@ x3 = h(x2)
       \end{tikzpicture}
       
 Smoking and lung cancer graphical model, where $S$: Smoking, $C$: cancer, $A$: asbestos exposure.
+- Here, $S$, $A$ are *independent*
+- However, they become *dependent* if we know $C$.
+#+BEAMER: \pause
+\[
+P(S, C, A) = P(S) P(A) P(C | S, A)
+\]
+#+BEAMER: \pause
+\begin{align*}
+P(A, S | C) 
+&
+= P(A | S, C) P (S | C) 
+= \frac{P(C | A, S) P(A | S)}{P(C|S)} \frac{P (C | S) P(S)}{P(C)}
+\\
+&
+= \frac{P(C | A, S) P(A | S)}{P(S|C)P(C)/P(S)} \frac{P (C | S) P(S)}{P(C)}
+\end{align*}
 
 *** Time of arrival at work
       \begin{tikzpicture}
@@ -533,6 +604,11 @@ Time of arrival at work graphical model where $T$ is a traffic jam and $x_1$ is 
 
 *Conditional independence:
 - Even though $x_1, x_2$ are *not independent*, they become independent once you know $T$.
+
+#+BEAMER: \pause
+\[
+P(S, C, A) = P(S) P(A) P(C | S, A)
+\]
 
 *** School admission
 |--------+------+--------|
@@ -661,41 +737,7 @@ P(a, b, c, d) = P(a) P(b | a) P (c | a) P(d | b, c)
 
 
 
-*** Conditional independence
 
-For any set of events $A_1, A_2, A_3, \ldots$, we can write their co-occurence probability as
-$\prod_i P(A_i  \mid \cap A_1 \cap A_2 \cap \cdots \cap A_{i-1})$. However,
-we can use a *Bayesian network* to define conditional independence structures.
-**** Bayesian Network
-:PROPERTIES:
-:BEAMER_col: 0.5
-:END:
-    \begin{tikzpicture}
-      \node[RV] at (0,0) (A1) {$A_1$};
-      \node[RV] at (0,1) (A2) {$A_2$};
-      \node[RV] at (1,0.5) (B) {$B$};
-      \node[RV] at (2,0) (C1) {$C_1$};
-      \node[RV] at (2,1) (C2) {$C_2$};
-      \draw[->] (A1) to (B);
-      \draw[->] (A2) to (B);
-      \draw[->] (B) to (C1);
-      \draw[->] (B) to (C2);
-    \end{tikzpicture}
-**** Network rule
-:PROPERTIES:
-:BEAMER_col: 0.5
-:END:
-If $A$ is a parent of $B$ and $C$ is a child of $B$, and there are *no other paths* from $A$ to $C$ then the following conditional independence holds:
-\[
-P(C \mid B, A) = P(C \mid B)
-\]
-i.e. $C$ is conditionally independent of $A$ given $B$. 
-**** Conditional probability tables
-We can now write the distribution of the above example as
-\[
-P( B, C_1, C_2) = 
-P(A_1) P(A_2) P(B | A_1 \cap A_2) P(C_1 | B) P(C_2 | B).
-\]
 *** Example: COVID test 
 **** Information
 - 10% of people have COVID

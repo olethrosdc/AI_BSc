@@ -24,6 +24,7 @@ For any rewards $x, y \in R$, we either
 - (d) Similarly define $\succ^*$ and $\prec^*$
   
 *** Utility and Cost
+#+BEAMER: \pause
 **** Utility function
 To make it easy, assign a utility $U(x)$ to every reward through a
 utility function $U : R \to \Reals$.
@@ -32,27 +33,110 @@ utility function $U : R \to \Reals$.
 We prefer items with higher utility, i.e.
 - (a) $U(x) \geq U(y)$ $\Leftrightarrow$ $x \succeq^* y$
 - (b) $U(x) \leq U(y)$ $\Leftrightarrow$ $y \succeq^* x$
-
+#+BEAMER: \pause
 **** Cost
      It is sometimes more convenient to define a cost function $C: R \to \Reals$ so that we prefer items with lower cost, i.e.
 - $C(x) \geq C(y)$ $\Leftrightarrow$ $y \succeq^* x$
 
 *** Random outcomes
-**** Choosing among rewards
--[A] Bet 10 CHF on black
--[B] Bet 10 CHF on 0
--[C] Bet nothing
-What is the reward here?
+#+ATTR_LATEX: width=\textwidth
+[[./figures/roulette.jpg]]
 
-**** Choosing among trips
--[A] Taking the car to Zurich (50' without delays, 80' with delays)
--[B] Taking the train to Zurich (60' without delays)
+
+**** Choosing among rewards: Roulette
+- [A] Bet 10 CHF on black
+- [B] Bet 10 CHF on 0
+- [C] Bet nothing
+
+- What is the reward here?
+- What is the outcome?
+*** Uncertain outcomes
+- [A] Taking the car to Zurich (50'-80' with delays)
+- [B] Taking the train to Zurich (60' without delays)
 What is the reward here? 
 
+**** Car                                                              :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+#+ATTR_LATEX: width=0.25\textwidth
+[[./figures/car.jpg]]
+**** Train                                                            :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+#+ATTR_LATEX: width=0.25\textwidth
+[[./figures/train.jpeg]]
+
+
+
+
+*** Independent outcomes
+
+**** Graphical model
+\begin{center}
+      \begin{tikzpicture}
+        \node[select] at (0,0) (a) {$a$};
+	\node[RV] at (4,0) (w) {$\omega$};
+        \node[utility] at (2,0) (U) {$U$};
+	\draw[->] (a) -- (U);
+	\draw[->] (w) -- (U);
+      \end{tikzpicture}
+\end{center}
+
 **** Random rewards
-- Each gamble gives us different rewards with different probabilities.
-- These rewards are then *random*
-- For simplicity, we assign a real-valued *utility* to outcomes. This is a *random variable*
+- We *select* our action.
+- Outcomes are *random*, with $\omega \sim P$, but *independent* of our action
+- We then obtain a random *utility* with distribution depending on $a$.
+\[
+\Pr(U = u \mid a) = P(\{\omega : U(a, \omega) = u\})
+\]
+
+
+*** General case
+**** Graphical model
+\begin{center}
+      \begin{tikzpicture}
+        \node[select] at (0,0) (a) {$a$};
+	\node[RV] at (2,0) (w) {$\omega$};
+        \node[utility] at (4,0) (U) {$U$};
+	\draw[->] (a) -- (w);
+	\draw[->] (w) -- (U);
+	\draw[->, dashed] (a) to [bend right=45] (U);
+      \end{tikzpicture}
+\end{center}
+**** Random rewards
+- We *select* our action.
+- The action determines the *outcome* distribution.
+- The utility may depend on *both* the outcome and reward.
+*** Route selection
+**** Utility                                                      :B_example:
+     :PROPERTIES:
+     :BEAMER_env: example
+     :END:
+|----------------+-----+-----+-----+-----+-----+-----+-----|
+| /              |   < |     |     |     |     |     |     |
+| $U(a, \omega)$ | 30' | 40' | 50' | 60' | 70' | 80' | 90' |
+|----------------+-----+-----+-----+-----+-----+-----+-----|
+| Train          |  -1 |  -2 |  -5 | -10 | -15 | -20 | -30 |
+| Car            | -10 | -20 | -30 | -40 | -50 | -60 | -70 |
+|----------------+-----+-----+-----+-----+-----+-----+-----|
+
+**** Probability                                                  :B_example:
+     :PROPERTIES:
+     :BEAMER_env: example
+     :END:
+|--------------------+-----+-----+-----+-----+-----+-----+-----|
+| /                  |   < |     |     |     |     |     |     |
+| $P(\omega \mid a)$ | 30' | 40' | 50' | 60' | 70' | 80' | 90' |
+|--------------------+-----+-----+-----+-----+-----+-----+-----|
+| Train              |  0% |  0% | 50% | 45% |  4% |  1% |  0% |
+| Car                |   0 | 40% | 30% | 15% | 10% |  3% |  2% |
+|--------------------+-----+-----+-----+-----+-----+-----+-----|
+
+
+
+
 ** Statistical Decision Theory
 
 *** Expected utility
@@ -61,11 +145,11 @@ In this setting, we obtain random outcomes that depend on our actions.
 - Actions $a \in A$
 - Outcomes $\omega \in \Omega$.
 - Probability of outcomes $P(\omega \mid a)$
-- Utility $U : \Omega \to \Reals$
+- Utility $U : \Omega \alert{\times A} \to \Reals$
 **** Expected utility
 The expected utility of an action is:
 \[
-\E_P[U \mid a] = \sum_{\omega \in \Omega} U(\omega) P(\omega \mid a).
+\E_P[U \mid a] = \sum_{\omega \in \Omega} U(\omega \alert{, a}) P(\omega \alert{\mid a}).
 \]
 
 **** The expected utility hypothesis
@@ -73,15 +157,6 @@ We prefer $a$ to $a'$ if and only if
 \[
 \E_P[U \mid a] \geq \E_P[U \mid a']
 \]
-
-*** The St-Petersburg Paradox
-**** The game
-If you give me $x$ CHF, then I promise to
-(a) Throw a fair coin until it comes heads.
-(b) If it does so after $T$ throws, then I will give you $2^T$ CHF.
-**** The question
-- How much $x$ are you willing to pay to play?
-- Given that the expected amount of money is infinite, why are you only willing to pay a small $x$?
 
 *** Example: Betting
  In this example, probabilities reflect actual randomness
@@ -99,6 +174,15 @@ If you give me $x$ CHF, then I promise to
 #+ATTR_LATEX: width=\textwidth
 [[./figures/roulette.jpg]]
 What are the expected gains for these bets?
+*** The St-Petersburg Paradox
+**** The game
+If you give me $x$ CHF, then I promise to:
+- (a) Throw a fair coin until it comes heads.
+- (b) If it does so after $T$ throws, then I will give you $2^T$ CHF.
+**** The question
+- How much $x$ are you willing to pay to play?
+- Given that the expected amount of money is infinite, why are you only willing to pay a small $x$?
+
 *** Example: Route selection
 - In this example, probabilities reflect subjective beliefs
 
@@ -110,14 +194,60 @@ What are the expected gains for these bets?
 | Car, route B |        70 | 10%             |           10 |               |
 |--------------+-----------+-----------------+--------------+---------------|
 
+
+*** Example: Noisy optimisation
+**** Simple maximisation
+For a function $f : \Reals \to \Reals$, find a maximum $x^*$ i.e. $f(x^*) \geq f(x) \forall x$.
+
+#+BEAMER: \pause
+**** Necessary conditions                                         :B_theorem:
+     :PROPERTIES:
+     :BEAMER_env: theorem
+     :END:
+If $f: \Reals \to \Reals$ is a continuous function, a maximum point $x^*$ satisfies:
+\[
+\frac{d}{dx} f(x^*) = 0,
+\qquad
+\frac{d}{dx^2} f(x^*) < 0.
+\]
+
+#+BEAMER: \pause
+**** Noisy optimisation
+- We select $x$ but *do not* observe $f(x)$.
+- We observe a *random* $g$ with $\E[g | x] = f(x)$.
+\begin{align}
+f(x) &\defn \E[g | x],
+&
+\E[g | x] = \int_{- \infty}^\infty g(\omega, x) p(\omega) d\omega
+\end{align}
+
+
+
+
+
+*** Mean-squared error cost function
+\begin{tikzpicture}[domain=-1:2, range=-1:2]
+   \draw[dotted, color=gray] (-1.1,-2.1) grid (3.1,4.1);
+   \draw[->] (0,0) -- (2,0) node[right] {$x$};
+   \draw[->] (0,0) -- (0,4) node[above] {$g(\omega, x)$};
+   \draw[color=red] plot (\x, {(\x-1)^2})  node[right] {$\omega = 1$};
+   \draw[color=blue] plot (\x, {(\x)^2})  node[right] {$\omega = 0$};
+\end{tikzpicture}
+This example is for a quadratic loss: $g(\omega, x) = (\omega - x)^2$.
+
 *** Example: Estimation
-- In this example, probabilities are calculated starting from subjective beliefs
-**** Mean-Square Estimation
+- $\param$: *parameter* (random)
+- $\hat{\param}$: *estimate* (our action)
+- $(\param - \hat{\param})^2$: *cost* function
+#+BEAMER: \pause
+**** Mean-squared error minimiser
 If we want to guess $\hat{\param}$, and we knew that $\param \sim P$, then the guess
 \[
 \hat{\param} = \E_P(\param) = \argmin_{\hat{\param}} \E_P [(\param - \hat{\param})^2]
 \]
-minimises the squared error. This is because
+minimises the squared error. 
+#+BEAMER: \pause
+This is because
 \begin{align}
 \frac{d}{d \hat{\theta}}
  \E_P [(\param - \hat{\param})^2]
@@ -132,41 +262,27 @@ minimises the squared error. This is because
 &=
 	 2 (\hat{\param} - \E_P [\theta]).
 \end{align}
-Setting this to $0$ gives $\hat{\param} - \E_P [\theta]$
+Setting this to $0$ gives $\hat{\param} =\E_P [\theta]$
 
-*** Example: Noisy optimisation
-We wish to find the maximum of a function
-\begin{align}
-f(x) &\defn \E[g | x],
-&
-\E[g | x] = \int_{- \infty}^\infty g(\omega, x) p(\omega) d\omega
-\end{align}
-
-For this problem we need to use some more complex optimisation method, such as gradient methods
-
-**** Theorem
-If $f: \Reals \to \Reals$ is a continuous function, and $x^*$ is a maximum i.e. $f(x^*) \geq f(x) \forall x$ then
-\[
-\frac{d}{dx} f(x^*) = 0,
-\qquad
-\frac{d}{dx^2} f(x^*) < 0.
-\]
 * Gradient methods
 ** Gradients for optimisation
 *** The gradient descent method: one dimension
 - Function to minimise $f : \Reals \to \Reals$.
-- Derivative $\frac{d}{d \param} f(\beta)$
+- Derivative $\frac{d}{d \param} f(\param)$
+#+BEAMER: \pause
 **** Gradient descent algorithm
 - Input: initial value $\param^0$, *learning rate* schedule $\alpha_t$
 - For $t=1, \ldots, T$
   - $\param^{t+1} = \param^t - \alpha_t \frac{d}{d \param} f(\param^t)$
 - Return $\param^T$
-
+#+BEAMER: \pause
 **** Properties
 - If $\sum_t \alpha_t = \infty$ and $\sum_t \alpha_t^2 < \infty$, it finds a local minimum $\param^T$, i.e. there is $\epsilon > 0$ so that
 \[
 f(\param^T) < f(\param), \forall \param: \|\param^T - \param\| < \epsilon.
 \]
+*** One-dimensional minimisation example
+
 *** Gradient methods for expected value :example:
 **** Estimate the expected value
 $x_t \sim P$ with $\E_P[x_t] = \mu$.
@@ -177,37 +293,27 @@ Here $\ell(x, \param) = (x - \param)^2$.
 \min_\param \E_P[(x_t - \param)^2].
 \]
 #+BEAMER: \pause
-**** Exact gradient update
+**** Exact derivative update
 If we know $P$, then we can calculate
 \begin{align}
 \param^{t+1} &= \param^t - \alpha_t \frac{d}{d\param} \E_P[(x - \param^t)^2]\\
-\frac{d}{d\param} \E_P[(x - \param^t)^2] &= 2 \E_P[x] - \param^t
+\frac{d}{d\param} \E_P[(x - \param^t)^2] &= 2 (\E_P[x] - \param^t)
 \end{align}
 
-*** Gradient for mean estimation :example:
-- Let us show this in detail
-\begin{align*}
- \frac{d}{d\param} \E_P [(x - \param)^2] 
-&= \int_{-\infty}^\infty dP(x) \frac{d}{d\param} (x - \param)^2
-\\
-&=  \int_{-\infty}^\infty dP(x) 2(x - \param)
-\\
-&=  2 \E_P[x] - 2\param.
-\end{align*}
-- If we set the derivative to zero, then we find the optimal solution:
-\[
-\param^* = \E_P[x]
-\]
-- How can we do this if we only have data $x_t \sim P$?
-*** Mean-squared error cost function
-\begin{tikzpicture}[domain=-1:2, range=-1:2]
-   \draw[dotted, color=gray] (-1.1,-2.1) grid (3.1,4.1);
-   \draw[->] (0,0) -- (2,0) node[right] {$\beta$};
-   \draw[->] (0,0) -- (0,4) node[above] {$\ell$};
-   \draw[color=red] plot (\x, {(\x-1)^2})  node[right] {$\mu = 1$};
-   \draw[color=blue] plot (\x, {(\x)^2})  node[right] {$\mu = 0$};
-\end{tikzpicture}
-Here we see a plot of $\ell(\mu, \beta) = (\beta - \mu)^2$.
+*** Stochastic derivative
+- Function to minimise $f : \Reals \to \Reals$.
+- Derivative $\frac{d}{d \param} f(\param)$
+- $f(\param) = \E[g | \param]$
+- $\frac{d}{d \param} f = \E[ \frac{d}{d \param} g | \param]$
+#+BEAMER: \pause
+**** Stochastic derivative algorithm
+- Input: initial value $\param^0$, *learning rate* schedule $\alpha_t$
+- For $t=1, \ldots, T$
+  - Observe $g(\omega_t, \param^t$), where $\omega_t \sim P$.
+  - $\param^{t+1} = \param^t - \alpha_t \frac{d}{d \param} g(\omega_t, \param^t)$
+- Return $\param^T$
+
+
 *** Stochastic gradient for mean estimation
 **** Sampling :B_theorem:
      :PROPERTIES:
@@ -222,59 +328,77 @@ For any bounded random variable $f$,
 \E_P \left[\frac{1}{T} \sum_{t=1}^T f(x_t)\right]
 , \qquad x_t \sim P
 \]
-**** Sampling :B_example:
+**** Derivative ampling                                           :B_example:
      :PROPERTIES:
      :BEAMER_env: example
      :END:
-- If we sample $x$ we approximate the gradient:
+We can also approximate the gradient through sampling:
 \begin{align*}
  \frac{d}{d\param} \E_P [(x - \param)^2] 
-= \int_{-\infty}^\infty \!\!\!\! dP(x) \frac{d}{d\param} (x - \param)^2
-\approx \frac{1}{T} \sum_{t=1}^T \frac{d}{d\param} (x_t - \param)^2
+&= \int_{-\infty}^\infty \!\!\!\! dP(x) \frac{d}{d\param} (x - \param)^2
+\\
+&\approx \frac{1}{T} \sum_{t=1}^T \frac{d}{d\param} (x_t - \param)^2
 = \frac{1}{T} \sum_{t=1}^T 2(x_t - \param)
 \end{align*}
 #+BEAMER: \pause
-- If we update $\param$ after each new sample $x_t$, we obtain:
+- Wen can even update $\param$ after *each sample* $x_t$:
 \[
 \param^{t+1} = \param^t + 2 \alpha_t (x_t - \param^t)
 \]
-
 *** The gradient method
-- Function to minimise $f : \Reals^n \to \Reals$.
-- Derivative $\nabla_\param f(\param)  = \left(\frac{\partial f(\param)}{\partial \param_1}, \ldots, \frac{\partial f(\param)}{\partial \param_n}\right)$,
- where $\frac{\partial f}{\partial \beta_n}$ denotes the *partial* derivative, i.e. varying one argument and keeping the others fixed.
+- Function to minimise $f : \Reals^{\alert{n}} \to \Reals$.
+- *Gradient* $\nabla_\param f(\param)  = \left(\frac{\partial f(\param)}{\partial \param_1}, \ldots, \frac{\partial f(\param)}{\partial \param_n}\right)$,
+- *Partial* derivative $\frac{\partial f}{\partial \param_n}$
+#+BEAMER: \pause
 **** Gradient descent algorithm
 - Input: initial value $\param^0$, learning rate schedule $\alpha_t$
 - For $t=1, \ldots, T$
   - $\param^{t+1} = \param^t - \alpha_t \nabla_\param f(\param^t)$
 - Return $\param^T$
-
+#+BEAMER: \pause
 **** Properties
 - If $\sum_t \alpha_t = \infty$ and $\sum_t \alpha_t^2 < \infty$, it finds a local minimum $\param^T$, i.e. there is $\epsilon > 0$ so that
 \[
 f(\param^T) < f(\param), \forall \param: \|\param^T - \param\| < \epsilon.
 \]
-*** Stochastic gradient method
-This is the same as the gradient method, but with added noise:
-- $\param^{t+1} = \param^t - \alpha_t [\nabla_\param f(\param^t) + \omega_t]$
-- $\E[\omega_t] = 0$ is sufficient for convergence.
-#+BEAMER: \pause
-**** When the cost is an expectation                     :B_example:
+
+*** When the cost is an expectation                               :B_example:
 	 :PROPERTIES:
 	 :BEAMER_env: example
 	 :END:
-In machine learning, the cost is frequently an expectation of some function $\ell$, 
+In machine learning, we sometimes want to minimise the *expectation* of a *cost* $\ell$, 
 \[
-f(\param) = \int_X dP(x) \ell(x, \param)
+f(\param) \defn \E[\ell | \param] = \int_\Omega dP(\omega) \ell(\omega, \param)
 \]
-This can be approximated with a sample
+This can be appro\omegaimated with a sample
 \[
-f(\param) \approx \frac{1}{T} \sum_t \ell(x_t, \param)
+f(\param) \approx \frac{1}{T} \sum_t \ell(\omega_t, \param)
 \]
 The same holds for the gradient:
 \[
-\nabla_\param f(\param) = \int_X dP(x) \nabla_\param \ell(x, \param)
-\approx \frac{1}{T} \sum_t \nabla_\param \ell(x_t, \param)
+\nabla_\param f(\param) = \int_\OMEGA dP(\omega) \nabla_\param \ell(\omega, \param)
+\approx \frac{1}{T} \sum_t \nabla_\param \ell(\omega_t, \param)
 \]
 
+
+
+
+*** Stochastic gradient method
+- Function to *minimise* $f : \Reals^n \to \Reals$.
+- *Gradient* $\nabla f(\param)$
+- $f(\param) = \E[\ell | \param]$
+- $\nabla_\param f = \E[ \nabla_\param \ell | \param]$
+
+#+BEAMER: \pause
+**** Algorithm
+- Input: initial value $\param^0$, *learning rate* schedule $\alpha_t$
+- For $t=1, \ldots, T$
+  - Observe $\ell(\omega_t, \param^t$), where $\omega_t \sim P$.
+  - $\param^{t+1} = \param^t - \alpha_t \nabla_\param g(\omega_t, \param^t)$
+- Return $\param^T$
+
+**** Alternative view: Noisy gradients
+- $\param^{t+1} = \param^t - \alpha_t [\nabla_\param f(\param^t) + \epsilon_t]$
+- $\E[\epsilon_t] = 0$ is sufficient for convergence.
+#+BEAMER: \pause
 

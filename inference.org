@@ -320,7 +320,6 @@ P(R_{t+1} \mid R_1\cap \cdots \cap R_t) = \sum_{\param \in \Param} P(R_{t+1} \mi
 \Pr_\bel(x_{t+1} \mid x_1, \ldots, x_t) = \sum_{\param \in \Param} P_\param(x_{t+1} \mid x_1, \ldots, x_t) \bel(\param \mid x_1, \ldots, x_t)
 \]
 
-
 * Graphical models
 
 ** Graphical model

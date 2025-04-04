@@ -26,10 +26,8 @@ P(s_{t+1} \mid s_{t}, \ldots, s_1) = P(s_{t+1} \mid s_{t}) \qquad \forall t
 - For finite $S$, the matrix $p_{i,j} \defn P(s_t = j \mid s_{t-1} = i)$ is called the *transition matrix*.
 #+BEAMER: \pause
 **** Bayesian network
-:PROPERTIES:
-:EXPORT_TAGS: article-only
-:END:
-test
+#+BEAMER: \only<article>{test}
+
 It is also called a  *Markov chain* because of the RV structure:
 \begin{center}
 \begin{tikzpicture}

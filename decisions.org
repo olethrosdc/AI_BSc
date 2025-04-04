@@ -3,6 +3,7 @@
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \input{preamble}
 #+LaTeX_CLASS_OPTIONS: [smaller]
+#+LaTeX_HEADER: \lstset{basicstyle=\small\ttfamily,tabsize=2}
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
@@ -89,7 +90,7 @@ What is the reward here?
 - Outcomes are *random*, with $\omega \sim P$, but *independent* of our action
 - We then obtain a random *utility* with distribution depending on $a$.
 \[
-\Pr(U = u \mid a) = P(\{\omega : U(a, \omega) = u\})
+\Pr(U = u \mid a) = P(\{\omega : U(\omega, a) = u\})
 \]
 
 
@@ -116,7 +117,7 @@ What is the reward here?
      :END:
 |----------------+-----+-----+-----+-----+-----+-----+-----|
 | /              |   < |     |     |     |     |     |     |
-| $U(a, \omega)$ | 30' | 40' | 50' | 60' | 70' | 80' | 90' |
+| $U(\omega, a)$ | 30' | 40' | 50' | 60' | 70' | 80' | 90' |
 |----------------+-----+-----+-----+-----+-----+-----+-----|
 | Train          |  -1 |  -2 |  -5 | -10 | -15 | -20 | -30 |
 | Car            | -10 | -20 | -30 | -40 | -50 | -60 | -70 |
@@ -134,8 +135,31 @@ What is the reward here?
 | Car                |   0 | 40% | 30% | 15% | 10% |  3% |  2% |
 |--------------------+-----+-----+-----+-----+-----+-----+-----|
 
+**** Expected utility
 
+| /     |      < |
+| Train |   -7.8 |
+| Car   | -20.82 |
 
+#+TBLFM: @1$2=-(0.5*5+0.45*10+0.04*15+0.01*20)::@2$2=-(0.4*20+0.3*5+0.15*40+0.1*50+0.03*6+0.02*7)
+
+*** Calculation in python
+For discrete variables, the implemenation is easy.
+
+**** Expected utility of action $a$: $\E_P[U |a] = \sum_{\omega \in \Omega} U(\omega, a)$.
+#+BEGIN_SRC python
+  # U: A matrix U[a, w]
+  # P: A matrix P[w, a]
+  # a: The action taken
+  def expected_utility(U, P, a):
+	  return np.dot(U[a, :],  P[:, a])
+#+END_SRC
+**** Finding the optimal action: $a^* = \argmax_{a \in A} \E_P[U \mid a]$.
+#+BEGIN_SRC python
+  # A: set of actions
+  def best_action(U, P, A):
+	  return np.argmax([expected_utility(U, P, a) for a in A])
+#+END_SRC  
 
 ** Statistical Decision Theory
 
@@ -370,13 +394,13 @@ In machine learning, we sometimes want to minimise the *expectation* of a *cost*
 \[
 f(\param) \defn \E[\ell | \param] = \int_\Omega dP(\omega) \ell(\omega, \param)
 \]
-This can be appro\omegaimated with a sample
+This can be approximated with a sample
 \[
 f(\param) \approx \frac{1}{T} \sum_t \ell(\omega_t, \param)
 \]
 The same holds for the gradient:
 \[
-\nabla_\param f(\param) = \int_\OMEGA dP(\omega) \nabla_\param \ell(\omega, \param)
+\nabla_\param f(\param) = \int_\Omega dP(\omega) \nabla_\param \ell(\omega, \param)
 \approx \frac{1}{T} \sum_t \nabla_\param \ell(\omega_t, \param)
 \]
 

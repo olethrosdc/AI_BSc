@@ -205,21 +205,47 @@ P(f, g) = P(f) P(g)
 \]
 for any two independent random variables $f, g$.
 *** Expectation
+**** Discrete probability space $\Omega$
 For any real-valued random variable $f: \Omega \to \Reals$, the expectation with respect to a probability measure $P$ is
 \[
 \E_P(f) = \sum_{\omega \in \Omega} f(\omega) P(\omega).
 \]
-When $\Omega$ is continuous, we can use a density $p$
+**** Continuous probability space
+When $\Omega$ is continuous, we define the probability $P(A)$ of any subset $A \subset \Omega$ through a *probability density $p$:
+\[
+P(A) = \int_A p(\omega) d\omega.
+\]
+We can then define the expectation through the density:
 \[
 \E_P(f) = \int_{\Omega} f(\omega) p(\omega) d\omega.
 \]
 
+
+*** Properties of expectations
+**** The law of the unconscious statistician
+If $x : \Omega \to X$, with $X \subset \Reals$, and $\omega \sim P$,
+we can say that $x \sim P_x$, with
+$P_x(k) = P(\{\omega : x(\omega) = k\})$.
+\[
+E_P(x) = \sum_{\omega \in \Omega} x(\omega) P_x(x) = \sum_{k \in X} k P_x(k).
+\]
 **** Linearity of expectations
 For any RVs $x, y$:
 \[
 \E_P(x + y) = \E_P(x) + \E_P(y)
 \]
-*** Multiple variables
+#+BEAMER:\pause
+We give the proof for the discrete case:
+\begin{align*}
+\E_P(x + y)
+&=
+\sum_{\omega \in \Omega} [x(\omega) + y(\omega)] P(\omega)
+\\
+&=\sum_{\omega \in \Omega} x(\omega) P(\omega)
++ \sum_{\omega \in \Omega} y(\omega) P(\omega)
+=\E_P(x) + \E_P(y)
+\end{align*}
+*** Distributions of multiple variables
 **** The joint distribution $P(x,y)$
 For two (or more) RVs $x : \Omega \to \Reals$, and $y : \Omega \to
  \Reals$, this is a *shorthand* for the distribution of $(x(\omega),
@@ -236,12 +262,21 @@ so that
 \]
 i.e. a \(T\)-length sample is drawn from the product distribution $P^T = P \times P \times \cdots \times P$.
 *** Conditional expectation
+Conditional expectations are similar to conditional probabilities.
+
+**** Discrete $\Omega$
 The conditional expectation of a random variable $f: \Omega \to \Reals$, with respect to a probability measure $P$ conditioned on some event $B$ is simply
 \[
 \E_P(f | B) = \sum_{\omega \in \Omega} f(\omega) P(\omega | B).
 \]
-Conditional expectations are similar to conditional probabilities.
-*** Conditional probabilities of RVs
+**** Conitnuous $\Omega$
+The conditional expectation of a random variable $f: \Omega \to \Reals$, with respect to a probability density $p$ conditioned on some event $B$ is simply
+\[
+\E_p(f | B) = \int_{\Omega} f(\omega) p(\omega | B) d\omega.
+\]
+
+
+*** Joint and conditional probabilities of RVs
 Similarly to the notation over sets,
 \[
 P(A \cap B) = P(A \mid B) P(B),

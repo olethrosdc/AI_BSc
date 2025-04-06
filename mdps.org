@@ -26,9 +26,7 @@ P(s_{t+1} \mid s_{t}, \ldots, s_1) = P(s_{t+1} \mid s_{t}) \qquad \forall t
 - For finite $S$, the matrix $p_{i,j} \defn P(s_t = j \mid s_{t-1} = i)$ is called the *transition matrix*.
 #+BEAMER: \pause
 **** Bayesian network
-#+BEAMER: \only<article>{test}
 
-It is also called a  *Markov chain* because of the RV structure:
 \begin{center}
 \begin{tikzpicture}
   \node[RV] at (0,0) (stp) {$s_{t-1}$};
@@ -64,20 +62,18 @@ It is also called a  *Markov chain* because of the RV structure:
 - $P(x_{m_t, t+1} = \alert{f}(x_{m_t, t} + k)) = 1/6$ for all $k < 100 - x_{m_t, t}$. 
 *** Simple betting game
 - You have $s_t$ CHF.
-- At time $t$, you bet 1 CHF.
-- There is a fixed probability $p$ you gain 1 CHF, and $1 - p$ that you lose.
-#+BEAMER: PAUSE
+- With probability $p$ you gain 1 CHF, and otherwise you lose 1 CHF.
+#+BEAMER: \pause
 **** State space
 - $s_t \in \Naturals$ (i.e. we cannot owe money)
-#+BEAMER: PAUSE
-**** Transition matrix
+#+BEAMER: \pause
+**** Transition matrix :no_beamer:
 For all $k > 1$.
 - $P(s_{t+1} = k+1 \mid s_t = k) = p$
 - $P(s_{t+1} = k-1 \mid s_t = k) = 1 - p$
 If $s_t = 0$ the game ends.
-\only<article>{This should only appear in the text.}
 
-#+BEAMER: PAUSE
+#+BEAMER: \pause
 **** Martingale property (*)
 If $p = 1/2$ then the process is a *martingale*, i.e.
 \[
@@ -88,6 +84,30 @@ This is because $\E[s_{t+1} \mid s_t = k] =
 
 
 * Markov decision processes
+*** Simple betting game
+- You have $s_t$ CHF.
+- At time $t$, you decide to *stop* or *play*
+- With probability $p$ you gain 1 CHF, and otherwise you lose 1 CHF.
+#+BEAMER: \pause
+**** State space
+- $s_t \in \Naturals$ (i.e. we cannot owe money)
+#+BEAMER: \pause
+**** Transition matrix
+For all $k > 1$.
+- $P(s_{t+1} = k+1 \mid s_t = k) = p$
+- $P(s_{t+1} = k-1 \mid s_t = k) = 1 - p$
+If $s_t = 0$ the game ends.
+\only<article>{This should only appear in the text.}
+
+#+BEAMER: \pause
+**** Martingale property (*)
+If $p = 1/2$ then the process is a *martingale*, i.e.
+\[
+\E[s_{t+1} \mid s_t] = s_t
+\]
+This is because $\E[s_{t+1} \mid s_t = k] = 
+(k + 1) p + (k -1)(1 - p)  = k$.
+
 *** Markov Decision Process
 **** Variables                                                        :BMCOL:
      :PROPERTIES:
@@ -133,6 +153,7 @@ The goal in a *finite-horizon* MDP is to maximise the \(T\)-horizon utility:
 \[
 U = \sum_{t=1}^T r_t
 \]
+
 *** Policies in Markov decision processes
 
 **** Variables                                                        :BMCOL:

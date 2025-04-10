@@ -3,21 +3,27 @@
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+startup: beamer
 #+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [smaller,ignorenonframetext,presentation]
 #+LaTeX_HEADER: \input{preamble}
-#+LaTeX_CLASS_OPTIONS: [smaller]
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
 * Markov processes
 #+TOC: headlines [currentsection]
 ** The Markov process
+Markov processes, or Markov chains, are very simple models. However,
+they form the basis of many modern, state-of-the art models algorithms
+in machine learning and computer science more generally. Their most
+noteworthy applications include compression, control, financial
+forecasting and large language models.
+
 *** Snakes and Ladders
 #+ATTR_HTML: :width 300px
 #+ATTR_LATEX: :height 0.9\textheight
 [[./figures/Snakes_and_Ladders.jpeg]]
 *** Markov Process
 A sequence of random variables 
-$s_1, s_2, \ldots, s_t$ is a *Markov process* if the nest variable $s_{t+1}$ only depends on the current value $s_t$
+$s_1, s_2, \ldots, s_t$ is a *Markov process* if the next variable $s_{t+1}$ only depends on the current value $s_t$
 \[
 P(s_{t+1} \mid s_{t}, \ldots, s_1) = P(s_{t+1} \mid s_{t}) \qquad \forall t
 \]
@@ -83,6 +89,26 @@ If $p = 1/2$ then the process is a *martingale*, i.e.
 \]
 This is because $\E[s_{t+1} \mid s_t = k] = 
 (k + 1) p + (k -1)(1 - p)  = k$.
+
+*** Python example:
+#+BEGIN_SRC python
+	class BettingGame:
+		def __init__(p, s):
+			self.p = p
+			self.s = s
+		def generate_state():
+			if (np.random.uniform() < p and self.s >= 1):
+				self.s += 1
+			else:
+				self.s -= 1
+				if self.s < 0:
+					self.s = 0
+									return self.s
+
+#+END_SRC
+
+*** Language models
+
 
 
 * Markov decision processes

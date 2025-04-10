@@ -8,6 +8,8 @@
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
+#+latex_header: \AtBeginSubsection[]{\begin{frame}<beamer>\tableofcontents[currentsubsection]\end{frame}}
+
 * Markov processes
 #+TOC: headlines [currentsection]
 ** The Markov process
@@ -61,7 +63,7 @@ P(s_{t+1} \mid s_{t}, \ldots, s_1) = P(s_{t+1} \mid s_{t}) \qquad \forall t
 **** Transition matrix (with no snakes or ladders)
 - $x_{1 - m_t, t+1} = x_{1 - m_t, t}$ w.p. 1
 - $m_{t+1} = 1 - m_t$ w.p. 1.
-- $P(x_{m_t, t+1} = x_{m_t, t} + k) = 1/6$ for all $k < 100 - x_{m_t, t}$.
+- $P(x_{m_t, t+1} = x_{m_t, t} + k) = 1/6$ for all $k < 100 - x_{m_t, t}$ with $k \leq 6$
 - $P(x_{m_t, t+1} = 100) = [(100 -x_{m_t, t+1})/6]_+$ 
 **** Taking snakes/ladders into account
 - $f: \{1, 100\} \to \{1, 100\}$ tells us where snakes/ladders take us.
@@ -92,46 +94,93 @@ This is because $\E[s_{t+1} \mid s_t = k] =
 
 *** Python example:
 #+BEGIN_SRC python
-	class BettingGame:
-		def __init__(p, s):
-			self.p = p
-			self.s = s
-		def generate_state():
-			if (np.random.uniform() < p and self.s >= 1):
-				self.s += 1
-			else:
-				self.s -= 1
-				if self.s < 0:
-					self.s = 0
-									return self.s
-
+class BettingGame:
+  def __init__(p, s):
+    self.p = p
+    self.s = s
+  def generate_state():
+    if (np.random.uniform() < p and self.s >= 1):
+      self.s += 1
+    else:
+      self.s -= 1
+    if self.s < 0:
+      self.s = 0
+    return self.s
 #+END_SRC
 
+
 *** Language models
+
+**** Text prediction
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna 
+#+BEAMER: \pause 
+\alert{aliqua}
+
+#+BEAMER: \pause 
+**** First-order Markov model
+Lorem \to ipsum\\
+ipsum \to dolor\\
+\cdots\\
+magna \to aliqua
+
+#+BEAMER: \pause
+**** Second-order Markov model
+Lorem ipsum \to dolor\\
+ipsum dolor \to sit\\
+dolor sit \to amet
+
+
+*** k-order Markov models
+
+**** First-order
+\begin{center}
+\begin{tikzpicture}
+  \node[RV] at (0,0) (stp) {$s_{t-1}$};
+  \node[RV] at (2,0) (st) {$s_t$};
+  \node[RV] at (4,0) (stn) {$s_{t+1}$};
+  \draw[->] (stp) -- (st);
+  \draw[->] (st) -- (stn);
+\end{tikzpicture}
+\end{center}
+
+**** Second-order
+\begin{center}
+\begin{tikzpicture}
+  \node[RV] at (0,0) (stp) {$s_{t-1}$};
+  \node[RV] at (2,0) (st) {$s_t$};
+  \node[RV] at (4,0) (stn) {$s_{t+1}$};
+  \draw[->] (stp) -- (st);
+  \draw[->] (stp) to [bend right=45] (stn);
+  \draw[->] (st) -- (stn);
+\end{tikzpicture}
+\end{center}
+
+**** Third-order
+\begin{center}
+\begin{tikzpicture}
+  \node[RV] at (-2,0) (stp2) {$s_{t-2}$};
+  \node[RV] at (0,0) (stp) {$s_{t-1}$};
+  \node[RV] at (2,0) (st) {$s_t$};
+  \node[RV] at (4,0) (stn) {$s_{t+1}$};
+  \draw[->] (stp2) to [bend right = 45] (st);
+  \draw[->] (stp2) -- (stp);
+  \draw[->] (stp) -- (st);
+  \draw[->] (stp2) to [bend right = 45] (stn);
+  \draw[->] (stp) to [bend right=45] (stn);
+  \draw[->] (st) -- (stn);
+\end{tikzpicture}
+\end{center}
 
 
 
 * Markov decision processes
 #+TOC: headlines [currentsection]
 ** Markov decision process
-*** Simple betting game
+*** Simple betting game (I)
 - You have $s_t$ CHF.
 - At time $t$, you take an action $a_t$, whether to *stop* or *play*
 - If you *play*, with probability $p$ you gain 1 CHF, and otherwise you lose 1 CHF.
 - If you *stop*, the game ends.
-#+BEAMER: \pause
-**** State space
-- $s_t \in \Naturals$ (i.e. we cannot owe money)
-#+BEAMER: \pause
-**** Transition matrix
-For all $k > 1$.
-- $P(s_{t+1} = k+1 \mid s_t = k, a_t = \textrm{play}) = p$
-- $P(s_{t+1} = k-1 \mid s_t = k, a_t = \textrm{play}) = 1 - p$
-If $s_t = 0$ the game ends.
-
-#+BEAMER: \pause
-**** Rewards
-
 *** Markov Decision Process
 **** Variables                                                        :BMCOL:
      :PROPERTIES:
@@ -163,6 +212,8 @@ If $s_t = 0$ the game ends.
   \draw[->] (st) -- (stn);
 \end{tikzpicture}
 
+
+#+BEAMER: \pause
 **** Markov Decision Process :B_definition:
      :PROPERTIES:
      :BEAMER_env: definition
@@ -170,12 +221,56 @@ If $s_t = 0$ the game ends.
 A Markov decision process $\mdp$ on $(S, A)$ has the property that for any sequence of actions $a_1, \ldots$
 \begin{align*}
 P_\mdp(s_{t+1} \mid s_t, a_t, r_{t}, s_{t-1}, a_{t-1}, \ldots) = P_\mdp(s_{t+1} \mid s_t, a_t)
+\tag{transition}
 \\
 P_\mdp(r_{t+1} \mid s_t, a_t, r_{t}, s_{t-1}, a_{t-1}, \ldots) = P_\mdp(r_{t+1} \mid s_t, a_t)
+\tag{reward}
 \end{align*}
+#+BEAMER: \pause
 The goal in a *finite-horizon* MDP is to maximise the \(T\)-horizon utility:
 \[
-U = \sum_{t=1}^T r_t
+U_t = \sum_{k=t}^T r_k
+\]
+
+*** Simple betting game (II)
+**** State space
+- $s_t \in \Naturals$ (i.e. we cannot owe money)
+#+BEAMER: \pause
+**** Game end conditions
+- $t = T$ (we reach the horizon)
+- $s_t = 0$ (we lose all our money)
+- $a_t  = \textrm{stop}$ (we stop)
+#+BEAMER: \pause
+**** Transition matrix
+- Win: $P(s_{t+1} = k+1 \mid s_t = k, a_t = \textrm{play}) = p$, $k > 0$
+- Lose: $P(s_{t+1} = k-1 \mid s_t = k, a_t = \textrm{play}) = 1 - p$, $k > 0$.
+- Stop: $P(s_{t+1} = 0 \mid s_t = k, a_t = \textrm{stop}) = 1$
+- Absorbing/terminal state: $P(s_{t+1} = 0 \mid s_t = 0, a_t = a) = 1$
+#+BEAMER: \pause
+**** Rewards
+- $r_t = 0$ when you *play*
+- $r_t = s_t$ when you *stop*
+*** Simple betting game (II)
+**** Always play
+\[
+\pol(a_t = \textrm{play} | s_t ) = 1
+\]
+**** Never play
+\[
+\pol(a_t = \textrm{play} | s_t ) = 0
+\]
+**** Play until you have more than 100 CHF
+\[
+\pol(a_t = \textrm{play} | s_t < 100 ) = 1,
+\qquad
+\pol(a_t = \textrm{stop} | s_t \geq 100 ) = 1.
+\]
+
+**** Play until you double your money
+\[
+\pol(a_t = \textrm{play} | s_t < 2 s_1 ) = 1,
+\qquad
+\pol(a_t = \textrm{stop} | s_t \geq 2 s_1 ) = 1.
 \]
 
 *** Policies in Markov decision processes
@@ -226,26 +321,26 @@ A Markov policy takes an action $a$ at time $t$ with probability
 \]
 **** The expected utility of a policy
 \[
-\E_\pol[U] = \sum_{t=1}^T \E_\pol[r_t]
+\E^\pol_\mdp[U_t] = \sum_{k=t}^T \E^\pol_\mdp[r_k]
 \]
  
-* Backwards induction
-#+TOC: headlines [currentsection]
-
 ** Utility and value functions
 
 *** Value function
 - The utility from step $t$ is $U_t \defn \sum_{k=t}^T r_k$
+#+BEAMER: \pause
 **** The state value function
 This is the expected utility obtained by following a *policy $\pol$* starting from some *state $s$*.
 \[
 V^\pol_t(s) \defn \E_\pol(U_t \mid s_t = s)
 \]
+#+BEAMER: \pause
 **** The state-action value function
 This is the expected utility obtained by following a policy $\pol$ starting from some state $s$ and *playing action $a$*
 \[
 Q^\pol_t(s, a) \defn \E_\pol(U_t \mid s_t = s, a_t = a)
 \]
+#+BEAMER: \pause
 **** The optimal value function
 There is some policy $\pol^*$ satisfying
 \begin{align*}
@@ -259,13 +354,32 @@ Q^*(s, a) &\defn Q^{\pol^*}(s, a) \geq Q^\pol(s, a) \qquad \forall \pol, s, a
 Value functions satisfy the following recursion
 \begin{align*}
 V^\pol_t(s_t) 
+\uncover<2->{
 &= \E_\pol(U_t \mid s_t)\\
-&= \E_\pol\left[\sum_{t=1}^T r_t \middle| s_t\right]\\
-&= \E_\pol[r_t \mid s_t] + \E_\pol\left[\sum_{k=t+2}^T r_k \middle| s_t  \right]\\
+}
+\uncover<3->{
+&= \E_\pol\left[\sum_{k=t}^T r_k \middle| s_t\right]\\
+}
+\uncover<4->{
+&= \E_\pol[r_t \mid s_t] + \E_\pol\left[\sum_{k=t+1}^T r_k \middle| s_t  \right]\\
+}
+\uncover<5->{
 &= \E_\pol[r_t \mid s_t] + \E_\pol\left[U_{t+1}| s_t \right]\\
+}
+\uncover<6->{
 &= \E_\pol[r_t \mid s_t] + \sum_{s_{t+1} \in S} \Pr_\pol(s_{t+1} \mid s_t) \E_\pol\left[U_{t+1}| s_{t+1} \right]\\
+}
+\uncover<7->{
 &= \E_\pol[r_t \mid s_t] +  \sum_a \pol(a \mid s_t) \sum_{s_{t+1} \in S} P_\mdp(s_{t+1} \mid s_t, a) V^\pol_{t+1}(s_{t+1}).
+}
 \end{align*}
+#+BEAMER: \pause
+#+BEAMER: \pause
+#+BEAMER: \pause
+#+BEAMER: \pause
+#+BEAMER: \pause
+#+BEAMER: \pause
+#+BEAMER: \pause
 **** Exercise
 Prove that 
 \[
@@ -273,29 +387,34 @@ Q^\pol_t(s, a) = r(s, a) + \sum_{s' \in S} P_\mdp(s' \mid s, a) \sum_{a' \in A} 
 \]
 
 *** Backwards induction
-**** On the state value function
-To find the value function of the optimal policy, we can perform the following recursion, after setting $V^*_T(s) = \max_a r(s,a)$ for all $s$.
+**** State value function 
+The value function of the *optimal* policy can be found by setting $V^*_T(s) = \max_a r(s,a)$ for all $s$ and recursing:
+#+BEAMER: \pause
 \[
 V^*_t(s) 
 =
 \max_a r(s,a)  + \sum_{s' \in S} P_\mdp(s' \mid s, a) V^*_{t+1}(s'),
 \]
-where the optimal action at $s, t$ is $\argmax_a r(s,a)  + \sum_{s' \in S} P_\mdp(s' \mid s, a) V^*_{t+1}(s')$.
+#+BEAMER: \pause
+Optimal action at $s, t$: $\argmax_a r(s,a)  + \sum_{s' \in S} P_\mdp(s' \mid s, a) V^*_{t+1}(s')$.
+#+BEAMER: \pause
 **** On the state-action value function
-Alternatively, we can write this in terms of the Q-value function, where we set
-$Q^*_T(s,a) = r(s,a)$ and then recurse:
+Similarly, set $Q^*_T(s,a) = r(s,a)$ and  recurse:
+#+BEAMER: \pause
 \[
 Q^*_t(s, a) 
 =
- r(s,a)  + \sum_{s' \in S} P_\mdp(s' \mid s, a) \max_{a'} Q^*_{t+1} Q(s', a').
+ r(s,a)  + \sum_{s' \in S} P_\mdp(s' \mid s, a) \max_{a'} Q^*_{t+1} (s', a').
 \]
-Here the optimal action at step $t$ is just $\argmax_a Q^*_t(s,a)$.
+#+BEAMER: \pause
+Optimal action at step $t$: $\argmax_a Q^*_t(s,a)$.
 
 * Examples
 #+TOC: headlines [currentsection]
 
 ** Toy examples
 *** Chain
+\begin{center}
 \begin{tikzpicture}
   \node[RV] at (0,0) (1) {$\epsilon$};
   \node[RV] at (1,0) (2) {$0$};
@@ -313,18 +432,27 @@ Here the optimal action at step $t$ is just $\argmax_a Q^*_t(s,a)$.
   \draw[red,->] (1) to [loop above] (1);	
   \draw[blue,->] (5) to [loop above] (5);	
 \end{tikzpicture}
+\end{center}
 
-In this MDP, there are 5 states, and the transition probabilities are:
+**** Reward
+At state $s = 1$ is $\epsilon < 1$ and the reward at state $s = 5$ is $1$.
+
+**** Transition probabilities for $a = 1$
 \[
 P(s_{t+1} = \min\{5, i + 1\} \mid s_t = i, a = 1) = 1 - \delta,
-\qquad P(s_{t+1} = 1 \mid s_t = i, a = 1) =  \delta.
 \]
-For the alternative action $a = 0$, the probabilities are reversed
+and
 \[
-P(s_{t+1} = \min\{5, i + 1\} \mid s_t = i, a = 1) = \delta,
-\qquad P(s_{t+1} = 1 \mid s_t = i, a = 1) = 1-  \delta.
+ P(s_{t+1} = 1 \mid s_t = i, a = 1) =  \delta.
 \]
-Further, the reward at state $s = 1$ is $\epsilon < 1$ and the reward at state $s = 5$ is $1$.
+**** Transition probabilities for $a = 2$:
+\[
+P(s_{t+1} = \min\{5, i + 1\} \mid s_t = i, a = 2) = \delta,
+\]
+and
+\[
+\qquad P(s_{t+1} = 1 \mid s_t = i, a = 2) = 1-  \delta.
+\]
 
 
 *** Wumpus world

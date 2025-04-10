@@ -71,7 +71,9 @@ P(s_{t+1} \mid s_{t}, \ldots, s_1) = P(s_{t+1} \mid s_{t}) \qquad \forall t
 For all $k > 1$.
 - $P(s_{t+1} = k+1 \mid s_t = k) = p$
 - $P(s_{t+1} = k-1 \mid s_t = k) = 1 - p$
-If $s_t = 0$ the game ends.
+Otherwise:
+- $P(s_{t+1} = 0 \mid s_t = 0) = 1$ (i.e. the game ends)
+
 
 #+BEAMER: \pause
 **** Martingale property (*)
@@ -84,29 +86,25 @@ This is because $\E[s_{t+1} \mid s_t = k] =
 
 
 * Markov decision processes
+#+TOC: headlines [currentsection]
+** Markov decision process
 *** Simple betting game
 - You have $s_t$ CHF.
-- At time $t$, you decide to *stop* or *play*
-- With probability $p$ you gain 1 CHF, and otherwise you lose 1 CHF.
+- At time $t$, you take an action $a_t$, whether to *stop* or *play*
+- If you *play*, with probability $p$ you gain 1 CHF, and otherwise you lose 1 CHF.
+- If you *stop*, the game ends.
 #+BEAMER: \pause
 **** State space
 - $s_t \in \Naturals$ (i.e. we cannot owe money)
 #+BEAMER: \pause
 **** Transition matrix
 For all $k > 1$.
-- $P(s_{t+1} = k+1 \mid s_t = k) = p$
-- $P(s_{t+1} = k-1 \mid s_t = k) = 1 - p$
+- $P(s_{t+1} = k+1 \mid s_t = k, a_t = \textrm{play}) = p$
+- $P(s_{t+1} = k-1 \mid s_t = k, a_t = \textrm{play}) = 1 - p$
 If $s_t = 0$ the game ends.
-\only<article>{This should only appear in the text.}
 
 #+BEAMER: \pause
-**** Martingale property (*)
-If $p = 1/2$ then the process is a *martingale*, i.e.
-\[
-\E[s_{t+1} \mid s_t] = s_t
-\]
-This is because $\E[s_{t+1} \mid s_t = k] = 
-(k + 1) p + (k -1)(1 - p)  = k$.
+**** Rewards
 
 *** Markov Decision Process
 **** Variables                                                        :BMCOL:

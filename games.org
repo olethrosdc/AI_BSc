@@ -64,7 +64,7 @@
 * Multi-Agent Systems
 ** Introduction
 *** Multi-agent decision making
-- *Two* versus $n$-player games
+- *Two* versus n-player games
 - *Co-operative* games
 - *Zero-sum* games
 - General-sum games
@@ -72,49 +72,68 @@
 - Partial information games
 
 *** Rock/Paper/Scissors
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./figures/rock-paper-scissors.png]]
 - Number of players: 2
-- Zero-sum
-- Deterministic
-- Simultaneous move
+- Zero-sum.
+- Deterministic.
+- Simultaneous move.
 
 *** Chess/Go/Checkers/Othello
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./figures/chess.jpg]]
 - Number of players: 2
 - Zero-sum
-- Deterministic, 
+- Deterministic 
 - Alternating, Full information
 
 *** Backgammon
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./figures/backgammon.png]]
 - Number of players: 2
 - Zero-sum
 - Stochastic
 - Alernating, Full information
 
 *** Poker/Blackjack
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./figures/poker.jpg]]
 - Number of players: $n$
 - Zero-sum
-- Stochastic
+- Stochastic [Partially]
 - Alternating, Partial information
 
 *** Doom/Quake/CoD
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./figures/doom.png]]
+
 - Number of players: $n$
-- Zero-sum
+- General sum
 - Stochastic
-- Simultaneous, Partial information
+- Simultaneous, Sequential, Partial information
 
 *** Auctions
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./figures/auction.jpg]]
+
 - Number of players: $n$
 - General sum
 - Deterministic
 - Simultaneous move
 
-** Humans and AI
-*** Human preferences
-- These are typically unknown
-- They might not be expressible in mathematical form
-- Nevertheless, we make the utility assumption
-*** AI preferences
-- These are typically known
-*** Human-AI examples
+*** Humans and AI
+
+Any system involving interaction between multiple agent can be describe through game theory. One question is how to define the preferences of each agent.
+
+**** Human preferences
+- These are typically unknown.
+- They might not be expressible in mathematical form.
+- Nevertheless, we make the utility assumption.
+**** AI preferences
+- These are typically specified by humans as utilities.
+- However, it is hard to fully specify them.
+
+
 ** Game representations
 *** Normal form
 
@@ -132,6 +151,62 @@ We assume that each player is playing without seeing the move of the other playe
 However, we can also look at *commitment* or *Stackleberg* games, where one player either /commits/ to playing a move, or plays before the other player.
 **** Information structure
 For other types of move sequencing, we have to encode the information structure of a game as a graph.
+*** Co-operative, adversarial and general games
+More generally, we can say that every player $i$ in the game:
+- Takes an action $a^i \in A_i$.
+- Obtains a reward $\rho^i(x)$ for each possible outcome/choice $x$.
+
+#+BEAMER: \pause
+**** 2-player Zero-sum games
+- $\rho^1 = -\rho^2$
+- Can be solved effiicently.
+#+BEAMER: \pause
+**** n-player Collaborative games
+- $\rho^i = \rho^j$ for all players $i,j$.
+- If the players can co-ordinate, then it reduces to a single-agent problem with action-space $A = A_1 \times \cdots A_n$.
+#+BEAMER: \pause
+**** n-player General-sum games
+- $\rho^i$ can be anything.
+- Finding solutions for these games is harder.
+
+*** Zero-Sum: Rock Paper Scissors
+| $\rho^1, \rho^2$ | Rock  | Paper | Scissors |
+|------------------+-------+-------+----------|
+| /                | <     | <     | <        |
+| Rock             | 0, 0  | -1, 1 | 1, -1    |
+|------------------+-------+-------+----------|
+| Paper            | 1, -1 | 0, 0  | -1, 1    |
+|------------------+-------+-------+----------|
+| Scissors         | -1, 1 | 1, -1 | 0, 0     |
+
+
+
+*** Co-operative: Party
+
+People want to bring something to the party.  Ideally, one brings
+food, and the other drinks.  But if they do not co-ordinate, then
+there is only food, or only drink.
+
+
+| $\rho^1, \rho^2$ | food   | drink    |
+|------------------+--------+----------|
+| /                | <      | <        |
+| food             | 2, 2   | 10, 10   |
+|------------------+--------+----------|
+| drink            | 10, 10 | 1, 1     |
+
+Here, co-ordination makes the outcomes better for everybody.
+
+
+*** General-Sum: Prisoner's dilemma
+| $\rho^1, \rho^2$ | cooperate | defect   |
+|------------------+-----------+----------|
+| /                | <         | <        |
+| cooperate        | -1, -1    | -5, 0    |
+|------------------+-----------+----------|
+| defect           | 0, -5     | -3, -3   |
+
+
 *** Basic concepts in normal form games
 
 | $\rho^1, \rho^2$ | b = 0 | b = 1 |
@@ -143,7 +218,6 @@ For other types of move sequencing, we have to encode the information structure 
 
 **** Domination and best response
 - $b = 1$ is a *best response* to $a = 1$, i.e. $\rho^2(1,1) > \rho^2(1,0)$
-  \]
 - $a = 0$ is a *strictly dominant* strategy. Given any $b$, it is strictly better to play $a = 0$, i.e. $\rho^1(0, b) > \rho^1(1, b)$.
 - If a pair $(a,b)$ is /not dominated/, then it is *Pareto*-efficient.
   
@@ -152,6 +226,10 @@ For other types of move sequencing, we have to encode the information structure 
 - Does $b$ have a dominant strategy?
 - Does this take into account what $b$ likes?
 
+
+
+*** Pareto-Optimality
+[[./figures/Pareto.pdf]]
 
 *** Commitment
 
@@ -216,59 +294,101 @@ Let us see what happens when one player *commits* to a move
 \end{tikzpicture}
 
 
-* Team games
-** Team games
-*** Fully collaborative games
-In team games, $\rho^i = \rho^j$ for all players $i,j$.
+
 
 * Two-Player zero-sum Games
-*** One-shot alternating move 2-player games
-- Player 1 plays $a$
-- Player 2 plays $b$
-- Player 1 obtains $\rho^1(a, b)$
-- Player 2 obtains $\rho^2(a, b)$
+*** Extensive-form alternating-move game
+**** Variables                                                        :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.4
+     :END:
+- The *state* $s_t \in S$.
+- The *actions* $a^i_t \in A$.
+- The *rewards* $r^i_t \in \Reals$, $r_t = (r^1_t, r^2_t)$.
+- The transition probabilities
+\[
+\Pr(s_{t+1} \mid s_t , a_{t-1}^i)
+\]
+#+BEAMER: \pause
+**** Bayesian network                                                 :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.6
+     :END:
+\begin{tikzpicture}
+  \node[RV] at (0,0) (stp) {$s_{t-1}$};
+  \node[RV] at (2,0) (st) {$s_t$};
+  \node[RV] at (4,0) (stn) {$s_{t+1}$};
+  \node[select] at (0,2) (atp) {$a^1_{t-1}$};
+  \node[select] at (2,2) (at) {$a^2_t$};
+  \node[utility] at (2,1) (rtp) {$r_{t}$};
+  \node[utility] at (4,1) (rt) {$r_{t+1}$};
+  \draw[->] (atp) -- (st);
+  \draw[->] (atp) -- (rtp);
+  \draw[->] (stp) -- (rtp);
+  \draw[->] (at) -- (rt);
+  \draw[->] (st) -- (rt);
+  \draw[->] (at) -- (stn);
+  \draw[->] (stp) -- (st);
+  \draw[->] (st) -- (stn);
+\end{tikzpicture}
+
 
 
 *** Extensive-form alternating-move zero sum games
+#+ATTR_BEAMER: :overlay <+->
 - At time $t$:
-- The state is $s_t$, players receive rewards $\rho(s_t), -\rho(s_t)$
-- Player chooses action $a_t$, which is revealed.
+- The state is $s_t$, players receive rewards $r^1_t = \rho(s_t), r^2_t = -\rho(s_t)$
+- Player $i$ chooses action $a^i_t$, which is revealed.
 - The state changes to $s_{t+1}$, and is revealed.
 - Players receive reward $\rho(s_{t+1}), -\rho(s_{t+1})$
-- Player chooses action $b_{t+1}$.
+- Player $j = 1 - i$ chooses action $a^j_{t+1}$.
 - The state changes to $s_{t+2}$.
-- Player $a$ receives $\rho(s_t)$ and $b$ receives $-\rho(s_t)$.
-The utility for player $a$ is 
+- Player 1 receives $\rho(s_t)$ and 2 receives $-\rho(s_t)$.
+#+BEAMER: \pause
+The utility for player 1 is 
 \[
 U^{1} = \sum_t \rho(s_t),
 \]
-while for $b$ it is
+while for 2 it is
 \[
 U^{2} = -\sum_t \rho(s_t)
 \]
 *** Backwards induction for Alternating Zero Sum Games
 Let *$\pi_1$* and *$\pi_2$* be the policies of *each* player and *$\pi$* the *joint* policy.
+#+BEAMER: \pause
 **** The value function of a policy $\pi = (\pi_1, \pi_2)$
 For the utility of player 1, we get:
 \begin{align}
 V^{1,\pol}_t(s) 
 &\defn \E_\pi [U^{1}_t \mid s_t = s]
-= \rho(s) + \E[U^{1}_{t+1} \mid s_t = s]\\
-&= \rho(s) + \sum_a \pol(a \mid s) \sum_{j} V^{1,\pi}_{t+1}(j) P(j\mid s, a)\\
+= \rho(s) + \E[U^{1}_{t+1} \mid s_t = s]
+\uncover<3->{
+\\
+&= \rho(s) + \sum_{a^1} \pol(a^1 \mid s) \sum_{j} V^{1,\pi}_{t+1}(j) P(j\mid s, a^1)
+}
+\uncover<4->{\\
 V^{1,\pol}_{t+1}(j) 
-&= \rho(j) + \sum_b \pol(b \mid j)  \sum_{j} V^{1,\pi}_{t+2}(j) P(k \mid j, b)
+&= \rho(j) + \sum_{a^2} \pol(a^2 \mid j)  \sum_{j} V^{1,\pi}_{t+2}(j) P(k \mid j, a^2)
+}
 \end{align}
-
+*** The optimal value function
 We can define the optimal value function analogously to MDPs, but 
-player 2 is minimising 
+player 2 is minimising. 
+
+The value for player 1, together with the recursion is given below:
+#+BEAMER: \pause
 \begin{align}
 V^{1,*}_t(s) 
-&= \max_{\pi_1} \min_{\pi_2} \E_\pi [U^{+}_t \mid s_t = s]\\
-&= \rho(s) + \max_a \sum_{j} V^{1,*}_{t+1}(j) P(j\mid s, a)\\
+&= \max_{\pi_1} \min_{\pi_2} \E_\pi [U^{1}_t \mid s_t = s]
+\uncover<3->{\\
+&= \rho(s) + \max_{a^1} \sum_{j} V^{1,*}_{t+1}(j) P(j\mid s, a^1)
+}
+\uncover<4->{\\
 V^{1,*}_{t+1}(j) 
-&= \rho(j) + \min_b  \sum_{j} V^{1,*}_{t+1}(j) P(k \mid j, b)
+&= \rho(j) + \min_{a^2}  \sum_{j} V^{1,*}_{t+1}(j) P(k \mid j, a^2)
+}
 \end{align}
-The above recursion can be used to calculate the minimax value function.
+
 
 *** Normal-form simultaneous-move zero-sum games
     (Also called *minimax* games)
@@ -364,12 +484,6 @@ The expected utility of the strateg
 
 
 
-
-*** Pareto-Optimality
-[[./figures/Pareto.pdf]]
-
-*** Nash equilibria
-A good notion for these kinds of games are Nash equilibria
 
 
 *** Computing Nash equlibria

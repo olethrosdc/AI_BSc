@@ -80,9 +80,9 @@ P2 needs P1's help to play a game. If they win the game, they get 100 CHF, and P
 
 P2's utility is the amount of money won.
 
-P1's utility is the amount of money given by P2, plus plus a constant c, which encodes either:
-(a) some intrinsic reward he obtains, if c > 0
-(b) some cost he has to incur to play, if c < 0.
+P1's utility is the amount of money given by P2, plus a constant c, which encodes either:
+(a) if $c > 0$, some intrinsic reward he obtains because he enjoys the game.
+(b) If $c < 0$, some cost he has to incur to play.
 
 Of course, if they lose, then P2 obtains a utility of 0, while P1 obtains c.
 
@@ -109,9 +109,12 @@ Since the probability of winning is 50%, we can write the expected utility for e
 | Accept  | (50, c) | (37.5, 12.5+c) | (25, 25+c) | (12.5, 37.5+c) | (0, 50 + c) |
 |---------+---------+----------------+------------+----------------+-------------|
 
-If $c > 0$, then P1 always accepts. If $p$ is the probability of winning and $R$ is the ratio of winnings given, then P1 accepts only when  $c > - p * R * 100$.
+If $c > 0$, then P1 always accepts, since he obtains a positive
+payoff.  If $p$ is the probability of winning and $R$ is the ratio of
+winnings given, then P1 accepts only when $100 R p + c > 0$.
 
-For that reason, it is optimal for P2 to offer exactly $R = - c / (100 p)$ 
+Any solution $R > -c/(100p)$ has a payoff of $1 - R$ for P2. Hence, P2 should offer $R$ as small as possible, but still greater than $-c/(100p)$.
+
 
 * Exercise 3
 

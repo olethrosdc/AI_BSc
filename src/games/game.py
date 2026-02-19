@@ -4,7 +4,7 @@ import numpy as np
 
 
     
-## This a discrete MDP with a finite number of states and actions
+## This a discrete MAMDP with a finite number of states and actions
 ## No specific player order is assumed here. This has to be externally imposed.
 ## IF you want to add a specific order or allowed players to move in particular states,
 ## then you should have a structure that tells you which players can move in each state.

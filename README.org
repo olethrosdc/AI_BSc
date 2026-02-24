@@ -37,7 +37,7 @@ In all cases, you are /not/ allowed to present anybody's work as your own work. 
 2. Online forums: Stackoverflow is an example. Cite as "We based this part of the work on URL where we modified the code to ... "
 3. Books or websites: Cite normally, explaining how you used the material.
 4. Automated translation: Specify what you used and where. Note, however, that you can write your reports in French or English.
-5. Advanced coding aids: Specify what you used, including generative-AI. Say where you used it exactly, so we can filter out.
+5. Advanced coding aids: Specify what you used, including generative-AI. Say where you used it exactly, so we can filter it out.
 6. Advanced models for grammar and rewriting: Specify which model you used and for which parts of the text. 
 7. Advanced models for text structuring. You are not encouraged to do that: we can discuss this in class if needed. However, if you do make use of such models, then you must explain how you used them, including a copy of the intermediate output.
 8. You must use a git repository to create your work. This way we can track changes.
@@ -49,6 +49,7 @@ In all cases, you are /not/ allowed to present anybody's work as your own work. 
 - This notebook contains a summary of all the foundational material in the course. It is not sufficient for studying for the exam, or as a reference material.
 - For details, use the links to external resources.
 - There are some more detailed slides available for each lecture.
+
 *** Books and schedule
 Artificial Intelligence: Foundations of Computational Agents, 3rd Edition
 *Artificial Intelligence: a Modern Approach, 4th Edition*

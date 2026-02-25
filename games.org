@@ -218,7 +218,7 @@ Here, co-ordination makes the outcomes better for everybody.
 
 **** Domination and best response
 - $b = 1$ is a *best response* to $a = 1$, i.e. $\rho^2(1,1) > \rho^2(1,0)$
-- $a = 0$ is a *strictly dominant* strategy. Given any $b$, it is strictly better to play $a = 0$, i.e. $\rho^1(0, b) > \rho^1(1, b)$.
+- $a = 0$ is a *strictly dominant* action. Given any $b$, it is strictly better to play $a = 0$, i.e. $\rho^1(0, b) > \rho^1(1, b)$.
 - If a pair $(a,b)$ is /not dominated/, then it is *Pareto*-efficient.
   
 **** Questions
@@ -452,10 +452,18 @@ Find the lowest upper bound for player 2
 **** Game structure
 - Each player $i$ chooses action $a^i \in A_i$ in secret.
 - The *joint action* is $\ba = (a^1, \ldots, a^n)$.
-- The players then receive a reward $\rho^i(\ba)$
+- Player $i$ receives a reward $\rho^i(\ba)$
 **** Mixed strategies
-Players can independently draw actions $a^i$ from $\pol(a^i)$
-The expected utility of the strateg
+Players *independently* draw actions $a^i$ from *strategies* $\pol^i(a^i)$, i.e.
+\[
+\pol(\ba) = \prod_i \pol^i(a^i).
+\]
+(This means they cannot coordinate).
+
+The *expected utility* of the strategy $\pol$ is then
+\[
+\E[\rho^i \mid \pol] = \sum_{\ba} \pol(\ba) \rho^i(\ba).
+\]
 
 *** Example: penalty shot
 | $\rho^1, \rho^2$ | kick left | kick right |
@@ -485,12 +493,36 @@ The expected utility of the strateg
 
 
 
+*** Solution concept: Nash equilibrium
+- $n$ players
+- Actions $\ba = (a^1, \ldots, a^n)$.
+- Payoffs $\rho_i(a)$
 
-*** Computing Nash equlibria
+**** Pure Nash equilibrium
+A joint action $\ba$ is a *pure Nash* equlibrium if no player $i$ can play some alternative action $\hat{a}^i$ and obtain a higher payoff:
+\[
+\rho^i(\hat{a}^i, a^{-i}) \leq \rho^i(\ba) \forall i, \hat{a}^i,
+\]
+where $a^{-i} = (a_1, \ldots, a^{i-1}, a^{i+1}, \ldots, a_n)$ are the actions of all players apart from $i$.
 
+**** Nash equilibrium
+A strategy profile $\pol = (\pol^1, \ldots, \pol^n)$, is a *Nash* equlibrium if no player $i$ can deviate to obtain a higher payoff:
+\[
+\E[\rho^i \mid \hat{a}^i, \pol^{-i}] \leq \E[\rho^i \mid \pol] 
+\]
 
-- A Nash equilibrium always exists (Nash, 1950)
-- Nash is $\PPAD$, with $\PC \subseteq \PPAD \subseteq \NP$
+*** Computing Nash equilibria
+
+- A *pure* Nash equilibrium may not exist.
+- A Nash equilibrium *always* exists (Nash, 1950)
+- Nash is $\PPAD$, with $\PC \subseteq \PPAD \subseteq \NP$.
+
+**** Pre-processing steps
+- Remove all *dominated* actions for each player.
+- Check if the remaining combinations have a *pure* equilibrium.
+- If not, the equilibrium is *mixed*, with support on these actions.
+
+*** Nash theory
 **** The Brouwer problem (PPAD)
 Input:
 - a function $F : [0,1]^m \to [0,1]^m$
@@ -504,7 +536,7 @@ Output:
 *** The Linear Complementarity Problem
 - $\sum_b \rho^1(a,b) \pi_2(b) + s_1(a)= v_1$ for all $a$
 - $\sum_a \rho^2(j,b) \pi_1(a) + s_2(b) = v_1$ for all $b$
-- $\|\pi_i\|_1 = $, $\pi_i \geq 0$
+- $\|\pi_i\|_1 = 1$, $\pi_i \geq 0$
 - $s \geq 0$
 - $\pi_i \cdot s_i = 0$: assigns zero to slack variables corresponding to actions with probability > 0
 *** Optimistic hedge

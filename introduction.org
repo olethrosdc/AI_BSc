@@ -200,10 +200,13 @@ We allow agents to randomise. The simplest agent choose actions only depending o
 \[
 \pi(a_t | x_t) \tag{the probability with which the agent takes action $a_t$}
 \]
-**** Deterministic (reactive) policies
-Then for each $x_t$ the same action $f(x_t)$ is always taken, so that $\pi(a_t = f(x_t) | x_t) = 1$.
+**** Deterministic policies
+A special cases when, for each $x_t$ the same action $f(x_t)$ is always taken, so that $\pi(a_t = f(x_t) | x_t) = 1$. Then we might prefer to write
+\[
+a_t = \pi(x_t)
+\]
 **** Adaptive policies
-The action taken may change over time, depending on what happened in the past:
+The action taken may depend on what the agent observed in the past:
 \[
 \pi(a_t \mid x_t, a_{t-1}, x_{t-1}, \ldots, a_1, x_1)
 \]
@@ -335,6 +338,18 @@ We prefer items with higher utility, i.e.
 
 **** Decision making as an optimisation problem
 How can we find the decision maximising utility / minimising cost?
+*** Additive utility functions
+**** Shortest path
+If $s_t$ describes our location in a maze, each path is a sequence $s_1, \ldots, s_T$. Then we can have
+\[
+U(s_1, \ldots, s_T) = \sum_t \rho(s_t).
+\]
+with $\rho(s_t)$ being a *reward* function.
+
+If our goal is to reach the goal state $s^*$ as quickly as possible, we can use
+\[
+\rho(s) = \begin{cases}-1 & s = s^*\\ 0 & s = s^*\end{cases}
+\]
 
 *** Choice of the utility function
 **** Designer input
@@ -344,7 +359,7 @@ How can we find the decision maximising utility / minimising cost?
 - The designer selects a utility they *think* is the best choice
 - However, their choice results in unintended behaviour
 - Example: Autonomous vehicles
-
+  
 **** The value-alignment in *populations*
 - Not everybody wants the same thing.
 - We need to design *fair* policies.
@@ -387,24 +402,5 @@ How can we find the decision maximising utility / minimising cost?
 - 11. Autonomous cars: state of the art.
   
   
-* Humans and AI
-** Safety
-*** Design problems
-*** Securing AI systems
-1. Understand what the system can do and where it is applied.
-2. You don’t have to compute gradients to break an AI system.
-3. AI red teaming is not safety benchmarking.
-4. Automation can help cover more of the risk landscape.
-5. The human element of AI red teaming is crucial.
-6. Responsible AI harms are pervasive but difficult to measure.
-7. LLMs amplify existing security risks and introduce new ones.
-8. The work of securing AI systems will never be complete.
-
-** Privacy
-*** Data collection
-*** Data publication
-** Fairness
-*** Goals and social welfare
-*** Group fairness
 
 

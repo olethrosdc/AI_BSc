@@ -139,7 +139,32 @@ $\rho_i(a) \geq \rho_i(a, -i)$.
 
 * Exercise 4
 
+|   | 1      | 2      | 3      |
+|---+--------+--------+--------|
+| 1 | (2,1)  | (2,3)  | (1,3)  |
+| 2 | (2,-1) | (-1,2) | (2,1)  |
+| 3 | (4,2)  | (4,2)  | (-2,4) |
 
+- Find dominated actions for either player
+- Is there a pure Nash equilibrium in the remaining actions?
+
+** Solution
+
+Action 1 is dominated for P1
+Action 1 is dominated for P2.
+So we can just look at this sub-matrix.
+
+|   | 2      | 3      |
+|---+--------+--------|
+| 2 | (-1,2) | (2,1)  |
+| 3 | (4,2)  | (-2,4)  |
+
+- If a=(2,2) is played, then P1 prefers a=(3,2). Not Nash.
+- If a=(3,2) is played, then P2 prefers a=(3,3). Not Nash.
+- If a=(3,3) is played, then P1 prefers a=(2,3). Not Nash.
+- If a=(2,3) is played, then P2 prefers a=(-1,2). Not Nash.
+
+Hence, the NE is a mixed strategy where both players play 2, 3 with some >0 probability.
 
 
 

@@ -237,22 +237,21 @@ A graph $G$ is defined by:
      :BEAMER_col: 0.5
      :END:
 State-space graph
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=1.5]
       \node[RV] at (0,0) (0) {0};
       \node[RV] at (1,0) (1) {1};
       \node[RV] at (2,0) (2) {2};
       \node[RV] at (3,0) (3) {3};
       \node[RV] at (1,1) (4) {4};
       \node[RV] at (1,-1) (5) {5};
-      \draw (0) to (1);
-      \draw (1) to (2);
-      \draw (2) to (3);
-      \draw (1) to (5);
-      \draw (1) to (4);
-      \draw (4) edge [bend left] (3);
+      \draw[->] (0) edge["R"] (1);
+      \draw[->] (1) edge["R"] (2);
+      \draw[->] (2) edge["R"] (3);
+      \draw[->] (1) edge["D"] (5);
+      \draw[<->] (1) edge["U/D"] (4);
+      \draw[->] (4) edge ["R", bend left] (3);
 \end{tikzpicture}
 
-The graph is *undirected* for simplicity
 
 **** Search graph                                                     :BMCOL:
      :PROPERTIES:
@@ -261,13 +260,23 @@ The graph is *undirected* for simplicity
 Search graph
 
 \begin{tikzpicture}
+\only<1>{
 	\node[RV] at (0,0) (0) {0};
+}
+\only<2->{
+	\node[RV,hidden] at (0,0) (0) {0};
+}
 	\uncover<2->{
+\only<2-4>{
 	\node[RV] at (1,0) (1) {1};
+}
+\only<5->{
+	\node[RV,hidden] at (1,0) (1) {1};
+}
 	\draw[->] (0) to (1);
 	}
 	\uncover<3->{
-	\node at (2,0) (5) {5};
+	\node[RV, hidden] at (2,0) (5) {5};
 	\draw[->] (1) to (5);
 	}		
 	\uncover<4->{
@@ -275,36 +284,20 @@ Search graph
 	\draw[->] (1) to (4);
 	}		
 	\uncover<5->{
-	\node at (3,1) (4-1) {1};
-	\draw[->] (4) to (4-1);
-	}	
+	\node[RV] at (2,2) (2) {2};
+	\draw[->] (1) to (2);
+	}
 	\uncover<6->{
-	\node[RV] at (3,2) (3) {\alert{3}};
+	\node[RV, hidden] at (3,1) (4-1) {1};
+	\draw[->] (4) to (4-1);
+	}
+	\uncover<7->{
+	\node[RV] at (3,2) (3) {3};
 	\draw[->] (4) to (3);
 	}	
 \end{tikzpicture}
 
-Our search algorithm selects the oldest node in the frontier first, and actions in the order D,U,L,R. 
-
-
-*** The search graph
-#+ATTR_BEAMER: :overlay +-
-- Node $0$ is *root* of the search graph.
-- Each node $i \in S'$ corresponds to a state $s^i \in S$.
-- It also corresponds to a  *path* $s^0, \ldots, \parent(\parent(s^i)), \parent(s^i), s^{i}$.
-- Node depth: $d_i = 1 + d_{\parent(i)}$, with $d_0 = 0$.
-#+BEAMER: \pause
-**** Frontier: what we can search.
-Set $F_0 = \{0\}$ and set of searched nodes $S'_0 = \emptyset$. 
-
-At step $k = 0, 1, \ldots$:
-#+ATTR_BEAMER: :overlay +-
-- The frontier is $F_k$, and searched nodes $S'_k$.
-- Select a node $i$, where $s^i \notin S'_k$.
-- We select action $a$ in node $i$, and observe $s' = \tau(s^i, a)$.
-- $i + 1$ is now a child of $i$, with $s^{i+1} = s'$.
-- Update the frontier $F_{k+1} = F_k \cup \{i + 1\} \setminus \{i\}$.
-- In the end, no more nodes can be added: $F_k = \emptyset$ and $S'_k = S'_{k+1}$
+Our search algorithm selects the *oldest* node in the frontier first, and actions in the order D,U,L,R. 
 
 
 *** State-action problem specification
@@ -327,6 +320,29 @@ One or more of the following:
 - $\pi : S \to A$ deterministic policy
 - For deterministic problem *and* policy, the policy is *open loop*
 
+
+*** The search graph $S'$.
+#+ATTR_BEAMER: :overlay +-
+- Node $0$ is *root* of the search graph $S'$.
+- Each node $i \in S'$ corresponds to a state $s^i \in S$.
+- It also corresponds to a  *path* $s^0, \ldots, \parent(\parent(s^i)), \parent(s^i), s^{i}$.
+- Node depth: $d_i = 1 + d_{\parent(i)}$, with $d_0 = 0$.
+#+BEAMER: \pause
+**** Frontier: what we can search.
+Set $F_0 = \{0\}$ and set of searched nodes $S'_0 = \emptyset$. 
+
+At step $k = 0, 1, \ldots$:
+#+ATTR_BEAMER: :overlay +-
+- The frontier is $F_k$, and searched states $S'_k$.
+- Select a node $i$, where $s^i \in F _k$.
+- *state-action* model: select action $a$ in node $i$, and set $s' = \tau(s^i, a)$.
+- *node-edge* model: select edge $(s^i, j)$ in node $i$, and set $s' = j$.
+- $i + 1$ is now a child of $i$ [$i + 1 \in \child(i)$], with $s^{i+1} = s'$.
+- Update the frontier $F_{k+1} = F_k \cup \{i + 1\} \setminus \{i\}$ and searched $S'_{k+1} = S'_k \cup \{i\}$.
+- In the end, no more nodes can be added: $F_k = \emptyset$ and $S'_k = S'_{k+1}$
+
+
+
 * Uninformed search
 ** Depth-first search
 *** Depth-first search example
@@ -342,12 +358,12 @@ State-space graph
       \node[RV] at (3,0) (3) {3};
       \node[RV] at (1,1) (4) {4};
       \node[RV] at (1,-1) (5) {5};
-      \draw (0) to (1);
-      \draw (1) to (2);
-      \draw (2) to (3);
-      \draw (1) to (5);
-      \draw (1) to (4);
-      \draw (4) edge [bend left] (3);
+      \draw[->] (0) to (1);
+      \draw[->] (1) to (2);
+      \draw[->] (2) to (3);
+      \draw[->] (1) to (5);
+      \draw[->] (1) to (4);
+      \draw[->] (4) edge [bend left] (3);
 \end{tikzpicture}
 **** Search graph                                                     :BMCOL:
      :PROPERTIES:
@@ -367,7 +383,7 @@ Search graph
 	}		
 	\uncover<4->{
 	\node[RV] at (2,1) (4) {4};
-	\draw[->] (1) to (4);
+	\draw[<->] (1) to (4);
 	}		
 	\uncover<5->{
 	\node at (3,1) (4-1) {1};
@@ -416,12 +432,12 @@ State-space graph
       \node[RV] at (3,0) (3) {3};
       \node[RV] at (1,1) (4) {4};
       \node[RV] at (1,-1) (5) {5};
-      \draw (0) to (1);
-      \draw (1) to (2);
-      \draw (2) to (3);
-      \draw (1) to (5);
-      \draw (1) to (4);
-      \draw (4) edge [bend left] (3);
+      \draw[->] (0) to (1);
+      \draw[->] (1) to (2);
+      \draw[->] (2) to (3);
+      \draw[->] (1) to (5);
+      \draw[->] (1) to (4);
+      \draw[->] (4) edge [bend left] (3);
 \end{tikzpicture}
 **** Search graph                                                     :BMCOL:
      :PROPERTIES:
@@ -533,7 +549,7 @@ Note that BFS always adds the minimum depth node. We can instead add the minimum
 \STATE $n = \argmin_{f \in F} c_f$. Select minimum cost node.
 \STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
 \IF {$n \notin S'$}
-\STATE $B = \{i \in \child(n) : i \noin \anc{n}\}. Get the set of unsearched children of $n$.
+\STATE $B = \{i \in \child(n) : i \notin \anc(n)\}$. Get the set of unsearched children of $n$.
 \STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
 \STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
 \STATE $F = F \cup B$. Add $n$'s children to the frontier.

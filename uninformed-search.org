@@ -53,7 +53,6 @@
       \draw[->] (4) edge["a=R", bend right] (7);
       \draw[->] (7) edge["a=L", bend right] (4);
       \draw[->] (7) edge["a=U", bend right] (8);
-      \draw[->] (8) edge["a=D", bend right] (7);
       \draw[->] (3) edge["a=U", bend right] (4);
       \draw[->] (4) edge["a=D", bend right] (3);
       \draw[->] (0) edge["a=R", bend right] (3);
@@ -66,9 +65,9 @@
      :BEAMER_col: 0.5
      :END:
 #+ATTR_BEAMER: :overlay +-
-- States: $S = \{0, \ldots, 8\}$
+- States (États): $S = \{0, \ldots, 8\}$
 - Actions: $A = \{U, D, L, R\}$.
-- Policy: $\pol : S \to A$ chooses an action in every state.
+- Policy (Politique): $\pol : S \to A$ chooses an action in every state.
 #+BEAMER: \pause
 |---+---|
 | S | A |
@@ -84,6 +83,61 @@
 | 8 |   |
 |---+---|
 
+*** A gridworld-maze solution
+**** Graph
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+\begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
+      \node[RV,label=below:{\alert{start}}] at (0,0) (0) {0};
+      \node[RV] at (0,2) (1) {1};
+      \node[RV] at (0,4) (2) {2};
+      \node[RV] at (2,0) (3) {3};
+      \node[RV] at (2,2) (4) {4};
+      \node[RV] at (2,4) (5) {5};
+      \node[RV] at (4,0) (6) {6};
+      \node[RV] at (4,2) (7) {7};
+      \node[RV,label=above:{\alert{goal}}] at (4,4) (8) {8};
+      \draw[->,alert] (0) edge["a=U", bend right] (1);
+      \draw[->,alert] (1) edge["a=U", bend right] (2);
+      \draw[->] (1) edge["a=D", bend right] (0);
+      \draw[->] (2) edge["a=D", bend right] (1);
+      \draw[->,alert] (2) edge["a=R", bend right] (5);
+      \draw[->] (5) edge["a=L", bend right] (2);
+      \draw[->] (4) edge["a=U", bend right] (5);
+      \draw[->,alert] (5) edge["a=D", bend right] (4);
+      \draw[->,alert] (4) edge["a=R", bend right] (7);
+      \draw[->] (7) edge["a=L", bend right] (4);
+      \draw[->,alert] (7) edge["a=U", bend right] (8);
+      \draw[->] (3) edge["a=U", bend right] (4);
+      \draw[->] (4) edge["a=D", bend right] (3);
+      \draw[->] (0) edge["a=R", bend right] (3);
+      \draw[->,alert] (3) edge["a=L", bend right] (0);
+      \draw[->] (3) edge["a=R", bend right] (6);
+      \draw[->,alert] (6) edge["a=L", bend right] (3);
+\end{tikzpicture}
+**** Properties                                                       :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+- States: $S = \{0, \ldots, 8\}$
+- Actions: $A = \{U, D, L, R\}$.
+- Policy: $\pol : S \to A$ chooses an action in every state.
+
+|---+---|
+| S | A |
+|---+---|
+| 0 | U |
+| 1 | U |
+| 2 | R |
+| 3 | L |
+| 4 | R |
+| 5 | D |
+| 6 | L |
+| 7 | U |
+| 8 |   |
+|---+---|
+
 ** Graphs
 
 *** Graph definitions
@@ -91,14 +145,16 @@
 A graph $G$ is defined by:
 - Set of *nodes* $N$ (un sommet)
 - Set of *edges* $E$ (une arête), with $\langle x,y \rangle \in E$ and $x, y \in N$
-**** Labels and costs (/ettiquettes, coutes/)
+#+BEAMER: \pause
+**** Labels and costs/rewards (/ettiquettes, coutes/récompenses/)
 - Nodes can be labelled as e.g. start and goal *states*.
-- Arcs can be labelled according to *actions*.
+- Edges can be labelled with *actions* or *costs/rewards*
+#+BEAMER: \pause
 **** Paths and cycles (/chemins, circuits/)
-- A path $h$ from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
-  $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
-- We write $h_j$ for the $j$-th element of the path.
-- A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
+- A path $h$, from $x$ to $y$, in $N$, is a sequence: $\langle h_0, \ldots, h_k \rangle$ so that
+  $h_0 = x, h_k = y$ and $\langle h_{t}, h_{t+1} \rangle \in E$.
+- We write $h_j$ for the \(j\)-th element of the path $h$.
+- A cycle is a path $\langle h_0, \ldots, h_k \rangle$ where $h_0 = h_k$.
 - If a graph has no cycles, it is *acyclic*
 - A state with no outgoing edges to other states is *terminal*
 
@@ -121,7 +177,7 @@ A graph $G$ is defined by:
 - For an edge $(i,j) \in E$, we write $c(i, j) \in \Reals$ for its cost.
 - The total cost for a path $h = \langle x, \ldots, y \rangle$ from node $x$ to a node $y$ is
 \[
-\sum_{k=1}^{|p|-1} c(p_k, p_{k+1}), \qquad \textrm{where $|p|$ is the length of $p$}
+\sum_{k=0}^{|h|-1} c(h_k, h_{k+1}), \qquad \textrm{where $|h|$ is the length of $h$}
 \]
 
 *** Tree example
@@ -195,6 +251,9 @@ State-space graph
       \draw (1) to (4);
       \draw (4) edge [bend left] (3);
 \end{tikzpicture}
+
+The graph is *undirected* for simplicity
+
 **** Search graph                                                     :BMCOL:
      :PROPERTIES:
      :BEAMER_col: 0.5
@@ -227,25 +286,7 @@ Search graph
 
 Our search algorithm selects the oldest node in the frontier first, and actions in the order D,U,L,R. 
 
-*** State-space graphs
-- $s \in S$: *state* space
-- $a \in A$: *action* space (with $A_s \subset S$ *available* actions in state $s$)
-- $\tau: S \times A \to A$: *transition* model (deterministic)
-- When we reach a *terminal* state, we stop. 
-#+BEAMER: \pause
-**** Graph specification
-- Nodes: $S$
-- Edges from node $i$: $\{(i, \tau(i, a) | a \in A_s\}$
-#+BEAMER: \pause
-**** Problem specifications
-One or more of the following:
-- $g : S \to \{0, 1\}$: goal indicator
-- $c : S \times A \to \Reals$: step cost or constraint.
-- $r : S \times A \to \Reals$: step reward.
-#+BEAMER: \pause
-**** Solution specification
-- $\pi : S \to A$ deterministic policy
-- When problem and the policy are deterministic, the policy is *open loop*
+
 *** The search graph
 #+ATTR_BEAMER: :overlay +-
 - Node $0$ is *root* of the search graph.
@@ -265,6 +306,26 @@ At step $k = 0, 1, \ldots$:
 - Update the frontier $F_{k+1} = F_k \cup \{i + 1\} \setminus \{i\}$.
 - In the end, no more nodes can be added: $F_k = \emptyset$ and $S'_k = S'_{k+1}$
 
+
+*** State-action problem specification
+It is sometimes more convenient to specify a state-action graph.
+- $s \in S$: *state* space
+- $a \in A$: *action* space (with $A_s \subset S$ *available* actions in state $s$)
+- $\tau: S \times A \to S$: *transition* model (deterministic)
+#+BEAMER: \pause
+**** Resulting graph
+- Nodes: $S$
+- Edges from node $i$: $\{(i, \tau(i, a) | a \in A_s\}$
+#+BEAMER: \pause
+**** Problem specifications
+One or more of the following:
+- $g : S \to \{0, 1\}$: goal indicator
+- $c : S \times A \to \Reals$: step cost or constraint.
+- $r : S \times A \to \Reals$: step reward.
+#+BEAMER: \pause
+**** Solution specification
+- $\pi : S \to A$ deterministic policy
+- For deterministic problem *and* policy, the policy is *open loop*
 
 * Uninformed search
 ** Depth-first search

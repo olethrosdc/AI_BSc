@@ -108,8 +108,8 @@ $C(s) = C^*(s)$
 **** Proof
 #+ATTR_BEAMER: :overlay <+->
 - If $s \in Y$, then $C(s) = 0 = C^*(s)$.
-- For any other $s', s = \parent(s')$: we will show that:
- if $C(s') \leq C^*(s')$ then $C(s) \leq C^*(s)$.
+- For any other $s$, we will show that if $s'$ is a next state and
+  $C(s') \leq C^*(s')$ then $C(s) \leq C^*(s)$.
 \begin{align*}
 \uncover<3->{
 C(s)
@@ -139,7 +139,8 @@ C^\pi(s), \qquad \forall \pi.
 #+BEAMER: \pause
 #+BEAMER: \pause
 #+BEAMER: \pause
-For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s)$, so $C(s) \leq C^*(s)$. Finally,
+For the optimal policy $\pi^*$, $C^{\pi^*}(s) = C^*(s) \leq C^\pi(s)$ for any $\pi$. Finally,
+#+BEAMER: \pause
 \[
 C^*(s) \leq C^{\pi}(s) = C(s) \leq C^*(s),
 \]
@@ -147,14 +148,16 @@ since $C^{\pi}(s) = C(s)$ for the policy returned by the algorithm.
 *** Properties of Dijkstra's algorithm
 The properties of the algorithm depend on some details.
 
-**** Finding the shortest path from $X$ to $Y$.
-- Stops when a *goal* is found.
+**** Finding a shortest path from $X$ to $Y$.
+#+ATTR_BEAMER: :overlay <+->
+- Stops when a *starting* state is found.
 - The costs along that optimal path are correct.
 - Costs of any other state may be incorrect.
 - This is because of the greedy step in which states are searched.
 - This version is used in search and practical papers.
 
-**** Finds all optimal paths from $X$ to $Y$.
+**** Finding all optimal paths to $Y$.
+#+ATTR_BEAMER: :overlay <+->
 - Stops when  *no more updates* are possible.
 - The costs along all paths are correct.
 - This is because of the stopping condition.
@@ -162,17 +165,12 @@ The properties of the algorithm depend on some details.
 
 ** Heuristic Search
 *** Partial graphs
+#+ATTR_BEAMER: :overlay <+->
 - Why do we need search?
 - We do not want to calculate on the whole graph
 - We use *search* to find the shortest path more efficiently (perhaps).
-- We denote the total cost of some path $s_1, \ldots, s_t$ as:
-\[
-C(s_1, \ldots, s_t)
-\]
-- The remaining cost from $s_t$ to the goal using some policy $\pi$ as
-\[
-C^\pi(s_t)
-\]
+- We denote the total cost of some path $s_1, \ldots, s_t$ as: $$C(s_1, \ldots, s_t)$$
+- The remaining cost from $s_t$ to the goal using some policy $\pi$ as $$C^\pi(s_t)$$
 
 *** Generic search
 We define heuristic search in the context of shortest-path problems.

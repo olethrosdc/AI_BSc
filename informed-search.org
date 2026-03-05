@@ -232,13 +232,13 @@ C^*(n) \geq h(n).
 $A^*$ returns an optimal solution if
 #+ATTR_BEAMER: :overlay <+->
 - The graph has a bounded branching factor.
-- All costs are greater that $\epsilon > 0$
+- All costs are greater than $\epsilon > 0$
 - The heuristic is admissible, i.e. $0 \leq h(n) \leq C^*(n)$ for all $n \in N$.
 #+BEAMER: \pause
 **** Proof
 #+ATTR_BEAMER: :overlay <+->
-- *Existence*. There is a finite number of paths that will be explored, as the longest possible path to a goal is $C^*(0)/\epsilon$ and the branching factor is bounded.
-- *Optimality*. The proof is by contradiction. Let as assume that $A^*$ finds some $\pi \neq \pi^*$ so that $C(\pi) > C(\pi^*)$. That means that at some node $n$ on the path there is an action $a^*$ on the optimal policy, but we keep expanding the path $s_1, s_2, \ldots$ of $\pi$. However, since $C(\pi) > C(\pi^*)$ there must be some $t$ such that $C(n, s_1, \ldots, s_t) > C^{\pi^*}(n)$. But then, to expand $\pi$ requires that $C(n, s_1, \ldots, s_t) + h(s') < h(s) \leq C^{\pi^*}(n)$.
+- *Existence*. There is a finite number of paths that will be explored, as (a) the longest possible path to a goal is $C^*(0)/\epsilon$ and (b) the branching factor is bounded.
+- *Optimality*. The proof is by contradiction. Let as assume that $A^*$ finds some $\pi \neq \pi^*$ so that $C(\pi) > C(\pi^*)$ $\Rightarrow$ there is a node $n$ on the path where $a^*$ is optimal policy, but we instead follow $\pi$ to $s_1, s_2, \ldots$. However, since $C(\pi) > C(\pi^*)$ there must be some $t$ such that $C(n, s_1, \ldots, s_t) > C^{\pi^*}(n)$. But then, to expand $\pi$ requires that $C(n, s_1, \ldots, s_t) + h(s') < h(s) \leq C^{\pi^*}(n)$.
 
 ** Upper and lower bounds algorithms
 *** Calculating Upper and Lower Bounds

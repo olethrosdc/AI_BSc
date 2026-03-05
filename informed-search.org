@@ -57,7 +57,7 @@ C^\pi(s) \defn \sum_{i=1}^\infty c[s_{i}, \pi(s_i)], \qquad s_{i+1} = \tau[s_i, 
 where for every $y \in Y$,  $c(s, a) = 0$ and $\tau(y,a) = y$ for all actions.
 #+BEAMER: \pause
 - We can calculate this recursively:
-\begin{align}
+\begin{align*}
 C^\pi(s)
 \uncover<2->{
 & = \sum_{t=1}^\infty c[s_{t}, \pi(s_t)]\\
@@ -68,7 +68,7 @@ C^\pi(s)
 \uncover<4->{
 & = c[s, \pi(s)] + C^\pi\{\tau[s, \pi(s)]\}.
 }
-\end{align}
+\end{align*}
 #+BEAMER: \pause
 #+BEAMER: \pause
 #+BEAMER: \pause
@@ -80,10 +80,9 @@ C^*(s)
 \end{align}
 
 *** Dijkstra's shortest path algorithm: backward search
-**** Shortest path algorithm
 \begin{algorithmic}
-\STATE Input: Goal states $Y$, starting state $x$.
-\STATE Set $C(s) = 0$ for $s \in Y$, $C(s) = \infty$ for $s \notin Y$, $F_0 = Y$
+\STATE \textbf{Dijkstra($Y, x$)} \# $Y$ are goal states $Y$, $x$ is starting state.
+\STATE $C(s) = 0$ for $s \in Y$, $C(s) = \infty$ for $s \notin Y$, $F_0 = Y$
 \FOR {$t = 0, 1, \ldots$}
 \STATE $s_t = \argmin_{s \in F_t} C(s)$
 \FOR {$s \in \parent(s_t)$}
@@ -243,22 +242,26 @@ $A^*$ returns an optimal solution if
 ** Upper and lower bounds algorithms
 *** Calculating Upper and Lower Bounds
 Starting from a set of leaf nodes $S_0$
+#+BEAMER: \pause
 **** Upper bound  $U(s) \geq C^*(s)$ for $s \in S_0$
 Setting $U(0) \geq C^*(0)$ and recursing:
+#+BEAMER: \pause
 \[
 U(s) = \min_{a \in A_s} c(s,a) + U[\tau(s,a)]
 \]
+#+BEAMER: \pause
 By induction, we can prove that this is an upper bound on $C^*$:
 \[
 U(s) = \min_{a \in A_s} c(s,a) + U[\tau(s,a)]
 \geq \min_{a \in A_s} c(s,a) + C^*[\tau(s,a)]
 = C^*(s). 
 \]
-
+#+BEAMER: \pause
 **** Lower bound  $L(s) \leq C^*(s)$ for $s \in S_0$
 \[
 L(s) = \min_{a \in A_s} c(s,a) + L[\tau(s,a)]
 \]
+#+BEAMER: \pause
 Similarly, we can prove that it is a lower bound:
 \[
 L(s) = \min_{a \in A_s} c(s,a) + L[\tau(s,a)]
@@ -267,6 +270,7 @@ L(s) = \min_{a \in A_s} c(s,a) + L[\tau(s,a)]
 \]
 *** Branch and bound
 The algorithm is rather simple to describe in words.
+#+ATTR_BEAMER: :overlay <+->
 - [1] Set $s = 0$.
 - [1.1] Select action $a^*$ minimising $c(s,a) + L(\tau(s,a))$.
 - [1.2] Discard subtrees $(s,a)$ for which $c(s,a) + L(\tau(s,a)) \geq c(s,a^*) + L(\tau(s,a^*))$.
@@ -278,17 +282,18 @@ The algorithm is rather simple to describe in words.
 * General weight shortest path
 ** General weight shortest path
 *** General weight shortest path
+#+ATTR_BEAMER: :overlay <+->
 - In this problem, actions can have positive or negative costs.
 - Negative edges generate problems if we have cycles
 - However, the basic algorithmic idea is again Dynamic Programming
+#+BEAMER: \pause
 **** Bellman-Ford Algorithm
 In state-action notation, the algorithm is simply
+#+ATTR_BEAMER: :overlay <+->
 - $C_0(0) = 0$, $C_0(s) = \infty$ for all $s \neq 0$.
-- For $k \in 1, \ldots, |S| - 1$:
-\[
-\forall s \in S: C_{k}(s) = \min_a c(s,a) + C_{k-1}(\tau(s,a))
-\]
+- For $k \in 1, \ldots, |S| - 1$: \[ \forall s \in S: C_{k}(s) = \min_a c(s,a) + C_{k-1}(\tau(s,a)) \]
 - If $C_{|S|-1}(s) \neq \min_a c(s,a) + C_{|S|-1}(\tau(s,a))$ for some $s$, *error*
+#+BEAMER: \pause
 **** Difference with Dijkstra :B_alertblock:
      :PROPERTIES:
      :BEAMER_env: alertblock
@@ -299,7 +304,7 @@ In state-action notation, the algorithm is simply
 - Instead of tracking the frontier, it initialises $C$ to infinity.
 
 *** Bellman-Ford Algorithm
-
+Here is a full pseudo-code for the Bellman-Ford algorithm
 \begin{algorithmic}
 \STATE $C(0) = 0$. $C(i) = \infty$, for $i \neq 0$.
 \FOR {$n \in 1, \ldots, |S| - 1$}

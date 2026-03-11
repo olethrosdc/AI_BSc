@@ -53,7 +53,6 @@
       \draw[->] (4) edge["a=R", bend right] (7);
       \draw[->] (7) edge["a=L", bend right] (4);
       \draw[->] (7) edge["a=U", bend right] (8);
-      \draw[->] (8) edge["a=D", bend right] (7);
       \draw[->] (3) edge["a=U", bend right] (4);
       \draw[->] (4) edge["a=D", bend right] (3);
       \draw[->] (0) edge["a=R", bend right] (3);
@@ -66,9 +65,9 @@
      :BEAMER_col: 0.5
      :END:
 #+ATTR_BEAMER: :overlay +-
-- States: $S = \{0, \ldots, 8\}$
+- States (États): $S = \{0, \ldots, 8\}$
 - Actions: $A = \{U, D, L, R\}$.
-- Policy: $\pol : S \to A$ chooses an action in every state.
+- Policy (Politique): $\pol : S \to A$ chooses an action in every state.
 #+BEAMER: \pause
 |---+---|
 | S | A |
@@ -84,6 +83,61 @@
 | 8 |   |
 |---+---|
 
+*** A gridworld-maze solution
+**** Graph
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+\begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
+      \node[RV,label=below:{\alert{start}}] at (0,0) (0) {0};
+      \node[RV] at (0,2) (1) {1};
+      \node[RV] at (0,4) (2) {2};
+      \node[RV] at (2,0) (3) {3};
+      \node[RV] at (2,2) (4) {4};
+      \node[RV] at (2,4) (5) {5};
+      \node[RV] at (4,0) (6) {6};
+      \node[RV] at (4,2) (7) {7};
+      \node[RV,label=above:{\alert{goal}}] at (4,4) (8) {8};
+      \draw[->,alert] (0) edge["a=U", bend right] (1);
+      \draw[->,alert] (1) edge["a=U", bend right] (2);
+      \draw[->] (1) edge["a=D", bend right] (0);
+      \draw[->] (2) edge["a=D", bend right] (1);
+      \draw[->,alert] (2) edge["a=R", bend right] (5);
+      \draw[->] (5) edge["a=L", bend right] (2);
+      \draw[->] (4) edge["a=U", bend right] (5);
+      \draw[->,alert] (5) edge["a=D", bend right] (4);
+      \draw[->,alert] (4) edge["a=R", bend right] (7);
+      \draw[->] (7) edge["a=L", bend right] (4);
+      \draw[->,alert] (7) edge["a=U", bend right] (8);
+      \draw[->] (3) edge["a=U", bend right] (4);
+      \draw[->] (4) edge["a=D", bend right] (3);
+      \draw[->] (0) edge["a=R", bend right] (3);
+      \draw[->,alert] (3) edge["a=L", bend right] (0);
+      \draw[->] (3) edge["a=R", bend right] (6);
+      \draw[->,alert] (6) edge["a=L", bend right] (3);
+\end{tikzpicture}
+**** Properties                                                       :BMCOL:
+     :PROPERTIES:
+     :BEAMER_col: 0.5
+     :END:
+- States: $S = \{0, \ldots, 8\}$
+- Actions: $A = \{U, D, L, R\}$.
+- Policy: $\pol : S \to A$ chooses an action in every state.
+
+|---+---|
+| S | A |
+|---+---|
+| 0 | U |
+| 1 | U |
+| 2 | R |
+| 3 | L |
+| 4 | R |
+| 5 | D |
+| 6 | L |
+| 7 | U |
+| 8 |   |
+|---+---|
+
 ** Graphs
 
 *** Graph definitions
@@ -91,14 +145,16 @@
 A graph $G$ is defined by:
 - Set of *nodes* $N$ (un sommet)
 - Set of *edges* $E$ (une arête), with $\langle x,y \rangle \in E$ and $x, y \in N$
-**** Labels and costs (/ettiquettes, coutes/)
+#+BEAMER: \pause
+**** Labels and costs/rewards (/ettiquettes, coutes/récompenses/)
 - Nodes can be labelled as e.g. start and goal *states*.
-- Arcs can be labelled according to *actions*.
+- Edges can be labelled with *actions* or *costs/rewards*
+#+BEAMER: \pause
 **** Paths and cycles (/chemins, circuits/)
-- A path $h$ from $x$ to $y$ in $N$ is a sequence $\langle n_0, \ldots, n_k \rangle$ so that
-  $n_0 = x, n_k = y$ and $\langle n_{t}, n_{t+1} \rangle \in A$.
-- We write $h_j$ for the $j$-th element of the path.
-- A cycle is a path $\langle n_0, \ldots, n_k \rangle$ where $n_0 = n_k$.
+- A path $h$, from $x$ to $y$, in $N$, is a sequence: $\langle h_0, \ldots, h_k \rangle$ so that
+  $h_0 = x, h_k = y$ and $\langle h_{t}, h_{t+1} \rangle \in E$.
+- We write $h_j$ for the \(j\)-th element of the path $h$.
+- A cycle is a path $\langle h_0, \ldots, h_k \rangle$ where $h_0 = h_k$.
 - If a graph has no cycles, it is *acyclic*
 - A state with no outgoing edges to other states is *terminal*
 
@@ -121,7 +177,7 @@ A graph $G$ is defined by:
 - For an edge $(i,j) \in E$, we write $c(i, j) \in \Reals$ for its cost.
 - The total cost for a path $h = \langle x, \ldots, y \rangle$ from node $x$ to a node $y$ is
 \[
-\sum_{k=1}^{|p|-1} c(p_k, p_{k+1}), \qquad \textrm{where $|p|$ is the length of $p$}
+\sum_{k=0}^{|h|-1} c(h_k, h_{k+1}), \qquad \textrm{where $|h|$ is the length of $h$}
 \]
 
 *** Tree example
@@ -181,20 +237,22 @@ A graph $G$ is defined by:
      :BEAMER_col: 0.5
      :END:
 State-space graph
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=1.5]
       \node[RV] at (0,0) (0) {0};
       \node[RV] at (1,0) (1) {1};
       \node[RV] at (2,0) (2) {2};
       \node[RV] at (3,0) (3) {3};
       \node[RV] at (1,1) (4) {4};
       \node[RV] at (1,-1) (5) {5};
-      \draw (0) to (1);
-      \draw (1) to (2);
-      \draw (2) to (3);
-      \draw (1) to (5);
-      \draw (1) to (4);
-      \draw (4) edge [bend left] (3);
+      \draw[->] (0) edge["R"] (1);
+      \draw[->] (1) edge["R"] (2);
+      \draw[->] (2) edge["R"] (3);
+      \draw[->] (1) edge["D"] (5);
+      \draw[<->] (1) edge["U/D"] (4);
+      \draw[->] (4) edge ["R", bend left] (3);
 \end{tikzpicture}
+
+
 **** Search graph                                                     :BMCOL:
      :PROPERTIES:
      :BEAMER_col: 0.5
@@ -202,13 +260,23 @@ State-space graph
 Search graph
 
 \begin{tikzpicture}
+\only<1>{
 	\node[RV] at (0,0) (0) {0};
+}
+\only<2->{
+	\node[RV,hidden] at (0,0) (0) {0};
+}
 	\uncover<2->{
+\only<2-4>{
 	\node[RV] at (1,0) (1) {1};
+}
+\only<5->{
+	\node[RV,hidden] at (1,0) (1) {1};
+}
 	\draw[->] (0) to (1);
 	}
 	\uncover<3->{
-	\node at (2,0) (5) {5};
+	\node[RV, hidden] at (2,0) (5) {5};
 	\draw[->] (1) to (5);
 	}		
 	\uncover<4->{
@@ -216,24 +284,29 @@ Search graph
 	\draw[->] (1) to (4);
 	}		
 	\uncover<5->{
-	\node at (3,1) (4-1) {1};
-	\draw[->] (4) to (4-1);
-	}	
+	\node[RV] at (2,2) (2) {2};
+	\draw[->] (1) to (2);
+	}
 	\uncover<6->{
-	\node[RV] at (3,2) (3) {\alert{3}};
+	\node[RV, hidden] at (3,1) (4-1) {1};
+	\draw[->] (4) to (4-1);
+	}
+	\uncover<7->{
+	\node[RV] at (3,2) (3) {3};
 	\draw[->] (4) to (3);
 	}	
 \end{tikzpicture}
 
-Our search algorithm selects the oldest node in the frontier first, and actions in the order D,U,L,R. 
+Our search algorithm selects the *oldest* node in the frontier first, and actions in the order D,U,L,R. 
 
-*** State-space graphs
+
+*** State-action problem specification
+It is sometimes more convenient to specify a state-action graph.
 - $s \in S$: *state* space
 - $a \in A$: *action* space (with $A_s \subset S$ *available* actions in state $s$)
-- $\tau: S \times A \to A$: *transition* model (deterministic)
-- When we reach a *terminal* state, we stop. 
+- $\tau: S \times A \to S$: *transition* model (deterministic)
 #+BEAMER: \pause
-**** Graph specification
+**** Resulting graph
 - Nodes: $S$
 - Edges from node $i$: $\{(i, \tau(i, a) | a \in A_s\}$
 #+BEAMER: \pause
@@ -245,10 +318,12 @@ One or more of the following:
 #+BEAMER: \pause
 **** Solution specification
 - $\pi : S \to A$ deterministic policy
-- When problem and the policy are deterministic, the policy is *open loop*
-*** The search graph
+- For deterministic problem *and* policy, the policy is *open loop*
+
+
+*** The search graph $S'$.
 #+ATTR_BEAMER: :overlay +-
-- Node $0$ is *root* of the search graph.
+- Node $0$ is *root* of the search graph $S'$.
 - Each node $i \in S'$ corresponds to a state $s^i \in S$.
 - It also corresponds to a  *path* $s^0, \ldots, \parent(\parent(s^i)), \parent(s^i), s^{i}$.
 - Node depth: $d_i = 1 + d_{\parent(i)}$, with $d_0 = 0$.
@@ -258,12 +333,14 @@ Set $F_0 = \{0\}$ and set of searched nodes $S'_0 = \emptyset$.
 
 At step $k = 0, 1, \ldots$:
 #+ATTR_BEAMER: :overlay +-
-- The frontier is $F_k$, and searched nodes $S'_k$.
-- Select a node $i$, where $s^i \notin S'_k$.
-- We select action $a$ in node $i$, and observe $s' = \tau(s^i, a)$.
-- $i + 1$ is now a child of $i$, with $s^{i+1} = s'$.
-- Update the frontier $F_{k+1} = F_k \cup \{i + 1\} \setminus \{i\}$.
+- The frontier is $F_k$, and searched states $S'_k$.
+- Select a node $i$, where $s^i \in F _k$.
+- *state-action* model: select action $a$ in node $i$, and set $s' = \tau(s^i, a)$.
+- *node-edge* model: select edge $(s^i, j)$ in node $i$, and set $s' = j$.
+- $i + 1$ is now a child of $i$ [$i + 1 \in \child(i)$], with $s^{i+1} = s'$.
+- Update the frontier $F_{k+1} = F_k \cup \{i + 1\} \setminus \{i\}$ and searched $S'_{k+1} = S'_k \cup \{i\}$.
 - In the end, no more nodes can be added: $F_k = \emptyset$ and $S'_k = S'_{k+1}$
+
 
 
 * Uninformed search
@@ -281,12 +358,12 @@ State-space graph
       \node[RV] at (3,0) (3) {3};
       \node[RV] at (1,1) (4) {4};
       \node[RV] at (1,-1) (5) {5};
-      \draw (0) to (1);
-      \draw (1) to (2);
-      \draw (2) to (3);
-      \draw (1) to (5);
-      \draw (1) to (4);
-      \draw (4) edge [bend left] (3);
+      \draw[->] (0) to (1);
+      \draw[->] (1) to (2);
+      \draw[->] (2) to (3);
+      \draw[->] (1) to (5);
+      \draw[->] (1) to (4);
+      \draw[->] (4) edge [bend left] (3);
 \end{tikzpicture}
 **** Search graph                                                     :BMCOL:
      :PROPERTIES:
@@ -306,7 +383,7 @@ Search graph
 	}		
 	\uncover<4->{
 	\node[RV] at (2,1) (4) {4};
-	\draw[->] (1) to (4);
+	\draw[<->] (1) to (4);
 	}		
 	\uncover<5->{
 	\node at (3,1) (4-1) {1};
@@ -355,12 +432,12 @@ State-space graph
       \node[RV] at (3,0) (3) {3};
       \node[RV] at (1,1) (4) {4};
       \node[RV] at (1,-1) (5) {5};
-      \draw (0) to (1);
-      \draw (1) to (2);
-      \draw (2) to (3);
-      \draw (1) to (5);
-      \draw (1) to (4);
-      \draw (4) edge [bend left] (3);
+      \draw[->] (0) to (1);
+      \draw[->] (1) to (2);
+      \draw[->] (2) to (3);
+      \draw[->] (1) to (5);
+      \draw[->] (1) to (4);
+      \draw[->] (4) edge [bend left] (3);
 \end{tikzpicture}
 **** Search graph                                                     :BMCOL:
      :PROPERTIES:
@@ -472,7 +549,7 @@ Note that BFS always adds the minimum depth node. We can instead add the minimum
 \STATE $n = \argmin_{f \in F} c_f$. Select minimum cost node.
 \STATE $F = F \setminus \{n\}$. Remove $n$ from the frontier.
 \IF {$n \notin S'$}
-\STATE $B = \{i \in \child(n) : i \noin \anc{n}\}. Get the set of unsearched children of $n$.
+\STATE $B = \{i \in \child(n) : i \notin \anc(n)\}$. Get the set of unsearched children of $n$.
 \STATE $\forall b \in B$, $b_i = c_n + c(n,b)$. Calculate the total cost to each child $b$.
 \STATE $S' = S' \cup \{n\}$. Add $n$ to the list of searched nodes.
 \STATE $F = F \cup B$. Add $n$'s children to the frontier.

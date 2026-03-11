@@ -343,7 +343,7 @@ Example worlds:
 | Graph Colouring         |  20 |
 | Meeting Scheduling      |  20 |
 |-------------------------+-----|
-| onstraint Optimisation  |  20 |
+| Constraint Optimisation |  20 |
 | Travelling Salesman     |  20 |
 | Maximum Flow            |  20 |
 |-------------------------+-----|

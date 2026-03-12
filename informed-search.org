@@ -1,4 +1,4 @@
-#+TITLE: Informed search
+#+TITLE: Shortest Path Problems and Informed search
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \input{preamble}
@@ -180,7 +180,7 @@ We now consider a general method for searching a node in the frontier.
 \STATE \textbf{input} $G = \langle N, E \rangle$: Graph.
 \STATE \textbf{input} $f : N \to \Reals$: evaluation function.
 \STATE \textbf{input} $x$ : Start node
-\STATE \textbf{function} \texttt{Heuristic Search}($G, x, h$)
+\STATE \textbf{function} \texttt{Heuristic Search}($G, x, f$)
 \STATE $S' = \emptyset$ : Nodes searched.
 \STATE $F = \{x\}$. Initialise the frontier
 \STATE $c_x = 0$. Initialise the cost of node $x$

@@ -297,16 +297,16 @@ which then denotes the probability msas of each
      :BEAMER_col: 0.5
      :END:
 - $P(C)$: Probability of  event $C$ 
+- $P(A | B)$: Probability of the event $A$ if we know $B$
 - $P(A \cap B)$: Probability of $A$ and $B$ 
-- $P(A | B)$: Probability of the event $A$ if we know $B$ 
 - $P(A \cup B)$: Probability of $A$ or $B$
 **** Stat                                                             :BMCOL:
      :PROPERTIES:
      :BEAMER_col: 0.5
      :END:
 - $P(x)$:  distribution of variable $x$. 
-- $P(x, y)$: joint distribution of $x, y$
 - $P(x | y)$:  distribution of $x$ for different  values of $y$
+- $P(x, y)$: joint distribution of $x, y$
 - No correspondence.
 
 *** Example: The k-meteorologists problem (set notation)

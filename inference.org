@@ -109,9 +109,9 @@ In particular, you each get two hidden cards, and each combination has a given p
 |--------+-------+-------|
 | Card 1 | Car 2 | Prob. |
 |--------+-------+-------|
-| *R*    | *R*   |       |
-| *R*    | B     |       |
-| B      | B     |       |
+| *R*    | *R*   |  10   |
+| *R*    | B     |  10   |
+| B      | B     |  10   |
 |--------+-------+-------|
 
 #+BEAMER: \pause
@@ -119,14 +119,14 @@ If everybody opens *one* card, what is the proportion of cards that are going to
 
 #+BEAMER: \pause
 Let's count!
-|------+--------+-------|
-| Open | Closed | Prob. |
-|------+--------+-------|
-| *R*  | *R*    |       |
-| *R*  | B      |       |
-| B    | *R*    |       |
-| B    | B      |       |
-|------+--------+-------|
+|------+--------+-----+--------------------|
+| Open | Closed | Pr. | $Pr(R \mid Open )$ |
+|------+--------+-----+--------------------|
+| *R*  | *R*    |  10 |                    |
+| *R*  | B      |   5 |                    |
+| B    | *R*    |   5 |                    |
+| B    | B      |  10 |                    |
+|------+--------+-----+--------------------|
 
 
 

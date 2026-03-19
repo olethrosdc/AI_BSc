@@ -11,14 +11,14 @@
 ** General optimisation problems
 *** Optimisation on graphs
 **** Discrete optimisation
-- Shortest path.
-- Meeting scheduling.
+- *Shortest path*.
+- *Meeting scheduling*.
 - Travelling salesman.
-- Graph colouring.
+- *Graph colouring*.
 - Bipartite matching.
 - Spanning trees.
 **** Continuous optimisation
-- Linear programming.
+- *Linear programming* .
 - Maximum flow / minimum-cost flow.
 
 * Constraint optimisation
@@ -26,13 +26,15 @@
 *** Constrained Problems
 #+TOC: headlines [currentsection]
 ** Constraint Satisfaction
-*** Constrained Satisfaction Problems
+*** Constraint Satisfaction Problems (CSP) with *binary* constraints
 **** Variables
 - A set of variables $\{x_1, \ldots, x_n\} \in X$
-- Each variable can take values in $x_i \in X_i$ (it's *domain*)
+- Each variable can take values in $x_i \in X_i$ (its *domain*)
+#+BEAMER: \pause
 **** Binary constraints
 - $c_{i,j} : X_i \times X_j \to \{0, 1\}$.
-- A constraint $c_{ij}(x_i)$ is violated when it has the value $1$.
+- A constraint $c_{ij}(x_i, x_j)$ is *violated* when it has the value $1$.
+#+BEAMER: \pause
 **** Graph representation
 \begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
       \node[RV] at (0,0) (1) {$x_1$};
@@ -44,7 +46,8 @@
       \draw[->] (3) edge["$x_3 = x_1$"] (1);
       \draw[->] (4) edge["$x_4 = x_1$"] (1);	
 \end{tikzpicture}
-- Goal: Find $x \in \prod_i X_i$ so that $c = 0$.
+#+BEAMER: \pause
+- *Goal*: Find $x \in \prod_i X_i$ so that $c = 0$.
 *** Example: Graph colouring
 - For any neighbouring nodes $i,j$ on the graph, $c_{ij} = \ind{x_i = x_j}$.
 \begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
@@ -66,11 +69,17 @@
       \draw[->] (4) edge["$x_4 = x_1$"] (1);	
 \end{tikzpicture}
 
-*** General constraints
-**** Example: Meeting scheduling
+*** CSP with general constraints
+**** Example: Meeting scheduling                             :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
 - Let $x_1, x_2, x_3$ be the time three people decide to go to a meeting.
 - They can only meet if $x_1 = x_2$ and $x_2 = x_3$ and $x_3 = x_1$
 - Instead of 3 binary constraints, use one constraint: $c = \ind{\neg(x_1 = x_2 = x_3)}$.
+**** General constraints
+- Each constraint $c_i$ is linked to a set $S_i \subset X$ of variables.
+- This can be represented graphically with links from the constraint to those variables.
 **** Graph representation
 \begin{tikzpicture}[every edge quotes/.style = {auto, font=\footnotesize, sloped}]
       \node[RV] at (0,0) (1) {$x_1$};
@@ -81,48 +90,61 @@
       \draw[-] (2) -- (c);
       \draw[-] (3) -- (c);
 \end{tikzpicture}
-Here the constraint $c$ is linked to all variables it affects.
-
-**** Example: Sudoku
-Constraints exist between (a) all numbers in a square (b) all numbers in a row (c) all numbers in a column.
 
 
-** Constrained Optimisation Problemss 
-*** Constrained optimisation Problems
+
+
+** Constrained optimisation problems
+*** Constrained optimisation problems (COP)
 **** Variables
-- A set of variables $\{x_1, \ldots, x_n\}$
+- A set of variables $\{x_1, \ldots, x_n\} \in X$
 - Each variable can take values in $x \in X_i$, with $X \in \prod_i X_i$.
-**** Binary constraints
-- $c_{i,j} : X_i \times X_j \to \{0, 1\}$.
-**** Objective function
-- Maximise $u: X \to \Reals$.
+**** General constraints
+- $c_{i} : X \to \{0, 1\}$, with $S_i \subset X$, $i \in [m]$.
+**** Objective 
+- Maximise $u: X \to \Reals$,
+- s.t. (such that) $c_i(X) = 0$ for all $i \in [m]$.
 **** Special cases:
-- $u(X) = \sum_i u_i(x_i)$
-- $u(X) = \sum_{ij} u_{ij}(x_i, x_j)$
-*** Network Flow
+- Linear utility over nodes: $u(X) = \sum_i u_i(x_i)$
+- Linear utility over edges: $u(X) = \sum_{ij} u_{ij}(x_i, x_j)$
+*** Example: Network Flow
 - Graph $G = (N, E)$, $s, t \in N$ being the source and sink.
 - Edge capacity $c : E \to \Reals_+$
-**** Flow $f : E \to \Reals$
+**** Flow $x : E \to \Reals$
 The total flow from source to sink is
-\[|f| = \sum_{(s,i) \in E} f_{si}  = \sum_{(j,t) \in E} f_{jt}\]
+\[|x| = \sum_{(s,i) \in E} x_{si}  = \sum_{(j,t) \in E} x_{jt}\]
 **** Flow constraints
 The flow satisfies the following constraints:
-- Capacity constraint: $f_{ij} \leq c_{ij}$
+- Capacity constraint: $x_{ij} \leq c_{ij}$
 - Conservation of flows:
 \[
 \forall n \in N \setminus \{s, t\}  
-\sum_{i : (i,j) \in E, f_{ij} > 0} f_ij
+\sum_{i : (i,j) \in E, x_{ij} > 0} x_{ij}
 =
-\sum_{j : (i,j) \in E, f_{ji} > 0} f_ji.
+\sum_{j : (i,j) \in E, x_{ji} > 0} x_{ji}.
 \]
 **** The maximum network flow problem
-Maximise $|f|$ while satisfying the capacity and conservation constraints.
+Maximise $|x|$ while satisfying the capacity and conservation constraints.
 
 ** Algorithms
 *** Naive search
-- Order variables $x_1, \ldots, x_n$.
-- At step $t = 1, \ldots, n$
-- Choose $x_t : $ such that the constraint is satisfied.
+- Set all variables to unassigned
+- Go linearly over the variables
+- Set the current variable to a value that does not violate constraints linked to its predecessors, and then search the next variable.
+- If this is not possible, go to the previous variable again.
+- The algorithm can be seen as a tree search (to be done on the board).
+- The algorithm is guaranteed to complete given sufficient time.
+  
+*** Local search
+- Choose a variable arbitrarily.
+- Select a value for the variable that reduces the number of constraint violations
+- This algorithm may get stuck.
+  
+**** Randomised local search
+- The randomised version of the algorithm chooses a value for each variable with decreasing probability for the number of constraint violations.
+- The algorithm has a positive probability of completion.
+  
+  
 * Logical constraints
 ** Logic 
 
@@ -268,8 +290,8 @@ Precedence: $\neg, \wedge, \vee, \Rightarrow, \Leftrightarrow$
 
 *** Set theory semantics of propositional logic
 **** Atoms as sets 
-- Let $\Omega$ be the universal set.
-- Any atom $A$ is a subset of $\Omega$.
+- Let $\Omega$ be the universe.
+- Any atom $A$ corresponds to a subset of $\Omega$.
 - Any model $\omega$ is an element of $\Omega$.
 **** For any model $\omega$:
 - $\neg P$ is true iff $P$ is false in $\omega$.

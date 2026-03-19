@@ -2,6 +2,7 @@
 #+AUTHOR: Christos Dimitrakakis
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \input{preamble}
+#+LaTeX_HEADER: \usepackage{fdsymbol}
 #+LaTeX_CLASS_OPTIONS: [smaller]
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
@@ -48,16 +49,16 @@ In addition
 - When something happens, we observe an  element $\omega \in \Omega$.
 **** Events in the universe
 - An event is true if $\omega \in A$, and false if $\omega \notin A$.
-- The negative event $\neg A = \Omega \setminus A$ is the set
-- The possible events are a collection of subsets $\Sigma$ of $\Omega$ so that
-(i) $\Omega \in \Sigma$, (ii) $A, B \in \Sigma \Rightarrow A \cup B in \Sigma$ (iii) $A \in \Sigma \Rightarrow \neg A \in \Sigma$
+- The negative event $\neg A = \Omega \setminus A$ is the set $\{\omega \in \Omega \wedge \omega \notin A$.
+- The *possible events* are a *collection* of subsets $\Sigma$ of $\Omega$ so that
+(i) $\Omega \in \Sigma$, (ii) $A, B \in \Sigma \Rightarrow A \cup B \in \Sigma$ (iii) $A \in \Sigma \Rightarrow \neg A \in \Sigma$
 **** Example: Traffic violation
 - A car is moving with speed $\omega \in [0,\infty)$ in front of the speed camera.
 - $A_0 = [0,50]$: below the speed limit
 - $A_1 = (50,60]$: low fine
 - $A_2 = (60,\infty]$: high fine
 - $A_3 = (100, \infty)$: Suspension of license
-- All combinations of the above events are interesting.
+All combinations of the above events are interesting.
 *** Probability fundamentals
 
 **** Probability measure $P$
@@ -97,6 +98,37 @@ collection of probability distributions:
 \]
 where $\Param$ is indexing possible values of $\theta$.
 -  $\theta$ is sometimes called the *model* or *parameter*
+
+*** Conditional probability game
+**** Cards
+You are each given a pair of cards. Each card is either black (\spadesuit, \clubsuit) or red (*\vardiamondsuit*, *\varheartsuit*).
+
+#+BEAMER: \pause
+In particular, you each get two hidden cards, and each combination has a given probability. Keep the cards face down for now. [FILL]
+
+|--------+-------+-------|
+| Card 1 | Car 2 | Prob. |
+|--------+-------+-------|
+| *R*    | *R*   |       |
+| *R*    | B     |       |
+| B      | B     |       |
+|--------+-------+-------|
+
+#+BEAMER: \pause
+If everybody opens *one* card, what is the proportion of cards that are going to be *Red*?
+
+#+BEAMER: \pause
+Let's count!
+|------+--------+-------|
+| Open | Closed | Prob. |
+|------+--------+-------|
+| *R*  | *R*    |       |
+| *R*  | B      |       |
+| B    | *R*    |       |
+| B    | B      |       |
+|------+--------+-------|
+
+
 
 *** The theorem of Bayes
 **** Bayes's theorem

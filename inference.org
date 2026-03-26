@@ -80,7 +80,7 @@ P(B) = \sum_{i = 1}^n P(B \cap A_i).
 
 ** Conditional probability and independence
 *** Conditional probability
-**** Conditional probability
+**** Conditional probability :B_definition:
     :PROPERTIES:
     :BEAMER_env: definition
     :END:
@@ -89,7 +89,7 @@ The conditional probability of an event $A$ given an event $B$ is defined as
 P(A | B) \defn \frac{P(A \cap B)}{P(B)}
 \]
 The above definition requires $P(B)$ to exist and be positive.
-
+#+BEAMER: \pause
 **** Conditional probabilities as a collection of probabilities
 More generally, we can define conditional probabilities as simply a
 collection of probability distributions:
@@ -97,65 +97,103 @@ collection of probability distributions:
 \{P_\param : \theta \in \Param\},
 \]
 where $\Param$ is indexing possible values of $\theta$.
--  $\theta$ is sometimes called the *model* or *parameter*
+- $\theta$ is sometimes called the *model* or *parameter*
+- $P_\param$ is sometimes called the *likelihood*
+  
+*** Independence
+**** Independence                                              :B_definition:
+:PROPERTIES:
+:BEAMER_env: definition
+:END:
+$A, B$ are independent if
+- $P(A | B) = P(A)$
+- or equivalently $P(A \cap B) = P(A) P(B)$.
+This means that knowing $B$ does not tell us anything about $A$ and vice-versa.
+**** Conditional Independence                                  :B_definition:
+:PROPERTIES:
+:BEAMER_env: definition
+:END:
+$A, B$ are *conditionally* independent *given $C$* if
+- $P(A | B, C) = P(A | C)$
+- or equivalently $P(A \cap B \mid C) = P(A | C) P(B | C)$.
+This means that knowing $B$ does not tell us anything about $A$ and vice-versa.
+
+
 
 *** Conditional probability game
-**** Cards
-You are each given a pair of cards. Each card is either black (\spadesuit, \clubsuit) or red (*\vardiamondsuit*, *\varheartsuit*).
-
+You are each given a pair of cards, either black (\spadesuit, \clubsuit) or red (*\vardiamondsuit*, *\varheartsuit*).
 #+BEAMER: \pause
-In particular, you each get two hidden cards, and each combination has a given probability. Keep the cards face down for now. [FILL]
-
+Keep the cards face down for now. 
 |--------+-------+-------|
 | Card 1 | Car 2 | Prob. |
 |--------+-------+-------|
-| *R*    | *R*   |  10   |
-| *R*    | B     |  10   |
-| B      | B     |  10   |
+| *R*    | *R*   |  1/3  |
+| *R*    | B     |  1/3  |
+| B      | B     |  1/3  |
 |--------+-------+-------|
-
 #+BEAMER: \pause
 If everybody opens *one* card, what is the proportion of cards that are going to be *Red*?
-
 #+BEAMER: \pause
-Let's count!
 |------+--------+-----+--------------------|
 | Open | Closed | Pr. | $Pr(R \mid Open )$ |
 |------+--------+-----+--------------------|
-| *R*  | *R*    |  10 |                    |
-| *R*  | B      |   5 |                    |
-| B    | *R*    |   5 |                    |
-| B    | B      |  10 |                    |
+| *R*  | *R*    | 2/6 | $2/6 \times 3/1    |
+| *R*  | B      | 1/3 |                    |
+| B    | *R*    | 1/3 |                    |
+| B    | B      | 2/6 |                    |
 |------+--------+-----+--------------------|
 
-
-
+#+BEAMER: \pause
+**** Calculation from conditional probability
+P(R_2|R_1) = P(R_2 \cap R_1) / P(R_2)
 *** The theorem of Bayes
 **** Bayes's theorem
     :PROPERTIES:
     :BEAMER_env: theorem
     :END:
 \[
-P(A | B) = \frac{P(B | A) P(A)}{P(B)} 
+P(A | B) = \frac{P(B | A) P(A)}{P(B)},
+\qquad
+P(B) = P(B | A) P(A) + P(B | \neg A) P( \neg A)
 \]
 #+BEAMER: \pause
+\begin{proof}
+By definition of conditional probability:
+\begin{align*}
+\alert<2>{P(B | A)} &\alert<2>{= \frac{P(A \cap B)}{P(A)}}
+\Rightarrow
+\alert<3,5>{P(A \cap B)} = \alert<4,6>{P(B | A) P(A)}\\
+P(A | B) &= \frac{\alert<3>{P(A \cap B)}}{P(B)}
+\Rightarrow
+ P(A | B) =  \frac{\alert<4>{P(B | A) P(A)}}{P(B)}
+\end{align*}
+By marginalisation:
+\[
+P(B) = \alert<5>{P(B \cap A)} + P(B \cap \neg A)
+ = \alert<6>{P(B | A) P(A)} + P(B | \neg A) P(\neg A).
+\]
+\end{proof}
 
-**** The general case
+
+
+*** Bayes's theorem: the general case
 If $A_1, \ldots, A_n$ are a partition of $\Omega$, meaning that they
 are mutually exclusive events (i.e. $A_i \cap A_j = \emptyset$ for $i
 \neq j$) such that one of them must be true (i.e. $\bigcup_{i=1}^n A_i =
 \Omega$), then
+#+BEAMER: \pause
 \[
 P(B) = \sum_{i=1}^n P(B | A_i) P(A_i)
 \]
-and 
+#+BEAMER: \pause
+and
 \[
 P(A_j | B) = \frac{P(B | A_j)}{\sum_{i=1}^n P(B | A_i) P(A_i)}
 \]
 
 ** Posterior distributions and model estimation
 *** Bayes's theorem
-**** As a conditional measure
+**** As a conditional probability
 \[
 P(A \mid B)
 = 
@@ -171,18 +209,17 @@ P(A \mid B)
 = 
 \frac{\Pr(\textrm{effect} \mid \textrm{cause}) \Pr(\textrm{cause})}{\Pr(\textrm{effect})}
 \]
-#+BEAMER: \pause
-**** As model inference
-- Prior $\bel(\param)$
-- Model class $\{P_\param(\bel) : \param \in \Param\}$
-- Data $x$
-\[
-\bel(\param \mid x)
-= 
-\frac{P_\param(x) \bel(\param)}{\Pr_\bel(x)}
-= 
-\frac{P_\param(x) \bel(x)}{\sum_{\param' \in \Param} P_{\param'}(x) \bel(\param')}
-\]
+
+*** As model inference
+- Model family: $\{P_\param : \param \in \Param\}$.
+- Parameter: $\param \in \Param$.
+- Prior: $\bel(\param)$.
+- Data: $x$, sampled from  $P_{\theta^*}$.
+- Likelihood: $\{P_\param(x) : \param \in \Param\}$ (in model family)
+- Posterior:
+  \[
+  \bel(\param \mid x) = \frac{P_\param(x) \bel(x)}{\sum_{\param' \in \Param} P_{\param'}(x) \bel(\param')}
+  \]
 
 *** Example: COVID symptoms
 **** Activity (with playing cards or dice)
@@ -209,15 +246,45 @@ P(C | S) = \frac{P(S | C) P(C)}{P(S | C) P(C) + P(S | \neg C) P( \neg C)}
 ** Random variables, expectation and variance
 *** Random variables
 A random variable $f : \Omega \to \Reals$ is a real-valued *function*, with $\omega \sim P$.
+#+BEAMER: \pause
+**** Uniform distribution                                      :B_definition:
+:PROPERTIES:
+:BEAMER_env: definition
+:END:
+$P$ is a uniform distribution on $\Omega$ $\Leftrightarrow$ $P(A)= |A|/|\Omega|$  $\forall A \subset \Omega$.\footnote{Formally, for $A$ in a $\sigma$-algebra.}
+**** Bernoulli distribution                                  :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+If $f(\omega) = \begin{cases} 1, &\omega \leq \theta\\ 0, &\omega \geq \theta\end{cases}$,
+with $P$ uniform on $\Omega$, then we say that $f$ is Bernoulli distributed with parameter $\theta$ and write
+\[
+f \mid \theta \sim \Ber(\theta)
+\]
+#+BEAMER: \pause
+**** Exponential distribution                                :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+If $f(\omega) = $\frac{\ln (\omega)}{\lambda}$ and $\omega$ is uniform
+*** Distributions of random variables
 **** The distribution of $f$
 The probability that $f$ lies in some subset $A \subset \Reals$ is
 \[
 P_f(A) \defn P(\{\omega \in \Omega : f(\omega) \in A\}),
 \]
-and we write $f \sim P_f$. 
+and we write $f \sim P_f$.
+#+BEAMER: \pause
+**** The density of $f$
+When $f$ takes an infinite number of values, it is easier to talk about the *density $p_f$*, which is linked with the probability through integration:
+\[
+P_f(A) \defn \int_A p_f(x) \, dx.
+\]
+#+BEAMER: \pause
 **** Shorthands for RV
 - For RVs $f : \Omega \to \Reals$, we write $P(f \in A)$ to mean $P_f(A)$.
-- For RVs $f : \Omega \to X$, where $X$ is a finite set e.g. $\{1, 2, \ldots, n\}$, we write $P(f = x) = P_f(\{x\})$ for any $x \in X$.
+- For RVs $f : \Omega \to X$, where $X$ is a finite set e.g. $\{1, 2, \ldots, n\}$, we write $P(f = x) = P_f(\{x\})$ for any $x \in X$, or even $P(f)$.
+- For continuous RVs $f : \Omega \to \Reals$, we use densities as  $p_f(x)$.
 *** Independence of random variables
 
 Two RVs $f,g$ are independent in the same way that events are independent. 
@@ -242,8 +309,9 @@ For any real-valued random variable $f: \Omega \to \Reals$, the expectation with
 \[
 \E_P(f) = \sum_{\omega \in \Omega} f(\omega) P(\omega).
 \]
+#+BEAMER:\pause
 **** Continuous probability space
-When $\Omega$ is continuous, we define the probability $P(A)$ of any subset $A \subset \Omega$ through a *probability density $p$:
+When $\Omega$ is continuous, we define the probability $P(A)$ of any subset $A \subset \Omega$ through a *probability density $p$*:
 \[
 P(A) = \int_A p(\omega) d\omega.
 \]
@@ -256,10 +324,10 @@ We can then define the expectation through the density:
 *** Properties of expectations
 **** The law of the unconscious statistician
 If $x : \Omega \to X$, with $X \subset \Reals$, and $\omega \sim P$,
-we can say that $x \sim P_x$, with
-$P_x(k) = P(\{\omega : x(\omega) = k\})$.
+we can say that $k \sim P_x$, with
+$P_f(A) = P(\{\omega : f(\omega) \in A\})$.
 \[
-E_P(x) = \sum_{\omega \in \Omega} x(\omega) P_x(x) = \sum_{k \in X} k P_x(k).
+\E_P(f) = \sum_{\omega \in \Omega} f(\omega) P(\omega) = \sum_{k \in X} k P_f(k).
 \]
 **** Linearity of expectations
 For any RVs $x, y$:
@@ -279,13 +347,17 @@ We give the proof for the discrete case:
 \end{align*}
 *** Distributions of multiple variables
 **** The joint distribution $P(x,y)$
+#+BEAMER: \pause
 For two (or more) RVs $x : \Omega \to \Reals$, and $y : \Omega \to
  \Reals$, this is a *shorthand* for the distribution of $(x(\omega),
  y(\omega))$ when $\omega \sim P$. We can also use $P(x = i, y = j)$ for the probability that the two variables assume the values $i, j$ respectively.
+ #+BEAMER: \pause
 **** Independence
 If $x,y$ are independent RVs then $P(x,y) = P_x(x) P_y(y)$.
+#+BEAMER: \pause
 **** Correlation
 If $x,y$ are *not* correlated then $\E_P(xy) = \E(x)\E(y)$.
+#+BEAMER: \pause
 **** IID (Independent and Identically Distributed) random variables
 A sequence $x_t$ of r.v.s is IID if $x_t \sim P$
 so that
@@ -301,7 +373,8 @@ The conditional expectation of a random variable $f: \Omega \to \Reals$, with re
 \[
 \E_P(f | B) = \sum_{\omega \in \Omega} f(\omega) P(\omega | B).
 \]
-**** Conitnuous $\Omega$
+#+BEAMER: \pause
+**** Continuous $\Omega$
 The conditional expectation of a random variable $f: \Omega \to \Reals$, with respect to a probability density $p$ conditioned on some event $B$ is simply
 \[
 \E_p(f | B) = \int_{\Omega} f(\omega) p(\omega | B) d\omega.
@@ -313,15 +386,17 @@ Similarly to the notation over sets,
 \[
 P(A \cap B) = P(A \mid B) P(B),
 \]
+#+BEAMER: \pause
 when dealing with RVs, it is common to use the notation
 \[
-P(x, y) = P(x | y) P(y)
+P(x, y) = P(x | y) P(y).
 \]
+#+BEAMER: \pause
 This equation works for all possible values of $x, y$ e.g.
 \[
 P(x = 1, y = 0) = P(x = 1 | y = 0) P(y = 0)
 \]
-which then denotes the probability msas of each
+which then denotes the probability mass of each
 
 *** Probability notation: math versus statistics
 **** Math                                                             :BMCOL:
@@ -401,11 +476,11 @@ P(R_{t+1} \mid R_1\cap \cdots \cap R_t) = \sum_{\param \in \Param} P(R_{t+1} \mi
 **** Independent events $A \indep B$
 -  $A, B$ are *independent* iff $P(A \cap B) = P(A) P(B)$.
 - Knowing if $A$ happened, does not tell us anything about whether $B$ happened
-
+#+BEAMER: \pause
 **** Conditional independence $A \indep B \mid C$
 - $A, B$ are *conditionally independent* given $C$ iff $P(A \cap B | C) = P(A | C) P(B | C)$.
 - Knowing if $C$ happened tells us all we need to know about $A$ and $B$.
-
+#+BEAMER: \pause
 **** For random variables
 - Independence: $P(x, y) = P(x) P(y)$.
 - Conditional independence:  $P(x, y | z) = P(x | z) P(y |z)$.
@@ -559,12 +634,20 @@ x3 = h(x2)
 *** Graphical models
 \begin{center}
     \begin{tikzpicture}
-      \node[RV] at (2,0) (xi) {$x_3$};
-      \node[RV] at (0,0) (xB) {$x_1$};
-      \node[RV] at (1,1) (xD) {$x_2$};
-      \draw[->] (xB) to (xD);
-      \draw[->] (xD) to (xi);
-      \draw[->] (xB) to (xi);
+      \node[RV] at (2,0) (x3) {$x_3$};
+      \node[RV] at (0,0) (x1) {$x_1$};
+      \node[RV] at (1,1) (x2) {$x_2$};
+      \draw[->] (x1) to (x2);
+      \draw[->] (x2) to (x3);
+      \draw[->] (x1) to (x3);
+\uncover<2->{
+      \node[RV,hidden] at (3,0) (w3) {$\omega_3$};
+      \node[RV,hidden] at (-1,0) (w1) {$\omega_3$};
+      \node[RV,hidden] at (1,2) (w2) {$\omega_2$};
+      \draw[->] (w1) to (x1);
+      \draw[->] (w2) to (x2);
+      \draw[->] (w3) to (x3);
+}
     \end{tikzpicture}
 \end{center}
 - Variables: $x_1, x_2, x_3$
@@ -597,39 +680,21 @@ x3 = h(x2)
 
 *** Conditional independence
 
-For any set of random variables $x_1, x_2, x_3, \ldots$, we can write their joint as
-$\prod_i P(x_i  \mid  x_1,  \ldots,  x_{i-1})$. However,
-we can use a *Bayesian network* to define conditional independence structures.
-**** Bayesian Network
-:PROPERTIES:
-:BEAMER_col: 0.5
-:END:
-    \begin{tikzpicture}
-      \node[RV] at (0,0) (A1) {$A_1$};
-      \node[RV] at (0,1) (A2) {$A_2$};
-      \node[RV] at (1,0.5) (B) {$B$};
-      \node[RV] at (2,0) (C1) {$C_1$};
-      \node[RV] at (2,1) (C2) {$C_2$};
-      \draw[->] (A1) to (B);
-      \draw[->] (A2) to (B);
-      \draw[->] (B) to (C1);
-      \draw[->] (B) to (C2);
-    \end{tikzpicture}
-**** Network rule
-:PROPERTIES:
-:BEAMER_col: 0.5
-:END:
+We can write the joint distribution of any set of RVs $x_1, \ldots, x_n$, as
+\[
+P(x_1, \ldots, x_n) = \prod_i P(x_i  \mid  x_1,  \ldots,  x_{i-1})
+\]
+#+BEAMER: \pause
+However,
+we can use a *Bayesian network* to define conditional independence *structures*.
+**** Bayesian Networks and Independence
 If $A$ is a parent of $B$ and $C$ is a child of $B$, and there are *no other paths* from $A$ to $C$ then the following conditional independence holds:
 \[
 P(C \mid B, A) = P(C \mid B)
 \]
 i.e. $C$ is conditionally independent of $A$ given $B$. 
-**** Conditional probability tables
-We can now write the distribution of the above example as
-\[
-P( B, C_1, C_2) = 
-P(A_1) P(A_2) P(B | A_1, A_2) P(C_1 | B) P(C_2 | B).
-\]
+
+This holds more generally for sets of random variables.
 *** Smoking and lung cancer
       \begin{tikzpicture}
         \node[RV] at (0,0) (x1) {$S$};
@@ -650,8 +715,8 @@ P(S, C, A) = P(S) P(A) P(C | S, A)
 \begin{align*}
 P(A, S | C) 
 &
-= P(A | S, C) P (S | C) 
-= \frac{P(C | A, S) P(A | S)}{P(C|S)} \frac{P (C | S) P(S)}{P(C)}
+= P(A | S, C) P (S | C)\\
+&= \frac{P(C | A, S) P(A | S)}{P(C|S)} \frac{P (C | S) P(S)}{P(C)}
 \\
 &
 = \frac{P(C | A, S) P(A | S)}{P(S|C)P(C)/P(S)} \frac{P (C | S) P(S)}{P(C)}
@@ -668,13 +733,15 @@ P(A, S | C)
      
 Time of arrival at work graphical model where $T$ is a traffic jam and $x_1$ is the time John arrives at the office and $x_2$ is the time Jane arrives at the office.
 
-*Conditional independence:
+*Conditional independence*:
 - Even though $x_1, x_2$ are *not independent*, they become independent once you know $T$.
-
 #+BEAMER: \pause
-\[
-P(S, C, A) = P(S) P(A) P(C | S, A)
-\]
+\begin{align*}
+P(x_1, x_2, T) &= P(x_1, x_2 | T) P(T)\\
+               & = P(x_1 | T) P(x_2 | T) P(T)\\
+P(x_1, x_2 | T)&=  P(x_1 | T) P(x_2 | T) P(T)\\
+P(x_1, x_2) &= \sum_{i=0}^1 P(x_1 | T = i) P(x_2 | T=i) P(T=i)
+\end{align*}
 
 *** School admission
 |--------+------+--------|
@@ -814,7 +881,7 @@ P(a, b, c, d) = P(a) P(b | a) P (c | a) P(d | b, c)
 #+BEAMER: \pause
 **** Formalisation
 - Prior: $P(C = 1) = 0.1$
-- Likelihood: $P(T, S | C) = P(T | C) P(S | C)$, $P(T, S | \neg C)$ for all va43lues of $T, S, C$.
+- Likelihood: $P(T, S | C) = P(T | C) P(S | C)$, $P(T, S | \neg C)$ for all values of $T, S, C$.
 - Posterior: 
 \[
 P(C | T, S) = 

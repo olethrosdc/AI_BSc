@@ -112,8 +112,9 @@ slowly progress to the more complex ones.
 - All the relevant course content is given in-class.
 - The slides only contain a summary.
 - More details in the reference books.
-**** Assignments: (40% of grade)
-- Assignments are obligatory
+**** Homework/class activities: (40% of grade)
+- Class activities, quizzes, etc.
+- Home Assignments are obligatory.
 - In English or French.
 - Can be individual or group.
 - You *must cite* sources, whether it be books, web pages, other students, or LLMs, e.g.

@@ -88,7 +88,7 @@ Artificial Intelligence: Foundations of Computational Agents, 3rd Edition
 |        | Deterministic planning     | 4.8. Optimization               |                                    |   |
 |        |                            |                                 |                                    |   |
 |--------+----------------------------+---------------------------------+------------------------------------+---|
-|      6 | Uncertainty                | 9. Reasoning with Uncertainty   | 12.1. Acting under uncertaint      |   |
+|      6 | Uncertainty                | 9. Reasoning with Uncertainty   | 12.1. Acting under uncertainty     |   |
 |        | Aleatory/Epistemic         | 9.1. Probability                | 12.2. Basic probability notation   |   |
 |        | Probability Theory         | 9.2. Independence               | 12.3. Inference                    |   |
 |        | Bayes Theorem              |                                 | 12.4. Independence                 |   |

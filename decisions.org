@@ -3,7 +3,6 @@
 #+EMAIL:christos.dimitrakakis@unine.ch
 #+LaTeX_HEADER: \input{preamble}
 #+LaTeX_CLASS_OPTIONS: [smaller]
-#+LaTeX_HEADER: \lstset{basicstyle=\small\ttfamily,tabsize=2}
 #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 #+TAGS: activity advanced definition exercise homework project example theory code
 #+OPTIONS:   H:3
@@ -107,9 +106,13 @@ What is the reward here?
       \end{tikzpicture}
 \end{center}
 **** Random rewards
-- We *select* our action.
-- The action determines the *outcome* distribution.
-- The utility may depend on *both* the outcome and reward.
+- We *select* our action $a$
+- The action determines the *outcome* distribution $P(\omega \mid a)$
+- The utility may depend on *both* the outcome and reward $U(\omega, a)$.
+- The *expected utility* for an action is
+\[
+\E_P[U \ mid a] = \sum_{\omega \in \Omega} U(\omega, a) P(\omega \mid a).
+\]
 *** Route selection
 **** Utility                                                      :B_example:
      :PROPERTIES:
@@ -123,6 +126,7 @@ What is the reward here?
 | Car            | -10 | -20 | -30 | -40 | -50 | -60 | -70 |
 |----------------+-----+-----+-----+-----+-----+-----+-----|
 
+#+BEAMER: \pause
 **** Probability                                                  :B_example:
      :PROPERTIES:
      :BEAMER_env: example
@@ -135,6 +139,7 @@ What is the reward here?
 | Car                |   0 | 40% | 30% | 15% | 10% |  3% |  2% |
 |--------------------+-----+-----+-----+-----+-----+-----+-----|
 
+#+BEAMER: \pause
 **** Expected utility
 
 | /     |      < |
@@ -145,8 +150,8 @@ What is the reward here?
 
 *** Calculation in python
 For discrete variables, the implemenation is easy.
-
-**** Expected utility of action $a$: $\E_P[U |a] = \sum_{\omega \in \Omega} U(\omega, a)$.
+#+BEAMER: \pause
+**** Expected utility of action $a$: $\E_P[U |a] = \sum_{\omega \in \Omega} U(\omega, a) P(\omega \mid a)$.
 #+BEGIN_SRC python
   # U: A matrix U[a, w]
   # P: A matrix P[w, a]
@@ -170,13 +175,19 @@ In this setting, we obtain random outcomes that depend on our actions.
 - Outcomes $\omega \in \Omega$.
 - Probability of outcomes $P(\omega \mid a)$
 - Utility $U : \Omega \alert{\times A} \to \Reals$
-**** Expected utility
+**** Expected utility                                          :B_definition:
+:PROPERTIES:
+:BEAMER_env: definition
+:END:
 The expected utility of an action is:
 \[
 \E_P[U \mid a] = \sum_{\omega \in \Omega} U(\omega \alert{, a}) P(\omega \alert{\mid a}).
 \]
 
-**** The expected utility hypothesis
+**** The expected utility hypothesis                           :B_alertblock:
+:PROPERTIES:
+:BEAMER_env: alertblock
+:END:
 We prefer $a$ to $a'$ if and only if
 \[
 \E_P[U \mid a] \geq \E_P[U \mid a']
@@ -274,17 +285,19 @@ minimises the squared error.
 This is because
 \begin{align}
 \frac{d}{d \hat{\theta}}
- \E_P [(\param - \hat{\param})^2]
+\alert<3>{\E_P} [(\param - \hat{\param})^2]
 &=
-\frac{d}{d \hat{\theta}}
- \sum_\omega [\theta(\omega) -  \hat{\param}]^2 P(\omega)\\
+\alert<4>{\frac{d}{d \hat{\theta}}}
+\alert<3>{\sum_\omega} [\theta(\omega) -  \hat{\param}]^2 \alert<3>{P(\omega)}\\
 &=
- \sum_\omega \frac{d}{d \hat{\theta}}
- [\theta(\omega) -  \hat{\param}]^2 P(\omega)\\
+ \sum_\omega \alert<4,5>{\frac{d}{d \hat{\theta}}}
+\alert<5>{[\theta(\omega) -  \hat{\param}]^2} P(\omega)
+\only<5>{\qquad (dz^2/dz = 2z)}
+\\
 &=
- \sum_\omega 2 [\theta(\omega) -  \hat{\param}] (-1) P(\omega)
-&=
-	 2 (\hat{\param} - \E_P [\theta]).
+\alert<6>{\sum_\omega} \alert<5>{2 [\alert<6>{\theta(\omega)} -  \hat{\param}] (-1)} \alert<6>{P(\omega)}
+=
+ 2 (\hat{\param} - \E_P [\theta]).
 \end{align}
 Setting this to $0$ gives $\hat{\param} =\E_P [\theta]$
 
@@ -369,7 +382,7 @@ We can also approximate the gradient through sampling:
 \[
 \param^{t+1} = \param^t + 2 \alpha_t (x_t - \param^t)
 \]
-*** The gradient method
+*** The gradient method: multiple dimensions
 - Function to minimise $f : \Reals^{\alert{n}} \to \Reals$.
 - *Gradient* $\nabla_\param f(\param)  = \left(\frac{\partial f(\param)}{\partial \param_1}, \ldots, \frac{\partial f(\param)}{\partial \param_n}\right)$,
 - *Partial* derivative $\frac{\partial f}{\partial \param_n}$

@@ -110,14 +110,14 @@ slowly progress to the more complex ones.
 
 **** Lectures
 - All the relevant course content is given in-class.
-- The slides only contain a summary.
-- More details in the reference books.
+- The slides only contain a summary:  details in the reference books.
 **** Homework/class activities: (40% of grade)
 - Class activities, quizzes, etc.
 - Home Assignments are obligatory.
 - In English or French.
 - Can be individual or group.
-- You *must cite* sources, whether it be books, web pages, other students, or LLMs, e.g.
+- You *must cite sources* (books, web pages, students, LLMs, etc)
+- It's *OK* if you make mistakes or do not understand something. In the latter case, explain what the difficulty is.
 **** Written exam (60% of grade)
 - No references allowed in the exam.
 - Important concepts will be repeated/explained in the exam questions.

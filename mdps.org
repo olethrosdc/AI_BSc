@@ -84,7 +84,7 @@ Otherwise:
 
 
 #+BEAMER: \pause
-**** Martingale property (*)
+**** *Martingale* property
 If $p = 1/2$ then the process is a *martingale*, i.e.
 \[
 \E[s_{t+1} \mid s_t] = s_t
@@ -250,22 +250,24 @@ U_t = \sum_{k=t}^T r_k
 **** Rewards
 - $r_t = 0$ when you *play*
 - $r_t = s_t$ when you *stop*
-*** Simple betting game (II)
+*** Simple betting game strategies
 **** Always play
 \[
 \pol(a_t = \textrm{play} | s_t ) = 1
 \]
+#+BEAMER: \pause
 **** Never play
 \[
 \pol(a_t = \textrm{play} | s_t ) = 0
 \]
+#+BEAMER: \pause
 **** Play until you have more than 100 CHF
 \[
 \pol(a_t = \textrm{play} | s_t < 100 ) = 1,
 \qquad
 \pol(a_t = \textrm{stop} | s_t \geq 100 ) = 1.
 \]
-
+#+BEAMER: \pause
 **** Play until you double your money
 \[
 \pol(a_t = \textrm{play} | s_t < 2 s_1 ) = 1,
@@ -319,12 +321,25 @@ A Markov policy takes an action $a$ at time $t$ with probability
 \[
 \pol(a_t = a \mid s_t = s)
 \]
+ 
+** Utility and value functions
+
+*** The utility
+**** The utility
+This is simply the sum of rewards we obtain until the game ends.
+\[
+U_t = \sum_{k=t}^T r_k
+\]
 **** The expected utility of a policy
+Since rewards are random, we want to maximise expected utility
 \[
 \E^\pol_\mdp[U_t] = \sum_{k=t}^T \E^\pol_\mdp[r_k]
 \]
- 
-** Utility and value functions
+**** The optimal policy for a given MDP
+\[
+\pol^*(\mdp) = \argmax_\pol \E^\pol_\mdp[U_t]
+\]
+
 
 *** Value function
 - The utility from step $t$ is $U_t \defn \sum_{k=t}^T r_k$
@@ -332,45 +347,45 @@ A Markov policy takes an action $a$ at time $t$ with probability
 **** The state value function
 This is the expected utility obtained by following a *policy $\pol$* starting from some *state $s$*.
 \[
-V^\pol_t(s) \defn \E_\pol(U_t \mid s_t = s)
+V^\pol_{\mdp,t}(s) \defn \E^\pol_\mdp(U_t \mid s_t = s)
 \]
 #+BEAMER: \pause
 **** The state-action value function
 This is the expected utility obtained by following a policy $\pol$ starting from some state $s$ and *playing action $a$*
 \[
-Q^\pol_t(s, a) \defn \E_\pol(U_t \mid s_t = s, a_t = a)
+Q^\pol_{\mdp, t}(s, a) \defn \E^\pol_\mdp(U_t \mid s_t = s, a_t = a)
 \]
 #+BEAMER: \pause
 **** The optimal value function
 There is some policy $\pol^*$ satisfying
 \begin{align*}
-V^*(s) &\defn V^{\pol^*}(s) \geq V^\pol(s) \qquad \forall \pol, s
+V_{\mdp,t}^*(s) &\defn V_{\mdp,t}^{\pol^*}(s) \geq V_{\mdp,t}^\pol(s) \qquad \forall \pol, s
 \\
-Q^*(s, a) &\defn Q^{\pol^*}(s, a) \geq Q^\pol(s, a) \qquad \forall \pol, s, a
+Q_{\mdp,t}^*(s, a) &\defn Q_{\mdp,t}^{\pol^*}(s, a) \geq Q_{\mdp,t}^\pol(s, a) \qquad \forall \pol, s, a
 \end{align*}
 
 
 *** The expected utility recursion
 Value functions satisfy the following recursion
 \begin{align*}
-V^\pol_t(s_t) 
+V^\pol_{\mdp,t}(s_t) 
 \uncover<2->{
-&= \E_\pol(U_t \mid s_t)\\
+&= \E^\pol(U_t \mid s_t)\\
 }
 \uncover<3->{
-&= \E_\pol\left[\sum_{k=t}^T r_k \middle| s_t\right]\\
+&= \E^\pol\left[\sum_{k=t}^T r_k \middle| s_t\right]\\
 }
 \uncover<4->{
-&= \E_\pol[r_t \mid s_t] + \E_\pol\left[\sum_{k=t+1}^T r_k \middle| s_t  \right]\\
+&= \E^\pol[r_t \mid s_t] + \E^\pol\left[\sum_{k=t+1}^T r_k \middle| s_t  \right]\\
 }
 \uncover<5->{
-&= \E_\pol[r_t \mid s_t] + \E_\pol\left[U_{t+1}| s_t \right]\\
+&= \E^\pol[r_t \mid s_t] + \E^\pol\left[U_{t+1}| s_t \right]\\
 }
 \uncover<6->{
-&= \E_\pol[r_t \mid s_t] + \sum_{s_{t+1} \in S} \Pr_\pol(s_{t+1} \mid s_t) \E_\pol\left[U_{t+1}| s_{t+1} \right]\\
+&= \E^\pol[r_t \mid s_t] + \sum_{s_{t+1} \in S} \Pr^\pol(s_{t+1} \mid s_t) \E^\pol\left[U_{t+1}| s_{t+1} \right]\\
 }
 \uncover<7->{
-&= \E_\pol[r_t \mid s_t] +  \sum_a \pol(a \mid s_t) \sum_{s_{t+1} \in S} P_\mdp(s_{t+1} \mid s_t, a) V^\pol_{t+1}(s_{t+1}).
+&= \E^\pol[r_t \mid s_t] +  \sum_a \pol(a \mid s_t) \sum_{s_{t+1} \in S} P_\mdp(s_{t+1} \mid s_t, a) V^\pol_{t+1}(s_{t+1}).
 }
 \end{align*}
 #+BEAMER: \pause

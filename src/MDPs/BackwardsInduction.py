@@ -3,7 +3,7 @@ import numpy as np
 
 ## Define algorithm
 ## policy[state, time] gives you index of the action played at any state for any time.
-def backwards_induction(mdp, policy, T):
+def backwards_induction(mdp, T):
     V = np.zeros([mdp.n_states, T])
     Q = np.zeros([mdp.n_states, mdp.n_actions, T])
     ## to fill in

@@ -123,18 +123,36 @@
 
 *** Humans and AI
 
-Any system involving interaction between multiple agent can be describe through game theory. One question is how to define the preferences of each agent.
-
+Any system involving interaction between multiple agent can be described through game theory. One question is how to define the *preferences* of each agent.
+#+BEAMER: \pause
 **** Human preferences
-- These are typically unknown.
-- They might not be expressible in mathematical form.
-- Nevertheless, we make the utility assumption.
+- These are typically *unknown*.
+- They might not be *compatible* with a mathematical model.
+- We usually *assume* the expected utility hypothesis.
+
+  #+BEAMER: \pause
 **** AI preferences
-- These are typically specified by humans as utilities.
-- However, it is hard to fully specify them.
+- These are typically *specified* by humans as utilities.
+- However, it is hard to *fully specify* them.
 
 
 ** Game representations
+*** Two-player games
+
+To keep things simple, we focus on 2-player games.
+#+BEAMER: \pause
+**** Player action space $A \times B$.
+- Player 1 chooses an action $a \in A$.
+- Player 2 chooses an action $b \in B$.
+
+#+BEAMER: \pause
+Then, both players choose their actions:
+**** Reward functions $\rho^i : A \times B \to \Reals$
+- Player 1 obtains reward $\rho^1(a, b)$
+- Player 2 obtains reward $\rho^2(a, b)$ .
+
+The type of game we have depends on the order actions and the information structure.
+
 *** Normal form
 
 In the table below, we see how much reward each player obtains for every combination of actions
@@ -145,10 +163,13 @@ In the table below, we see how much reward each player obtains for every combina
 |------------------+-------+-------|
 | a = 1            | 1, 0  | 3, 1  |
 
+#+BEAMER: \pause
 **** Simultaneous moves
-We assume that each player is playing without seeing the move of the other player. 
+We assume that each player is playing without seeing the move of the other player.
+#+BEAMER: \pause
 **** Commitment
-However, we can also look at *commitment* or *Stackleberg* games, where one player either /commits/ to playing a move, or plays before the other player.
+However, we can also look at *commitment* or *Stackleberg* games, where one player either /commits/ to playing a move, or plays before the other player
+#+BEAMER: \pause.
 **** Information structure
 For other types of move sequencing, we have to encode the information structure of a game as a graph.
 *** Co-operative, adversarial and general games

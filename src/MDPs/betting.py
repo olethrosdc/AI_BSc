@@ -24,8 +24,8 @@ def get_betting_MDP(initial_money, p_win, T):
 
     P[0, 0, 0] = 1
     P[0, 1, 0] = 1
+    # because T = n_states, we can only reach this state at the last step.
     P[n_states - 1, 0, 0] = 1
-    # because T = n_states, we can only reach this state at the last step. 
     P[n_states - 1, 1, n_states - 1] = 1
     R[n_states - 1, 0] = n_states -1
     R[n_states - 1, 1] = n_states -1

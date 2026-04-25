@@ -307,7 +307,7 @@ Let us see what happens when one player *commits* to a move
      node[left] {0}
    }     	    
    child {node[select] {$a$}
-     child {node[RV] {1,0} edge from parent node[left] {0}}	
+     child {node[RV] {4,0} edge from parent node[left] {0}}	
      child {node[RV] {3,1} edge from parent node[right] {1}}
      edge from parent
      node[right] {1}
@@ -409,6 +409,20 @@ V^{1,*}_{t+1}(j)
 &= \rho(j) + \min_{a^2}  \sum_{j} V^{1,*}_{t+1}(j) P(k \mid j, a^2)
 }
 \end{align}
+
+*** Normal-form simultaneous-move co-operative games
+    (Also called *minimax* games)
+- Player $a$ chooses action $a$ in secret.
+- Player $b$ chooses action $b$ in secret.
+- Players observe both actions
+- Both players $a$ receive $\rho(a,b)$.
+
+**** No-coordination: Mixed strategies
+Each player chooses an action randomly, independently of one another:
+\[
+\pol(a, b) = \pol_1(a) \pol_2(b)
+\]
+$\pol_i$ is called a *mixed* strategy.
 
 
 *** Normal-form simultaneous-move zero-sum games
@@ -589,7 +603,7 @@ For any player $i$, we can define their value at time $t$ as:
 \begin{align}
 V^{i,\pol}_t(s) 
 &\defn \E_\pi [U^{i}_t \mid s_t = s]\\
-&= \rho^i(s) + \sum_{a \in A} \pol_{I(s)}(a \mid s) \sum_{j} V^{1,\pi}_{t+1}(j) P(j\mid s, a)
+&= \rho^i(s) + \sum_{a \in A} \pol_{I(s)}(a \mid s) \sum_{j} V^{i,\pi}_{t+1}(j) P(j\mid s, a)
 \end{align}
 
 **** Optimal policies
